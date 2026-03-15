@@ -1,0 +1,16 @@
+{
+    "discover": {
+        "cardNumber": "6011947901963443",
+        "expirationMonth": "01",
+        "expirationYear": "2030",
+        "cardCode": "149"
+    },
+
+    "visa": {
+        "cardNumber": "4032031441564969",
+        "expirationMonth": "04",
+        "expirationYear": "2029",
+        "cardCode": "300"
+    }
+
+}

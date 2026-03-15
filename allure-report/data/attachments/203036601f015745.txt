@@ -1,0 +1,11 @@
+
+            processorAdditionalPrice: 0
+            ramAdditionalPrice: 20
+            hddAdditionalPrice: 100
+            softwareAdditionalPrice: 5
+            osAdditionalPrice: 60
+            basePrice: 1200
+        
+totalPrice: 2770
+shippingMethodText: Next Day Air (0.00)
+shippingFee: 0

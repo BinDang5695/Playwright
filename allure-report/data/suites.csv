@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","17351","Cheap Computer Component Test","chrome","Sun Dec 21 11:37:32 ICT 2025","failed","Sun Dec 21 11:37:49 ICT 2025","","computer\Computer.spec.ts","",""
+"","13908","Expensive Computer Component Test","edge","Sun Dec 21 11:38:06 ICT 2025","passed","Sun Dec 21 11:38:20 ICT 2025","","computer\Computer.spec.ts","",""
+"","13767","Expensive Computer Component Test","chrome","Sun Dec 21 11:38:07 ICT 2025","passed","Sun Dec 21 11:38:21 ICT 2025","","computer\Computer.spec.ts","",""
+"","13896","Standard Computer Component Test","chrome","Sun Dec 21 11:37:52 ICT 2025","passed","Sun Dec 21 11:38:06 ICT 2025","","computer\Computer.spec.ts","",""
+"","15063","Standard Computer Component Test","edge","Sun Dec 21 11:37:50 ICT 2025","passed","Sun Dec 21 11:38:05 ICT 2025","","computer\Computer.spec.ts","",""
+"","15979","Cheap Computer Component Test","edge","Sun Dec 21 11:37:32 ICT 2025","failed","Sun Dec 21 11:37:48 ICT 2025","","computer\Computer.spec.ts","",""

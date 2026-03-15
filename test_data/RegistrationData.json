@@ -1,0 +1,271 @@
+[
+  {
+    "title": "Validation - empty First Name",
+    "data": {
+      "surName": "Mikel",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "firstName",
+        "message": "First Name cannot be empty."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - invalid First Name",
+    "data": {
+      "firstName": "123bin",
+      "surName": "Mikel",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "firstName",
+        "message": "First Name is invalid. Please enter again."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Sur Name",
+    "data": {
+      "firstName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "surName",
+        "message": "Surname cannot be empty."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - invalid Sur Name",
+    "data": {
+      "firstName": "Arteta",
+      "surName": "123bin",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "surName",
+        "message": "Surname is invalid. Please enter again."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - invalid Club Name",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "bin123",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "clubName",
+        "message": "Club Name is invalid. Please enter again."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - invalid phone Number",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+123131abc",
+      "email": "bindz562005@gmail.com",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "phoneNumber",
+        "message": "Phone Number is invalid. Please enter again."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Email",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "email",
+        "message": "Email cannot be empty. Please input at least one email."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - invalid Email",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "123gmail.co",
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "email",
+        "message": "Email is invalid. Please enter again."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - duplicate emails",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "emailCount": 2,
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "email",
+        "message": "Email cannot be duplicated."
+      }
+    ]
+  },
+  {
+    "title": "Validation - maximum 3 emails",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "emails": [
+        "email1@gmail.com",
+        "email2@gmail.com",
+        "email3@gmail.com",
+        "email4@gmail.com"
+      ],
+      "emailCount": 4,
+      "consent": true,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "emails",
+        "message": "You can add a maximum of 3 emails."
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Consent",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "consent": false,
+      "captcha": "a4584e"
+    },
+    "expectedErrors": [
+      {
+        "field": "consent",
+        "message": "The consent is mandatory."
+      },
+      {
+        "field": "captcha",
+        "message": "The captcha is invalid."
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Captcha",
+    "data": {
+      "firstName": "Mikel",
+      "surName": "Arteta",
+      "clubName": "Arsenal",
+      "address": "123 London Street",
+      "phoneNumber": "+441234567890",
+      "email": "bindz562005@gmail.com",
+      "consent": true,
+      "captcha": ""
+    },
+    "expectedErrors": [
+      {
+        "field": "captcha",
+        "message": "The captcha cannot be empty."
+      }
+    ]
+  }
+]

@@ -1,0 +1,163 @@
+[
+  {
+    "title": "Create customer with only required Company",
+    "data": {
+      "company": "Create customer with only required Company"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with all fields",
+    "data": {
+      "company": "All fields",
+      "vat": "123456789",
+      "phone": "0123456789",
+      "website": "https://nashtech.com.vn",
+      "group": "VIP",
+      "currency": "Euro",
+      "language": "Vietnamese",
+      "address": "123 Street, Hanoi",
+      "city": "Hanoi",
+      "state": "Hoan Kiem",
+      "zip": "100000",
+      "country": "Vietnam"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer - with VAT only",
+    "data": {
+      "company": "1 - VAT",
+      "vat": "123456789"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer - with Phone only",
+    "data": {
+      "company": "2 - Phone",
+      "phone": "0123456789"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Website only",
+    "data": {
+      "company": "3 - Website",
+      "website": "https://example.com"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Group only",
+    "data": {
+      "company": "4 - Group",
+      "group": "VIP"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Currency only",
+    "data": {
+      "company": "5 - Currency",
+      "currency": "USD"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Language only",
+    "data": {
+      "company": "6 - Language",
+      "language": "English"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Address info",
+    "data": {
+      "company": "7 - Address",
+      "address": "123 Street",
+      "city": "Hanoi",
+      "state": "Hoan Kiem",
+      "zip": "100000",
+      "country": "Vietnam"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Address + Contact info",
+    "data": {
+      "company": "8 - Address + Contact",
+      "phone": "0987654321",
+      "address": "456 Nguyen Trai",
+      "city": "Hanoi",
+      "state": "Hoan Kiem",
+      "zip": "100000",
+      "country": "Vietnam"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Address only",
+    "data": {
+      "company": "9 - Address",
+      "address": "123 Street"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with City only",
+    "data": {
+      "company": "10 - City",
+      "city": "Hanoi"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with State only",
+    "data": {
+      "company": "11 - State",
+      "state": "Hoan Kiem"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Zip only",
+    "data": {
+      "company": "12 - Zip",
+      "zip": "100000"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer with Country only",
+    "data": {
+      "company": "13 - Country",
+      "country": "Vietnam"
+    },
+    "expectedType": "success"
+  },
+
+  {
+    "title": "Create customer without Company",
+    "data": {
+      "phone": "0123456789"
+    },
+    "expectedType": "error",
+    "expectedMessage": "This field is required."
+  }
+]

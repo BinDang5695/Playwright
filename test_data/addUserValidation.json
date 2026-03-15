@@ -1,0 +1,312 @@
+[
+  {
+    "title": "Validation - empty User Role",
+    "data": {
+      "employeeName": "Paul Collings",
+      "username": "testuser01",
+      "status": "Enabled",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "User Role",
+        "message": "Required"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Employee Name",
+    "data": {
+      "userRole": "Admin",
+      "username": "testuser02",
+      "status": "Enabled",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Employee Name",
+        "message": "Required"
+      }
+    ]
+  },
+  {
+    "title": "Validation - invalid Employee Name",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "David Beckham",
+      "username": "testuser03",
+      "status": "Enabled",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Username",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "status": "Enabled",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Username",
+        "message": "Required"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - less than 5 characters Username",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "status": "Enabled",
+      "username": "bin",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Username",
+        "message": "Should be at least 5 characters"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - more than 40 characters Username",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "status": "Enabled",
+      "username": "bindz123456789098765432112312313131@gmail.com",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Username",
+        "message": "Should not exceed 40 characters"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Status",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser04",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Status",
+        "message": "Required"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - less than 7 characters Password",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser05",
+      "status": "Enabled",
+      "password": "Ad@1",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Password",
+        "message": "Passwords do not match"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - more than 64 characters Password",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser06",
+      "status": "Enabled",
+      "password": "Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123",
+      "confirmPassword": "Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Password",
+        "message": "Should not exceed 64 characters"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - only number Password",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser07",
+      "status": "Enabled",
+      "password": "123456789",
+      "confirmPassword": "123456789"
+    },
+    "expectedErrors": [
+      {
+        "field": "Password",
+        "message": "Your password must contain minimum 1 lower-case letter"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - only letter characters Password",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser08",
+      "status": "Enabled",
+      "password": "abcdefghij",
+      "confirmPassword": "abcdefghij"
+    },
+    "expectedErrors": [
+      {
+        "field": "Password",
+        "message": "Your password must contain minimum 1 number"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Password",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser09",
+      "status": "Enabled",
+      "confirmPassword": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Password",
+        "message": "Passwords do not match"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - empty Confirm Password",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser10",
+      "status": "Enabled",
+      "password": "Admin@123"
+    },
+    "expectedErrors": [
+      {
+        "field": "Confirm Password",
+        "message": "Passwords do not match"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - Password does not match with Confirm Password",
+    "data": {
+      "userRole": "Admin",
+      "employeeName": "Paul Collings",
+      "username": "testuser11",
+      "status": "Enabled",
+      "password": "Admin@123",
+      "confirmPassword": "Admin@123456"
+    },
+    "expectedErrors": [
+      {
+        "field": "Confirm Password",
+        "message": "Passwords do not match"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Invalid"
+      }
+    ]
+  },
+  {
+    "title": "Validation - submit empty form",
+    "data": {},
+    "expectedErrors": [
+      {
+        "field": "User Role",
+        "message": "Required"
+      },
+      {
+        "field": "Employee Name",
+        "message": "Required"
+      },
+      {
+        "field": "Username",
+        "message": "Required"
+      },
+      {
+        "field": "Status",
+        "message": "Required"
+      },
+      {
+        "field": "Password",
+        "message": "Required"
+      },
+      {
+        "field": "Confirm Password",
+        "message": "Passwords do not match"
+      }
+    ]
+  }
+]

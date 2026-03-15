@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category_id": {
+          "type": "number"
+        },
+        "price": {
+          "type": "number"
+        },
+        "release_date": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "boolean"
+        },
+        "id": {
+          "type": "number"
+        },
+        "image": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "required": [
+              "id",
+              "path"
+            ],
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "name",
+        "category_id",
+        "price",
+        "release_date",
+        "status",
+        "id",
+        "image"
+      ]
+    }
+  },
+  "required": [
+    "message",
+    "response"
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "username": {
+          "type": "string",
+          "minLength": 1
+        },
+        "firstName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lastName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "userStatus": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "firstName",
+        "lastName",
+        "email",
+        "phone",
+        "userStatus"
+      ]
+    }
+  },
+  "required": [
+    "message",
+    "response"
+  ]
+}

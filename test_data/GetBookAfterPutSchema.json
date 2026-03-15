@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category_id": {
+          "type": "number"
+        },
+        "price": {
+          "type": "number"
+        },
+        "release_date": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+            "oneOf": [
+                { "type": "boolean" },
+                { "type": "number", "enum": [0, 1]}
+            ]
+        },
+        "image": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 1,
+          "items": {
+            "required": [
+              "id",
+              "path"
+            ],
+            "properties": {
+              "id": {
+                "type": "number"
+              },
+              "path": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "category_id",
+        "price",
+        "release_date",
+        "status",
+        "image"
+      ]
+    }
+  },
+  "required": [
+    "message",
+    "response"
+  ]
+}
