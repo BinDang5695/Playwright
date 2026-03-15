@@ -29,7 +29,7 @@ async function globalSetup(): Promise<void> {
   const authDir = path.resolve('playwright/.auth');
   if (!fs.existsSync(authDir)) fs.mkdirSync(authDir, { recursive: true });
 
-  await context.storageState({ path: path.resolve('playwright/.auth/user.json') });
+  await context.storageState({ path: path.resolve('.auth/user.json') });
   await browser.close();
 
   console.log('✅ Auth setup done.');

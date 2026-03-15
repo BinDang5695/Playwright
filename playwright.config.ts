@@ -61,7 +61,7 @@ export default defineConfig({
     ],
     use: {
         baseURL: process.env.BASE_URL,
-        storageState: 'playwright/.auth/user.json',
+        storageState: '.auth/user.json',
         actionTimeout: 20 * 1000, //timeout for each action like click, fill
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',

@@ -23,7 +23,8 @@
       "@data/*": ["test_data/*"],
       "@models/*": ["models/*"],
       "@utils/*": ["utils/*"],
-      "@constants/*": ["constants/*"]
+      "@constants/*": ["constants/*"],
+      "@.auth/*": ["auth/*"]
     }
   },
 
@@ -36,5 +37,6 @@
     "test_data/**/*.ts",
     "utils/**/*.ts",
     "constants/**/*.ts",
+    "auth/**/*.ts"
   ]
 }
