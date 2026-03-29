@@ -1,5 +1,5 @@
 import { Menu } from '@constants/crm';
-import { test } from './BaseTest';
+import { test } from '@fixtures/page.fixture';
 import { contractData, updatedContractData } from '@data/crm/contract.data';
 import { Message } from '@constants/crm';
 

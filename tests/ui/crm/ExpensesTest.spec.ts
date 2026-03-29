@@ -1,4 +1,4 @@
-import { test } from './BaseTest';
+import { test } from '@fixtures/page.fixture';
 import { expenseData, updatedExpenseData } from '@data/crm/expenses.data';
 import { Menu } from '@constants/crm';
 

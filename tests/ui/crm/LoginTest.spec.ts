@@ -1,4 +1,4 @@
-import { test } from './BaseTest';
+import { test } from '@fixtures/page.fixture';
 import { invalidLoginCases } from '@data/crm/login.data';
 import { ENV } from '@utils/env';
 

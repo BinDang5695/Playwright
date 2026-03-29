@@ -1,4 +1,4 @@
-import { test } from './BaseTest';
+import { test } from '@fixtures/page.fixture';
 import { proposalData } from '@data/crm/proposal.data';
 import { Menu } from '@constants/crm';
 import { ExportFileType } from '@models/types/file.model';

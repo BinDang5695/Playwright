@@ -1,4 +1,4 @@
-import { test as baseTest, Page } from '@playwright/test';
+import { test as baseTest, expect, Page } from '@playwright/test';
 import { LoginPage } from '@pages/crm/LoginPage';
 import { CustomersPage } from '@pages/crm/CustomersPage';
 import { LeadsPage } from '@pages/crm/LeadsPage';
@@ -20,7 +20,7 @@ export type PageFixtureType = {
     leadsPage: LeadsPage;
     projectsPage: ProjectsPage;
     contactsPage: ContactsPage;
-    contractsPage: ContractsPage;
+    contractsPage: ContractsPage;   
     expensesPage: ExpensesPage;
     proposalsPage: ProposalsPage;
     knowledgeBasePage: KnowledgeBasePage;
@@ -28,9 +28,7 @@ export type PageFixtureType = {
     tasksPage: TasksPage;
 };
 
-type ExtendParams = Parameters<typeof baseTest.extend<PageFixtureType>>;
-
-export const pageFixture: ExtendParams[0] = {
+export const test = baseTest.extend<PageFixtureType>({
 
     authenticatedPage: async ({ page }, use) => {
         await page.goto(process.env.BASE_URL!);
@@ -84,4 +82,6 @@ export const pageFixture: ExtendParams[0] = {
     tasksPage: async ({ authenticatedPage }, use) => {
         await use(new TasksPage(authenticatedPage));
     },
-};
+});
+
+export { expect };

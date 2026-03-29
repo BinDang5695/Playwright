@@ -1,4 +1,4 @@
-import { test } from './BaseTest';
+import { test } from '@fixtures/page.fixture';
 import { Menu } from '@constants/crm';
 import { itemData } from '@data/crm/item.data';
 

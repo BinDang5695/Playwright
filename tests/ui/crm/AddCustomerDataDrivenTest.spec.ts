@@ -1,4 +1,4 @@
-import { test } from './BaseTest';
+import { test } from '@fixtures/page.fixture';
 import customerCases from '../../../test_data/crm/CustomerData.json';
 import { Menu } from '@constants/crm';
 import { CustomerDataDriven } from '@models/types/customerdriven.model';
