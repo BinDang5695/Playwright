@@ -11,7 +11,7 @@ export default defineConfig({
     globalSetup: './env/global.setup.ts',
     fullyParallel: true,
     testDir: './tests/',
-    workers: 2,
+    workers: 1,
     timeout: 90 * 1000, //timeout for each test
     expect: {
         timeout: 15 * 1000, //timeout for each expect condition

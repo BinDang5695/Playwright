@@ -1,5 +1,5 @@
-import { Contract } from '@models/contract.model'
-import { Button, Message, Dropdown, Number, Input } from '@constants/crm';
+import { Contract } from '@models/types/contract.model'
+import { Button, Dropdown, Number, Input } from '@constants/crm';
 import { CRMBasePage } from './CRMBasePage';
 
 export class ContractsPage extends CRMBasePage {
@@ -16,24 +16,12 @@ export class ContractsPage extends CRMBasePage {
         return this.getDropdownSearch(Number.ONE);
     }
 
-    selectCustomer(customer: string) {
-        return this.getValue(customer);
-    }
-
     get inputSubject() {
         return this.getInputById(Input.SUBJECT);
     }
 
     get inputContractValue() {
         return this.getInputValue(Input.CONTRACT_VALUE);
-    }
-
-    get inputContractType() {
-        return this.getDropdown(Dropdown.CONTRACT_TYPE);
-    }
-
-    get inputValueForContractType() {
-        return this.getDropdownSearch(Number.ONE);
     }
 
     get selectContractType() {
@@ -64,10 +52,6 @@ export class ContractsPage extends CRMBasePage {
         return this.getText(Number.ONE);
     }
 
-    get alertSuccess() {
-        return this.getAlert();
-    }
-
     get dropdownMore() {
         return this.getButtonByText(Button.MORE);
     }
@@ -80,52 +64,27 @@ export class ContractsPage extends CRMBasePage {
         return this.getInputAriaControls(Input.SEARCH_CONTRACT);
     }
 
-    noDataAfterDelete() {
-        return this.getNoData(Message.NO_DATA);
-    }
-
-    get buttonCloseAlert() {
-        return this.getCloseAlert();
-    }
-
     async clickNewContract() {
         await this.click(this.buttonNewContract);
     }
 
-    async addNewContract(data: Contract) {
-        await this.click(this.buttonNewContract);
-        await this.selectDropdown(Dropdown.CLIENT_ID, Number.TWO, data.customer);
+    async fillContractForm(data: Contract, haveDropdown: boolean = false) {
+        if (haveDropdown) {
+            await this.selectDropdown(Dropdown.CLIENT_ID, Number.TWO, data.customer);
+        }
         await this.type(this.inputSubject, data.subject);
         await this.type(this.inputContractValue, data.value);
-        await this.selectDropdown(Dropdown.CONTRACT_TYPE, Number.ONE, data.contractType);
+        if (haveDropdown) {
+            await this.selectDropdown(Dropdown.CONTRACT_TYPE, Number.ONE, data.contractType);
+        }
         await this.type(this.inputStartDate, data.startDate);
         await this.type(this.inputEndDate, data.endDate);
         await this.type(this.inputDescription, data.description);
         await this.click(this.buttonSave);
     }
 
-    async verifyCreatedContract(data: Contract) {
-        await this.verifyText(this.alertSuccess, Message.CREATED);
-        await this.verifyText(this.selectedCustomer(data.customer), data.customer);
-        await this.verifyValue(this.inputSubject, data.subject);
-        await this.verifyCurrency(this.inputContractValue, `${data.value}`);
-        await this.verifyText(this.selectedContractType, data.contractType);
-        await this.verifyValue(this.inputStartDate, data.startDate);
-        await this.verifyValue(this.inputEndDate, data.endDate);
-        await this.verifyValue(this.inputDescription, data.description);
-    }
-
-    async updateContract(data: Contract) {
-        await this.type(this.inputSubject, data.subject);
-        await this.type(this.inputContractValue, data.value);
-        await this.type(this.inputStartDate, data.startDate);
-        await this.type(this.inputEndDate, data.endDate);
-        await this.type(this.inputDescription, data.description);
-        await this.click(this.buttonSave);
-    }
-
-    async verifyUpdatedContract(data: Contract) {
-        await this.verifyText(this.alertSuccess, Message.UPDATED);
+    async verifyContract(data: Contract, message: string) {
+        await this.verifyText(this.getAlert(), message);
         await this.verifyText(this.selectedCustomer(data.customer), data.customer);
         await this.verifyValue(this.inputSubject, data.subject);
         await this.verifyCurrency(this.inputContractValue, `${data.value}`);
@@ -139,12 +98,12 @@ export class ContractsPage extends CRMBasePage {
         await this.acceptAlert();
         await this.click(this.dropdownMore);
         await this.click(this.buttonDelete);
-        await this.click(this.buttonCloseAlert);
+        await this.click(this.getCloseAlert());
     }
 
     async verifyDeletedContract(data: Contract) {
         await this.type(this.searchContract, data.subject);
-        await this.verifyText(this.noDataAfterDelete(), Message.NO_DATA);
+        await this.waitVisible(this.getNoData());
     }
 
 }

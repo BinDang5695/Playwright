@@ -1,255 +1,253 @@
-import { Page, Locator, expect } from '@playwright/test';
-import BasePage from './BasePage';
-import type { CustomerData } from '../../models/types/CustomerData';
+import { CRMBasePage } from './CRMBasePage';
+import { Button, Input, Option, Dropdown, Table, Number, Delay, Error } from '@constants/crm';
+import { Customer } from '@models/types/customer.model'
+import { CustomerDataDriven } from '@models/types/customerdriven.model'
 
-export class CustomersPage extends BasePage {
+export class CustomersPage extends CRMBasePage {
 
-  private readonly buttonAddNewCustomer: Locator;
-  private readonly searchInput: Locator;
-  private readonly inputCompany: Locator;
-  private readonly inputVATNumber: Locator;
-  private readonly inputPhoneNumber: Locator;
-  private readonly inputWebsite: Locator;
-  private readonly dropDownGroups: Locator;
-  private readonly searchGroups: Locator;
-  private readonly optionVIP: Locator;
-  private readonly currencyDropdown: Locator;
-  private readonly optionEuro: Locator;
-  private readonly defaultLanguageDropdown: Locator;
-  private readonly optionVietnamese: Locator;
-  private readonly inputAddress: Locator;
-  private readonly inputCity: Locator;
-  private readonly inputState: Locator;
-  private readonly inputZipCode: Locator;
-  private readonly countryDropdown: Locator;
-  private readonly searchCountry: Locator;
-  private readonly optionVietnam: Locator;
-  private readonly buttonSave: Locator;
-  private readonly dataInTable: Locator;
-  private readonly totalCustomer: Locator;
-  private readonly buttonDelete: Locator;
-  private readonly noData: Locator;
-  private readonly buttonX: Locator;
-  private customerRow = (customerName: string) =>
-    this.page.locator('table tbody tr', {
-      has: this.page.getByRole('link', { name: customerName })
-    });
-
-  constructor(page: Page) {
-    super(page);
-
-    this.buttonAddNewCustomer = page.getByRole('link', { name: 'New Customer' });
-    this.searchInput = page.locator("//input[@aria-controls='clients']");
-    this.inputCompany = page.getByLabel('Company');
-    this.inputVATNumber = page.getByLabel('VAT Number');
-    this.inputPhoneNumber = page.getByLabel('Phone');
-    this.inputWebsite = page.getByLabel('Website');
-    this.dropDownGroups = page.locator("//button[@data-id='groups_in[]']");
-    this.searchGroups = page.getByRole('combobox', { name: 'Search' });
-    this.optionVIP = page.locator("//span[normalize-space()='VIP']");
-    this.currencyDropdown = page.locator("//button[@data-id='default_currency']");
-    this.optionEuro = page.getByText('€', { exact: true });
-    this.defaultLanguageDropdown = page.locator("//button[@data-id='default_language']");
-    this.optionVietnamese = page.locator("//span[normalize-space()='Vietnamese']");
-    this.inputAddress = page.getByRole('textbox', { name: 'Address' });
-    this.inputCity = page.locator("//input[@id='city']");
-    this.inputState = page.locator("//input[@id='state']");
-    this.inputZipCode = page.locator("//input[@id='zip']");
-    this.countryDropdown = page.locator('button[data-id="country"]');
-    this.searchCountry = page.getByRole('combobox', { name: 'Search' });
-    this.optionVietnam = page.locator("//span[normalize-space()='Vietnam']");
-    this.buttonSave = page.locator("//button[contains(@class,'only-save')]");
-    this.dataInTable = page.getByRole('link', { name: 'Nashtech Company' });
-    this.totalCustomer = page.locator("//span[normalize-space()='Total Customers']/preceding-sibling::span");
-    this.buttonDelete = page.locator("//a[normalize-space()='Delete']");
-    this.noData = page.getByText('No matching records found', { exact: true });
-    this.buttonX = page.locator("button[data-dismiss='alert'] span", { hasText: '×' });
+  get buttonAddNewCustomer() {
+      return this.getLinkByText(Button.NEWCUSTOMER);
   }
+
+  get searchInput() {
+      return this.getInputAriaControls(Input.CLIENTS);
+  }
+
+  get inputCompany() {
+      return this.getInputById(Input.COMPANY);
+  }
+
+  get inputVATNumber() {
+      return this.getInputById(Input.VAT);
+  }
+
+  get inputPhoneNumber() {
+      return this.getInputById(Input.PHONENUMBER);
+  }
+
+  get inputWebsite() {
+      return this.getInputById(Input.WEBSITE);
+  }
+
+  get clickDropdown() {
+      return this.getDropdown(Dropdown.GROUPS_IN);
+  }
+
+  get currencyDropdown() {
+      return this.getDropdown(Dropdown.DEFAULT_CURRENCY);
+  }
+
+  get optionEuro() {
+      return this.getValue1(Option.EURO);
+  }
+  
+  get defaultLanguageDropdown() {
+      return this.getDropdown(Dropdown.DEFAULT_LANGUAGE);
+  }
+
+  get optionVietnamese() {
+      return this.getValue(Option.VIETNAMESE);
+  }
+
+  get inputAddress() {
+      return this.getTextArea2(Input.ADDRESS);
+  }
+
+  get inputCity() {
+      return this.getInputById(Input.CITY);
+  }
+
+  get inputState() {
+      return this.getInputById(Input.STATE);
+  }
+
+  get inputZipCode() {
+      return this.getInputById(Input.ZIP);
+  }
+
+  get countryDropdown() {
+      return this.getDropdown(Dropdown.COUNTRY);
+  }
+
+  get buttonSave() {
+      return this.getButtonByClass(Button.ONLY_SAVE);
+  }
+
+  dataInTable(company: string) {
+      return this.getLinkByText(company);
+  }
+
+  get totalCustomer() {
+      return this.getTotalCustomer(Table.TOTAL_CUSTOMERS);
+  }
+
+  get buttonDelete() {
+      return this.getLinkByText(Button.DELETE);
+  }
+
+  get errorCompany() {
+      return this.getErrorCompany(Error.COMPANY_ERROR);
+  }  
+
+  dataTable(company: string) {
+      return this.getAText(company);
+  }  
 
   async clickButtonAddNewCustomer() {
-    await this.buttonAddNewCustomer.click();
+    await this.click(this.buttonAddNewCustomer);
   }
 
-  async addNewCustomer() {
-    await this.inputCompany.fill('Nashtech Company');
-    await this.inputVATNumber.fill('123456789');
-    await this.inputPhoneNumber.fill('0123456789');
-    await this.inputWebsite.fill('https://nashtech.com.vn');
-    await this.dropDownGroups.click();
-    await this.searchGroups.fill('VIP');
-    await this.optionVIP.click();
-    await this.dropDownGroups.click();
-    await this.currencyDropdown.click();
-    await this.optionEuro.click();
-    await this.defaultLanguageDropdown.click();
-    await this.optionVietnamese.click();
-    await this.inputAddress.fill('123 Street, Hanoi');
-    await this.inputCity.fill('Hanoi');
-    await this.inputState.fill('Hoan Kiem');
-    await this.inputZipCode.fill('100000');
-    await this.countryDropdown.click();
-    await this.searchCountry.fill('Vietnam');
-    await this.optionVietnam.click();
-    await this.buttonSave.click();
+  async addNewCustomer(data: Customer) {
+    await this.type(this.inputCompany, data.company);
+    await this.type(this.inputVATNumber, data.vat);
+    await this.type(this.inputPhoneNumber, data.phone);
+    await this.type(this.inputWebsite, data.website);
+    await this.selectDropdown(Dropdown.GROUPS_IN, Number.ONE, data.group);
+    await this.click(this.clickDropdown);
+    await this.click(this.currencyDropdown);
+    await this.click(this.optionEuro);
+    await this.click(this.defaultLanguageDropdown);
+    await this.click(this.optionVietnamese);
+    await this.type(this.inputAddress, data.address);
+    await this.type(this.inputCity, data.city);
+    await this.type(this.inputState, data.state);
+    await this.type(this.inputZipCode, data.zip);
+    await this.selectDropdown(Dropdown.COUNTRY, Number.FOUR, data.country);
+    await this.click(this.buttonSave);
   }
 
-
-  async addNewCustomerDataDriven(data: CustomerData) {
+  async addNewCustomerDataDriven(data: CustomerDataDriven) {
 
     if (data.company)
-      await this.inputCompany.fill(data.company);
+        await this.type(this.inputCompany, data.company);
 
     if (data.vat)
-      await this.inputVATNumber.fill(data.vat);
+        await this.type(this.inputVATNumber, data.vat);
 
     if (data.phone)
-      await this.inputPhoneNumber.pressSequentially(data.phone, { delay: 50 });
+        await this.type(this.inputPhoneNumber, data.phone, Delay.ONE_HUNDRED_MILLISECONDS);
 
     if (data.website)
-      await this.inputWebsite.fill(data.website);
+        await this.type(this.inputWebsite, data.website, Delay.ONE_HUNDRED_MILLISECONDS);
 
     if (data.group) {
-      await this.dropDownGroups.click();
-      await this.searchGroups.fill(data.group);
-      await this.optionVIP.click();
+      await this.selectDropdown(Dropdown.GROUPS_IN, Number.ONE, data.group);
     }
 
     if (data.currency) {
-      await this.dropDownGroups.click();
-      await this.currencyDropdown.click();
-      await this.optionEuro.click();
+      await this.click(this.clickDropdown);
+      await this.click(this.currencyDropdown);
+      await this.click(this.optionEuro);
     }
 
     if (data.language) {
-      await this.defaultLanguageDropdown.click();
-      await this.optionVietnamese.click();
+      await this.click(this.defaultLanguageDropdown);
+      await this.click(this.optionVietnamese);
     }
 
     if (data.address)
-      await this.inputAddress.fill(data.address);
+      await this.type(this.inputAddress, data.address);
 
     if (data.city)
-      await this.inputCity.fill(data.city);
+      await this.type(this.inputCity, data.city);
 
     if (data.state)
-      await this.inputState.fill(data.state);
+      await this.type(this.inputState, data.state);
 
     if (data.zip)
-      await this.inputZipCode.fill(data.zip);
+      await this.type(this.inputZipCode, data.zip);
 
     if (data.country) {
-      await this.countryDropdown.click();
-      await this.searchCountry.fill(data.country);
-      await this.optionVietnam.click();
+        await this.selectDropdown(Dropdown.COUNTRY, Number.FOUR, data.country);
     }
 
-    await this.buttonSave.scrollIntoViewIfNeeded();
-    await this.buttonSave.click();
+    await this.scrollIntoView(this.buttonSave);
+    await this.click(this.buttonSave);
   }
 
   async verifyCreateFail(expectedMessage: string) {
-
-    await this.page.keyboard.press('Tab');
-
-    const errorMessage = this.page.locator('#company-error');
-    await expect(errorMessage).toBeVisible();
-    await expect(errorMessage).toHaveText(expectedMessage);
+    await this.waitVisible(this.errorCompany);
+    await this.verifyText(this.errorCompany, expectedMessage);
   }
 
-  async verifyCustomerAddedDataDriven(data: CustomerData) {
+  async verifyCustomerAddedDataDriven(data: CustomerDataDriven) {
 
     if (data.company)
-      await expect(this.inputCompany).toHaveValue(data.company);
+        await this.verifyValue(this.inputCompany, data.company)
 
     if (data.vat)
-      await expect(this.inputVATNumber).toHaveValue(data.vat);
+        await this.verifyValue(this.inputVATNumber, data.vat)
 
     if (data.phone)
-      await expect(this.inputPhoneNumber).toHaveValue(data.phone);
+        await this.verifyValue(this.inputPhoneNumber, data.phone)
 
     if (data.website)
-      await expect(this.inputWebsite).toHaveValue(data.website);
+        await this.verifyValue(this.inputWebsite, data.website)
 
     if (data.address)
-      await expect(this.inputAddress).toHaveValue(data.address);
+        await this.verifyValue(this.inputAddress, data.address)
 
     if (data.city)
-      await expect(this.inputCity).toHaveValue(data.city);
+        await this.verifyValue(this.inputCity, data.city)
 
     if (data.state)
-      await expect(this.inputState).toHaveValue(data.state);
+        await this.verifyValue(this.inputState, data.state)
 
     if (data.zip)
-      await expect(this.inputZipCode).toHaveValue(data.zip);
+        await this.verifyValue(this.inputZipCode, data.zip)
+
   }
 
-  async verifyCustomerAdded() {
-    await expect(this.inputCompany).toHaveValue('Nashtech Company');
-    await expect(this.inputVATNumber).toHaveValue('123456789');
-    await expect(this.inputPhoneNumber).toHaveValue('0123456789');
-    await expect(this.inputWebsite).toHaveValue('https://nashtech.com.vn');
-    await expect(this.dropDownGroups).toHaveText(/VIP/);
-    await expect(this.currencyDropdown).toHaveText(/EUR/);
-    await expect(this.defaultLanguageDropdown).toHaveText(/Vietnamese/);
-    await expect(this.inputAddress).toHaveValue('123 Street, Hanoi');
-    await expect(this.inputCity).toHaveValue('Hanoi');
-    await expect(this.inputState).toHaveValue('Hoan Kiem');
-    await expect(this.inputZipCode).toHaveValue('100000');
-    await expect(this.countryDropdown).toHaveText(/Vietnam/);
+  async verifyCustomerAdded(data: Customer) {
+    await this.verifyValue(this.inputCompany, data.company);
+    await this.verifyValue(this.inputVATNumber, data.vat);
+    await this.verifyValue(this.inputPhoneNumber, data.phone);
+    await this.verifyValue(this.inputWebsite, data.website);
+    await this.verifyText(this.clickDropdown, data.group);
+    await this.verifyText(this.currencyDropdown, data.currency);
+    await this.verifyText(this.defaultLanguageDropdown, data.language);
+    await this.verifyValue(this.inputAddress, data.address);
+    await this.verifyValue(this.inputCity, data.city);
+    await this.verifyValue(this.inputState, data.state);
+    await this.verifyValue(this.inputZipCode, data.zip);
+    await this.verifyValue(this.inputState, data.state);
+    await this.verifyText(this.countryDropdown, data.country);
   }
 
   async getTotalCustomers(): Promise<number> {
-    const totalText = await this.totalCustomer.textContent();
-    return Number(totalText);
+    return this.getTextAsNumber(this.totalCustomer);
   }
 
-  async searchCustomer() {
-    await this.menuCustomers.click();
-    await this.searchInput.fill('Nashtech Company');
-    await expect(this.dataInTable).toBeVisible();
+  async searchCustomer(data: Customer) {
+    await this.type(this.searchInput, data.company);
+    await this.waitVisible(this.dataInTable(data.company));
   }
 
-  async deleteCustomer(): Promise<void> {
-    await this.dataInTable.hover();
-    await this.page.once('dialog', dialog => dialog.accept());
-    await this.buttonDelete.click();
-    await this.buttonX.click();
+  async deleteCustomer(data: Customer) {
+    await this.hover(this.dataInTable(data.company));
+    await this.acceptAlert();
+    await this.click(this.buttonDelete);
+    await this.click(this.getbuttonCloseAlert());
   }
 
-  async deleteCustomerIfExist(customerName: string): Promise<void> {
-
-    await this.menuCustomers.click();
-    await this.searchInput.fill(customerName);
-    const tableBody = this.page.locator('//tbody/tr[1]');
-    await tableBody.waitFor({ state: 'visible' });
-    await this.page.waitForLoadState('networkidle');
-
-    const customerRow = this.customerRow(customerName);
-
-    if (await customerRow.count() === 0) {
-      console.log(`Customer "${customerName}" not found → skip delete`);
-      return;
-    }
-    await this.hoverWithRetry(customerRow.first());
-
-    this.page.once('dialog', dialog => dialog.accept());
-    await customerRow.first().getByRole('link', { name: 'Delete' }).click();
-    await this.page.waitForLoadState('networkidle');
-
-    await this.buttonX.click();
-    await this.page.waitForLoadState('networkidle');
-
-    await this.searchInput.fill(customerName);
-    try {
-      await expect(this.noData).toBeVisible();
-    } catch (error) {
-      console.log(`⚠️ Customer "${customerName}" may not have been deleted`);
-    }
+  async deleteCustomerIfExist(data: CustomerDataDriven): Promise<void> {
+      if (!data.company) {
+    console.log('⚠️ No company name provided, cannot delete');
+    return;
+  }
+    await this.type(this.searchInput, data.company);
+    await this.hover(this.dataTable(data.company));
+    await this.acceptAlert();
+    await this.click(this.buttonDelete);
+    await this.waitForNetwork();
+    await this.click(this.getbuttonCloseAlert());
+    await this.waitForNetwork();
+    await this.type(this.searchInput, data.company);
   }
 
-  async verifyCustomerDeleted() {
-    await this.searchInput.fill('Nashtech Company');
-    await expect(this.noData).toBeVisible();
+  async verifyCustomerDeleted(data: Customer) {
+    await this.type(this.searchInput, data.company);
+    await this.waitVisible(this.getNoData());
   }
 
 }

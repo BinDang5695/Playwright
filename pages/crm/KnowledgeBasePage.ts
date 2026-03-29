@@ -1,78 +1,82 @@
-import { expect } from '@playwright/test';
-import BasePage from './BasePage';
+import { Page } from '@playwright/test';
+import { Article } from '@models/types/knowledge.model'
+import { Button, Message, Dropdown, Option, Input, Label, Checkbox } from '@constants/crm';
+import { CRMBasePage } from './CRMBasePage';
 
-export class KnowledgeBasePage extends BasePage {
+export class KnowledgeBasePage extends CRMBasePage {
 
-    private buttonNewArticle = () => this.page.locator("//a[normalize-space()='New Article']");
-    private inputSubject = () => this.page.locator("//input[@id='subject']");
-    private dropdownGroup = () => this.page.locator("//button[@data-id='articlegroup']");
-    private searchGroup = () => this.page.locator("//input[@aria-label='Search']");
-    private optionJava = () => this.page.locator("//span[normalize-space()='java']");
-    private checkboxInternalArticle = () => this.page.locator("//label[normalize-space()='Internal Article']");
-    private checkboxDisabled = () => this.page.locator("//div[@class='panel-body']//label[@for='disabled'][normalize-space()='Disabled']");
-    private iframeDescription = () => this.page.frameLocator('#article-form iframe#description_ifr');
-    private editorBody = () => this.iframeDescription().locator('#tinymce');
-    private buttonSave = () => this.page.locator("//div[@class='panel-footer text-right']//button[@type='submit'][normalize-space()='Save']");
-    private createdArticle = () => this.page.locator("//tr[@class='has-row-options odd']//a[contains(text(),'Bin Article')]");
-    private buttonView = () => this.page.locator("//a[normalize-space()='View']");
-    private buttonDelete = () => this.page.locator("//a[normalize-space()='Delete']");
-    private nameArticle = "//h4[normalize-space()='Bin Article']";
-    private descriptionArticle = "//p[normalize-space()='Bin article description']";
-    private buttonYes = "//button[normalize-space()='Yes']";
-    private messageNotification = "//div[@class='answer_response']";
-    private buttonX = () => this.page.locator("//button[@data-dismiss='alert']//span[@aria-hidden='true'][normalize-space()='×']");
+    get buttonNewArticle() {
+        return this.getLinkByText(Button.NEWARTICLE);
+    }
+
+    get inputSubject() {
+        return this.getInputById(Input.SUBJECT);
+    }
+
+    get checkboxInternalArticle() {
+        return this.getLabelText(Label.INTERNALARTICLE);
+    }
+
+    get checkboxDisabled() {
+        return this.getCheckbox(Checkbox.DISABLED);
+    }
+
+    get buttonSave() {
+        return this.getButton3(Button.SAVE);
+    }
+
+    createdArticle(subject: string, page?: Page) {
+        return this.getTable2(subject, page);
+    }
+
+    nameArticle(subject: string, page?: Page) {
+        return this.getValue6(subject, page);
+    }
+
+    descriptionArticle(description: string, page?: Page) {
+        return this.getValue7(description, page);
+    }
+
+    buttonYes(page?: Page) {
+        return this.getButtonByText(Button.YES, page);
+    }
+
+    messageNotification(page?: Page) {
+        return this.getButton4(Message.ANSWER_RESPONSE, page);
+    }
 
     async clickButtonNewArticle() {
-        await this.buttonNewArticle().click();
+        await this.click(this.buttonNewArticle);
     }
 
-    async enterDescription(content: string) {
-        await this.editorBody().fill(content);
+    async addNewArticle(data: Article) {
+        await this.type(this.inputSubject, data.subject);
+        await this.selectDropdownNotSearch(Dropdown.ARTICLEGROUP, Option.JAVA);
+        await this.check(this.checkboxInternalArticle);
+        await this.check(this.checkboxDisabled);
+        await this.type(this.editorBody, data.description);
+        await this.click(this.buttonSave);
     }
 
-    async addNewArticle() {
-        await this.inputSubject().fill('Bin Article');
-        await this.dropdownGroup().click();
-        await this.searchGroup().fill('java');
-        await this.optionJava().click();
-        await this.checkboxInternalArticle().check();
-        await this.checkboxDisabled().check();
-        await this.enterDescription('Bin article description');
-        await this.buttonSave().click();
+    async switchBetweenTabTest(data: Article) {
+        await this.hover(this.createdArticle(data.subject));
+        await this.waitVisible(this.buttonView);
+
+        const [tab2] = await Promise.all([this.page.context().waitForEvent('page'), this.click(this.buttonView)]);
+
+        await this.verifyText(this.nameArticle(data.subject, tab2), data.subject);
+        await this.verifyText(this.descriptionArticle(data.description, tab2), data.description);
+        await this.buttonYes(tab2).click();
+        await this.verifyText(this.messageNotification(tab2), data.messageFirst);
+        await this.buttonYes(tab2).click();
+        await this.verifyText(this.messageNotification(tab2), data.messageSecond);
+        await this.page.bringToFront();
     }
 
-    async switchBetweenTabTest() {
-        const tab1 = this.page;
-
-        await this.createdArticle().hover();
-        await expect(this.buttonView()).toBeVisible({ timeout: 5000 });
-
-        const [tab2] = await Promise.all([
-            this.page.context().waitForEvent('page'),
-            this.buttonView().click()
-        ]);
-
-        await tab2.waitForLoadState('domcontentloaded');
-
-        await expect(tab2.locator(this.nameArticle)).toHaveText('Bin Article');
-        await expect(tab2.locator(this.descriptionArticle))
-            .toHaveText('Bin article description');
-
-        await tab2.locator(this.buttonYes).click();
-        await expect(tab2.locator(this.messageNotification))
-            .toHaveText('Thanks for your feedback');
-
-        await tab2.locator(this.buttonYes).click();
-        await expect(tab2.locator(this.messageNotification))
-            .toHaveText('You can vote once in 24 hours');
-
-        await tab1.bringToFront();
-    }
-
-    async deleteCreatedArticle() {
-        this.page.once('dialog', dialog => dialog.accept());
-        await this.createdArticle().hover();
-        await this.buttonDelete().click();
-        await this.buttonX().click();
+    async deleteCreatedArticle(data: Article) {
+        await this.acceptAlert();
+        await this.hover(this.createdArticle(data.subject));
+        await this.click(this.buttonDelete);
+        await this.click(this.getbuttonCloseAlert());
     }
 }

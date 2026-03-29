@@ -2,97 +2,65 @@ import { expect } from '@playwright/test';
 
 export class VerifyBookingResponseBody {
 
-  static verifyCreateBooking(body: any, expected: any) {
-    expect(body).toHaveProperty('bookingid');
-    expect(typeof body.bookingid).toBe('number');
-    expect(body.bookingid).toBeGreaterThan(0);
-
-    expect(body).toHaveProperty('booking');
-    const booking = body.booking;
-
+  private static verifyBookingFields(booking: any, expected: any) {
     expect(booking.firstname).toBe(expected.firstname);
     expect(booking.lastname).toBe(expected.lastname);
     expect(booking.totalprice).toBe(expected.totalprice);
     expect(booking.depositpaid).toBe(expected.depositpaid);
+  }
 
-    expect(booking).toHaveProperty('bookingdates');
-    const bookingdates = booking.bookingdates;
-
+  private static verifyBookingDates(bookingdates: any, expected: any, normalize = false) {
     expect(typeof bookingdates.checkin).toBe('string');
     expect(typeof bookingdates.checkout).toBe('string');
-
     expect(bookingdates.checkin).toMatch(/^\d{4}-\d{2}-\d{2}$/);
     expect(bookingdates.checkout).toMatch(/^\d{4}-\d{2}-\d{2}$/);
 
     if (expected.bookingdates) {
-      expect(bookingdates.checkin).toBe(expected.bookingdates.checkin.replace(/\//g, '-'));
-      expect(bookingdates.checkout).toBe(expected.bookingdates.checkout.replace(/\//g, '-'));
+      const checkin  = normalize ? expected.bookingdates.checkin.replace(/\//g, '-')  : expected.bookingdates.checkin;
+      const checkout = normalize ? expected.bookingdates.checkout.replace(/\//g, '-') : expected.bookingdates.checkout;
+      expect(bookingdates.checkin).toBe(checkin);
+      expect(bookingdates.checkout).toBe(checkout);
     }
+  }
 
+  private static verifyAdditionalNeeds(booking: any, expected: any) {
     if (expected.additionalneeds) {
       expect(booking.additionalneeds).toBe(expected.additionalneeds);
     }
   }
 
-  static verifyGetBooking(body: any, expected: any) {
-
-    const bookingdates = body.bookingdates;
-
-    expect(body.firstname).toBe(expected.firstname);
-    expect(body.lastname).toBe(expected.lastname);
-    expect(body.totalprice).toBe(expected.totalprice);
-    expect(body.depositpaid).toBe(expected.depositpaid);
-
+  private static verifyBookingBody(body: any, expected: any) {
+    this.verifyBookingFields(body, expected);
     expect(body).toHaveProperty('bookingdates');
-
-    expect(typeof bookingdates.checkin).toBe('string');
-    expect(typeof bookingdates.checkout).toBe('string');
-
-    expect(bookingdates.checkin).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-    expect(bookingdates.checkout).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-
-    if (expected.bookingdates) {
-      expect(bookingdates.checkin).toBe(expected.bookingdates.checkin);
-      expect(bookingdates.checkout).toBe(expected.bookingdates.checkout);
-    }
-
-    if (expected.additionalneeds) {
-      expect(body.additionalneeds).toBe(expected.additionalneeds);
-    }
-  } 
-  
-  static verifyUpdatePartialBooking(body: any, expected: any) {
-    const bookingdates = body.bookingdates;
-
-    expect(body.firstname).toBe(expected.firstname);
-    expect(body.lastname).toBe(expected.lastname);
-    expect(body.totalprice).toBe(expected.totalprice);
-    expect(body.depositpaid).toBe(expected.depositpaid);
-
-    expect(body).toHaveProperty('bookingdates');
-
-    expect(typeof bookingdates.checkin).toBe('string');
-    expect(typeof bookingdates.checkout).toBe('string');
-
-    expect(bookingdates.checkin).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-    expect(bookingdates.checkout).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-
-    if (expected.bookingdates) {
-      expect(bookingdates.checkin).toBe(expected.bookingdates.checkin);
-      expect(bookingdates.checkout).toBe(expected.bookingdates.checkout);
-    }
-
-    if (expected.additionalneeds) {
-      expect(body.additionalneeds).toBe(expected.additionalneeds);
-    }
+    this.verifyBookingDates(body.bookingdates, expected);
+    this.verifyAdditionalNeeds(body, expected);
   }
 
-  static verifyDeleteBooking(body: any, expected?: any) {
+  static verifyCreateBooking(body: any, expected: any) {
+    expect(body).toHaveProperty('bookingid');
+    expect(typeof body.bookingid).toBe('number');
+    expect(body.bookingid).toBeGreaterThan(0);
+    expect(body).toHaveProperty('booking');
+
+    this.verifyBookingFields(body.booking, expected);
+    expect(body.booking).toHaveProperty('bookingdates');
+    this.verifyBookingDates(body.booking.bookingdates, expected, true);
+    this.verifyAdditionalNeeds(body.booking, expected);
+  }
+
+  static verifyGetBooking(body: any, expected: any) {
+    this.verifyBookingBody(body, expected);
+  }
+
+  static verifyUpdatePartialBooking(body: any, expected: any) {
+    this.verifyBookingBody(body, expected);
+  }
+
+  static verifyDeleteBooking(body: any) {
     expect(body).toBe('Created');
   }
 
-  static verifyGetAfterDeleteBooking(body: any, expected?: any) {
+  static verifyGetAfterDeleteBooking(body: any) {
     expect(body).toBe('Not Found');
-  }  
-  
+  }
 }

@@ -2,8 +2,7 @@ import { APIResponse } from '@playwright/test';
 
 export class ApiLogger {
 
-    static logRequest(
-    method: string,
+    static logRequest( method: string,
     url: string,
     options?: {
       headers?: Record<string, any>;

@@ -16,10 +16,7 @@ test.describe.serial('API Booking Tests', () => {
     const resultPost = await BookingService.post(request, token);
     validateSchema(CreateBookingSchema, resultPost.body);
     VerifyBookingHeaders.verify(resultPost.response);
-    VerifyBookingResponseBody.verifyCreateBooking(
-      resultPost.body,
-      resultPost.requestData
-    );
+    VerifyBookingResponseBody.verifyCreateBooking( resultPost.body, resultPost.requestData );
     expect(resultPost.body.bookingid).toBeGreaterThan(0);
     createdBooking = resultPost.body.booking;
     createdBookingId = resultPost.body.bookingid;
@@ -37,10 +34,7 @@ test.describe.serial('API Booking Tests', () => {
     validateSchema(UpdateBookingSchema, resultPut.body);
     VerifyBookingHeaders.verify(resultPut.response);
     updatedBookingData = resultPut.requestData;
-    const expectedBookingAfterPatch = {
-      ...createdBooking,
-      ...updatedBookingData
-    };
+    const expectedBookingAfterPatch = { ...createdBooking, ...updatedBookingData };
     VerifyBookingResponseBody.verifyUpdatePartialBooking(resultPut.body, expectedBookingAfterPatch);
     createdBooking = expectedBookingAfterPatch;
   });
@@ -55,7 +49,7 @@ test.describe.serial('API Booking Tests', () => {
   test('Delete Booking', async ({ request, token }) => {
     const result = await BookingService.delete(request, token, createdBookingId);
     VerifyBookingHeaders.verifyText(result.response);
-    VerifyBookingResponseBody.verifyDeleteBooking(result.body, updatedBookingData);
+    VerifyBookingResponseBody.verifyDeleteBooking(result.body);
   });
 
   test('Get Booking After Delete', async ({ request, token }) => {

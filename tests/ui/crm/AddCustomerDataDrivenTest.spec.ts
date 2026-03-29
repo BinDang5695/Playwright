@@ -1,36 +1,34 @@
 import { test } from './BaseTest';
-import customerCases from '../../../test_data/customerData.json';
-import type { CustomerData } from '../../../models/types/CustomerData';
+import customerCases from '../../../test_data/crm/CustomerData.json';
+import { Menu } from '@constants/crm';
+import { CustomerDataDriven } from '@models/types/customerdriven.model';
 
 type CustomerCase = {
   title: string;
-  data: CustomerData;
+  data: CustomerDataDriven;
   expectedType: 'success' | 'error';
   expectedMessage?: string;
 };
 
 const cases = customerCases as CustomerCase[];
 
-test.describe('CRM Add Customer Data Driven', () => {
+test.describe.serial('CRM Add Customer Data Driven', () => {
 
   for (const item of cases) {
 
-    test(item.title, async ({ pages }) => {
+    test(item.title, async ({ CRMBasePage, customersPage }) => {
 
-      await pages.loginPage().loginCRM('admin@example.com', '123456');
-      await pages.basePage().clickMenuCustomers();
-      await pages.customersPage().clickButtonAddNewCustomer();
-      await pages.customersPage().addNewCustomerDataDriven(item.data);
+      await CRMBasePage.clickValue(Menu.CUSTOMERS);
+      await customersPage.clickButtonAddNewCustomer();
+      await customersPage.addNewCustomerDataDriven(item.data);
 
       if (item.expectedType === 'success') {
-        await pages.customersPage().verifyCustomerAddedDataDriven(item.data);
-        await pages.customersPage().deleteCustomerIfExist(item.data.company!);
+        await customersPage.verifyCustomerAddedDataDriven(item.data);
+        await CRMBasePage.clickValue(Menu.CUSTOMERS);
+        await customersPage.deleteCustomerIfExist(item.data);
       } else {
-        await pages.customersPage().verifyCreateFail(item.expectedMessage!);
+        await customersPage.verifyCreateFail(item.expectedMessage!);
       }
-
     });
-
   }
-
 });

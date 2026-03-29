@@ -26,7 +26,7 @@ async function globalSetup(): Promise<void> {
   await loginPage.loginCRM(username, password);
   await loginPage.verifyLoginSuccess();
 
-  const authDir = path.resolve('playwright/.auth');
+  const authDir = path.resolve('.auth');
   if (!fs.existsSync(authDir)) fs.mkdirSync(authDir, { recursive: true });
 
   await context.storageState({ path: path.resolve('.auth/user.json') });

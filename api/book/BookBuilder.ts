@@ -18,18 +18,18 @@ export class BookBuilder {
     };
   }
 
-static getDataToUpdateBook(): Partial<BookCreateRequest> {
-  return {
-    name: `Bin Updated Book ${faker.number.int({ min: 1, max: 9999 })}`,
-    category_id: 594,
-    release_date: faker.date
+  static getDataToUpdateBook(): Partial<BookCreateRequest> {
+    return {
+      name: `Bin Updated Book ${faker.number.int({ min: 1, max: 9999 })}`,
+      category_id: 594,
+      release_date: faker.date
         .future()
         .toISOString()
         .split('T')[0]!
         .replace(/-/g, '/'),
-    price: faker.number.int({ min: 1000, max: 99999 }),
-    image_ids: [76],
-    status: true
-  };
-}
+      price: faker.number.int({ min: 1000, max: 99999 }),
+      image_ids: [76],
+      status: true
+    };
+  }
 }

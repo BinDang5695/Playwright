@@ -1,51 +1,49 @@
-import { expect } from '@playwright/test';
-import { Menu } from '../../constants/crm';
+import { Menu, Url, Input, Header, Button } from '../../constants/crm';
 import { CRMBasePage } from './CRMBasePage';
 
 export class LoginPage extends CRMBasePage {
 
     get headerLogin() {
-        return this.page.getByRole('heading', { name: 'Login' });
+        return this.getValue3(Header.LOGIN);
     }
 
     get inputEmail() {
-        return this.page.locator('#email');
+        return this.getInputById(Input.EMAIL);
     }
 
     get inputPassword() {
-        return this.page.locator('#password');
+        return this.getInputById(Input.PASSWORD);
     }
 
     get checkboxRememberMe() {
-        return this.page.locator('#remember');
+        return this.getInputById(Input.REMEMBER);
     }
 
     get buttonLogin() {
-        return this.page.getByRole('button', { name: 'Login' });
+        return this.getButtonByText(Button.LOGIN);
     }
 
     get alertErrorMessage() {
-        return this.page.locator('.alert.alert-danger');
+        return this.getValue4();
     }
 
     async loginCRM(email: string, password: string) {
         await this.goto(process.env.BASE_URL!);
-        await expect(this.headerLogin).toBeVisible();
+        await this.waitVisible(this.headerLogin);
         await this.type(this.inputEmail, email);
         await this.type(this.inputPassword, password);
-        await this.checkboxRememberMe.check();
+        await this.check(this.checkboxRememberMe);
         await this.click(this.buttonLogin);
     }
 
     async verifyLoginSuccess() {
-        await expect(this.getValue(Menu.DASHBOARD)).toBeVisible();
-        await expect(this.page).not.toHaveURL(/authentication/);
+        await this.waitVisible(this.getValue(Menu.DASHBOARD));
+        await this.verifyUrlNotContains(Url.AUTHENTICATION);
     }
 
     async verifyLoginFail(expectedMessage: string | string[]) {
-        await expect(this.page).toHaveURL(/authentication/);
-        await expect(this.alertErrorMessage).toBeVisible();
-        await expect(this.alertErrorMessage).toHaveText(expectedMessage);
+        await this.verifyUrlContains(Url.AUTHENTICATION);
+        await this.waitVisible(this.alertErrorMessage);
+        await this.verifyText(this.alertErrorMessage, expectedMessage);
     }
-
 }

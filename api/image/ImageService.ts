@@ -2,142 +2,46 @@
 import type { APIRequestContext } from '@playwright/test';
 import { ConfigsGlobal } from '../common/ConfigsGlobal';
 import { EndPointGlobal } from '../common/EndpointGlobal';
-import { measureRequest } from '../common/ApiTestHelper';
-import { ApiLogger } from '../common/ApiLogger';
-import { expect } from '../common/BaseTestApi';
+import { BaseApiService } from '../common/BaseApiService';
 import { ImagePath } from './ImagePath';
 import fs from 'fs';
 
-export class ImageService {
+export class ImageService extends BaseApiService {
 
-  static async postCreate( request: APIRequestContext,
+  private static url(path = '') {
+    return `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_IMAGE}${path}`;
+  }
+
+  static async postCreate(
+    request: APIRequestContext,
     token: string,
     imagePath: string = ImagePath.createImage()
   ) {
-    const url = `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_IMAGE}`;
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-    };
-    ApiLogger.logRequest('POST', url, { headers: headers, body: { image: imagePath }, });
-
-    const { response, duration } = await measureRequest(() =>
-      request.post(url, {
-        headers: headers,
-        multipart: {
-          image: fs.createReadStream(imagePath),
-        },
-      })
-    );
-
-    const body = await response.json();
-    expect(response.status()).toBe(200);
-
-    await ApiLogger.logResponse(response, duration);
+    const multipart = { image: fs.createReadStream(imagePath) };
+    const { response, body } = await this.sendRequest('POST', request, this.url(), token, undefined, 200, multipart);
     return { response, body, imagePath };
   }
 
-  static async get( request: APIRequestContext,
-    token: string,
-    imageId: number
-  ) {
-    const url = `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_IMAGE}/${imageId}`;
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-    };
-    ApiLogger.logRequest('GET', url, { headers: headers });
+  static async get(request: APIRequestContext, token: string, imageId: number) {
+    return await this.sendRequest('GET', request, this.url(`/${imageId}`), token);
+  }
 
-    const { response, duration } = await measureRequest(() =>
-      request.get(url, {
-        headers: headers,
-        })
-    );
-
-    const body = await response.json();
-    expect(response.status()).toBe(200);
-
-    await ApiLogger.logResponse(response, duration);
-    return { response, body };
-}
-
-  static async postUpdate( request: APIRequestContext,
+  static async postUpdate(
+    request: APIRequestContext,
     token: string,
     imageId: number,
     imagePath: string = ImagePath.UpdateImage()
   ) {
-    const url = `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_IMAGE}/${imageId}`;
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-    };
-    const requestData = {
-        imageId,
-        imagePath,
-    };
-    ApiLogger.logRequest('POST', url, { headers, body: requestData });
+    const multipart = { image: fs.createReadStream(imagePath) };
+    const { response, body } = await this.sendRequest('POST', request, this.url(`/${imageId}`), token, undefined, 200, multipart);
+    return { response, body, requestData: { imageId, imagePath } };
+  }
 
-    const { response, duration } = await measureRequest(() =>
-      request.post(url, {
-        headers,
-        multipart: {
-          image: fs.createReadStream(imagePath),
-        },
-      })
-    );
+  static async delete(request: APIRequestContext, token: string, imageId: number) {
+    return await this.sendRequest('DELETE', request, this.url(`/${imageId}`), token);
+  }
 
-    const body = await response.json();
-    expect(response.status()).toBe(200);
-
-    await ApiLogger.logResponse(response, duration);
-    return { response, body, requestData };
-}
-
-  static async delete( request: APIRequestContext,
-    token: string,
-    imageId: number
-  ) {
-    const url = `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_IMAGE}/${imageId}`;
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-    };
-    ApiLogger.logRequest('DELETE', url, { headers: headers });
-
-    const { response, duration } = await measureRequest(() =>
-      request.delete(url, {
-        headers: headers,
-      })
-    );
-
-    const body = await response.json();
-    expect(response.status()).toBe(200);
-
-    await ApiLogger.logResponse(response, duration);
-    return { response, body };
-}
-
-  static async getAfterDelete( request: APIRequestContext,
-    token: string,
-    imageId: number
-  ) {
-    const url = `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_IMAGE}/${imageId}`;
-    const headers = {
-        Authorization: `Bearer ${token}`,
-        Accept: 'application/json',
-    };
-    ApiLogger.logRequest('GET', url, { headers: headers });
-
-    const { response, duration } = await measureRequest(() =>
-      request.get(url, {
-        headers: headers,
-      })
-    );
-
-    const body = await response.json();
-    expect(response.status()).toBe(400);
-
-    await ApiLogger.logResponse(response, duration);
-    return { response, body };
-}
+  static async getAfterDelete(request: APIRequestContext, token: string, imageId: number) {
+    return await this.sendRequest('GET', request, this.url(`/${imageId}`), token, undefined, 400);
+  }
 }

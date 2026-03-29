@@ -34,3 +34,12 @@ export async function readExcelAsText(filePath: string): Promise<string> {
     });
     return text;
 }
+
+export async function deleteFile(filePath: string) {
+        try {
+            await fs.promises.unlink(filePath);
+            console.log(`🧹 Deleted file: ${filePath}`);
+        } catch (err) {
+            console.warn(`⚠️ Could not delete file: ${filePath}`);
+        }
+    }

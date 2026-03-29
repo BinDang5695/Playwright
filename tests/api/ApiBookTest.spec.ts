@@ -18,10 +18,7 @@ test.describe.serial('API Book Tests', () => {
     const resultPost = await BookService.post(request, token);
     validateSchema(CreateBookSchema, resultPost.body);
     VerifyBookHeaders.verify(resultPost.response);
-    VerifyBookResponseBody.verifyCreateBook(
-      resultPost.body,
-      resultPost.requestData
-    );
+    VerifyBookResponseBody.verifyCreateBook( resultPost.body, resultPost.requestData );
     const created = resultPost.body.response;
     expect(created.id).toBeGreaterThan(0);
     createdBook = resultPost.body.response;

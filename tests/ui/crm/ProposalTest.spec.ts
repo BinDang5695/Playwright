@@ -1,46 +1,27 @@
 import { test } from './BaseTest';
+import { proposalData } from '@data/crm/proposal.data';
+import { Menu } from '@constants/crm';
+import { ExportFileType } from '@models/types/file.model';
+
+const fileTypes: { type: ExportFileType; tag: string }[] = [
+    { type: 'pdf', tag: '@P1' },
+    { type: 'excel', tag: '@P2' },
+    { type: 'csv', tag: '@P3' },
+];
 
 test.describe.serial('CRM Test Suite', () => {
 
-    test('Manage Proposals PDF File @P1', async ({ pages }) => {
-        await pages.loginPage().loginCRM('admin@example.com', '123456');
-        await pages.basePage().clickMenuSales();
-        await pages.basePage().clickMenuProposals();
-        await pages.proposalsPage().clickButtonNewProposal();
-        await pages.proposalsPage().addNewProposalWithRetry();
-        await pages.proposalsPage().verifyTooltip();
-        await pages.proposalsPage().searchCreatedProposal();
-        await pages.proposalsPage().captureUITableData();
-        await pages.proposalsPage().exportAndVerifyContentFile('pdf');
-        await pages.proposalsPage().deleteCreatedProposal();
-        await pages.headerPage().logout();
-    });
-
-    test('Manage Proposals Excel File @P2', async ({ pages }) => {
-        await pages.loginPage().loginCRM('admin@example.com', '123456');
-        await pages.basePage().clickMenuSales();
-        await pages.basePage().clickMenuProposals();
-        await pages.proposalsPage().clickButtonNewProposal();
-        await pages.proposalsPage().addNewProposalWithRetry();
-        await pages.proposalsPage().verifyTooltip();
-        await pages.proposalsPage().searchCreatedProposal();
-        await pages.proposalsPage().captureUITableData();
-        await pages.proposalsPage().exportAndVerifyContentFile('excel');
-        await pages.proposalsPage().deleteCreatedProposal();
-        await pages.headerPage().logout();
-    });
-
-    test('Manage Proposals CSV File @P3', async ({ pages }) => {
-        await pages.loginPage().loginCRM('admin@example.com', '123456');
-        await pages.basePage().clickMenuSales();
-        await pages.basePage().clickMenuProposals();
-        await pages.proposalsPage().clickButtonNewProposal();
-        await pages.proposalsPage().addNewProposalWithRetry();
-        await pages.proposalsPage().verifyTooltip();
-        await pages.proposalsPage().searchCreatedProposal();
-        await pages.proposalsPage().captureUITableData();
-        await pages.proposalsPage().exportAndVerifyContentFile('csv');
-        await pages.proposalsPage().deleteCreatedProposal();
-        await pages.headerPage().logout();
+    fileTypes.forEach(({ type, tag }) => {
+        test(`Manage Proposals ${type.toUpperCase()} File ${tag}`, async ({ proposalsPage, CRMBasePage }) => {
+            await CRMBasePage.clickValue2(Menu.SALES);
+            await CRMBasePage.clickValue(Menu.PROPOSALS);
+            await proposalsPage.clickButtonNewProposal();
+            await proposalsPage.addNewProposal(proposalData);
+            await proposalsPage.verifyTooltip();
+            await proposalsPage.searchCreatedProposal(proposalData);
+            await proposalsPage.captureUITableData();
+            await proposalsPage.exportAndVerifyContentFile(type);
+            await proposalsPage.deleteCreatedProposal();
+        });
     });
 });

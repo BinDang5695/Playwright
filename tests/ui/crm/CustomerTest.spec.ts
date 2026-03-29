@@ -1,28 +1,31 @@
-import { test, expect } from './BaseTest';
+import { test } from './BaseTest';
+import { Menu } from '@constants/crm';
+import { customerData } from '@data/crm/customer.data';
+import { Message } from '@constants/crm';
+import { contactData } from '@data/crm/contact.data';
 
 test.describe('CRM Test Suite', () => {
 
-    test('Create, Verify and Delete Customer Successfully', async ({ pages }) => {
-        await pages.loginPage().loginCRM('admin@example.com', '123456');
-        await pages.basePage().clickMenuCustomers();
-        const beforeAddCustomer = await pages.customersPage().getTotalCustomers();
+    test('Create, Verify and Delete Customer Successfully', async ({ customersPage, contactsPage, CRMBasePage }) => {
+        await CRMBasePage.clickValue(Menu.CUSTOMERS);
+        const beforeAddCustomer = await customersPage.getTotalCustomers();
         console.log(`beforeAddCustomer = ${beforeAddCustomer}`);
-        await pages.customersPage().clickButtonAddNewCustomer();
-        await pages.customersPage().addNewCustomer();
-        await pages.customersPage().verifyCustomerAdded();
-        await pages.basePage().clickTabContacts();
-        await pages.contactsPage().clickButtonNewContact();
-        await pages.contactsPage().addNewContact('Bin', 'Dang');
-        await pages.contactsPage().verifyCreatedContact('Bin', 'Dang');
-        await pages.customersPage().searchCustomer();
-        const afterAddedCustomer = await pages.customersPage().getTotalCustomers();
-        await expect(afterAddedCustomer).toBe(beforeAddCustomer + 1);
+        await customersPage.clickButtonAddNewCustomer();
+        await customersPage.addNewCustomer(customerData)
+        await customersPage.verifyCustomerAdded(customerData);
+        await CRMBasePage.clickValue3(Menu.CONTACTS);
+        await contactsPage.clickButtonNewContact();
+        await contactsPage.addNewContact(contactData);
+        await contactsPage.verifyCreatedContact(contactData, Message.CREATEDCONTACT);
+        await CRMBasePage.clickValue(Menu.CUSTOMERS);
+        await customersPage.searchCustomer(customerData);
+        const afterAddedCustomer = await customersPage.getTotalCustomers();
+        await customersPage.expectEqual(afterAddedCustomer, beforeAddCustomer + 1);
         console.log(`afterAddedCustomer = ${beforeAddCustomer} + 1`);
-        await pages.customersPage().deleteCustomer();
-        const afterDeletedCustomer = await pages.customersPage().getTotalCustomers();
-        await expect(afterDeletedCustomer).toBe(beforeAddCustomer);
+        await customersPage.deleteCustomer(customerData);
+        const afterDeletedCustomer = await customersPage.getTotalCustomers();
+        await customersPage.expectEqual(afterDeletedCustomer, beforeAddCustomer);
         console.log(`afterDeletedCustomer = ${beforeAddCustomer}`);
-        await pages.customersPage().verifyCustomerDeleted();
-        await pages.headerPage().logout();
+        await customersPage.verifyCustomerDeleted(customerData);
     });
 });

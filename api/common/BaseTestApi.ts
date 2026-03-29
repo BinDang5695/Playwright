@@ -26,9 +26,7 @@ export const test = base.extend<ApiFixtures>({
     const loginData = LoginBuilder.getDataLogin();
     const url = `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_LOGIN}`;
 
-    ApiLogger.logRequest('POST', url, {
-      body: loginData
-    });
+    ApiLogger.logRequest('POST', url, { body: loginData });
 
     const start = Date.now();
     const response = await request.post(url, { data: loginData });
@@ -49,7 +47,7 @@ export const test = base.extend<ApiFixtures>({
       console.error(validateLoginSchema.errors);
     }
 
-    await ApiLogger.logResponse(response, duration);
+    ApiLogger.logResponse(response, duration);
 
     cachedToken = body.token;
   }

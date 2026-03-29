@@ -1,52 +1,81 @@
-import { expect } from '@playwright/test';
-import BasePage from './BasePage';
+import { CRMBasePage } from './CRMBasePage';
 import SystemHelper from '../../models/helpers/SystemHelper';
+import { Button, Input, Number } from '@constants/crm';
+import { Item } from '@models/types/item.model'
 
-export class ItemsPage extends BasePage {
+export class ItemsPage extends CRMBasePage {
 
-    private buttonImportItems = () => this.page.locator("//a[normalize-space()='Import Items']");
-    private buttonChooseFile = () => this.page.locator("//input[@id='file_csv']");
-    private buttonImport = () => this.page.locator("//button[normalize-space()='Import']");
-    private filePath: string = SystemHelper.getFilePath('test_data/BinItems.csv');
-    private inputSearchItems = () => this.page.locator("//input[@aria-controls='DataTables_Table_1']");
-    private tableDescription = () => this.page.locator("//a[normalize-space()='Bin Description']");
-    private tableLongDescription = () => this.page.locator("//td[normalize-space()='Bin Long description']");
-    private tableRate = () => this.page.locator("//td[normalize-space()='$25.00']");
-    private tableTax1 = () => this.page.locator("//td[5]//span[normalize-space()='0.00%']");
-    private tableTax2 = () => this.page.locator("//td[6]//span[normalize-space()='0.00%']");
-    private tableUnit = () => this.page.locator("//td[normalize-space()='Bin Unit']");
-    private buttonDelete = () => this.page.locator("//a[@class='text-danger _delete']");
-    private buttonX = () => this.page.locator("//button[@data-dismiss='alert']//span[@aria-hidden='true'][normalize-space()='×']");
+      get buttonImportItems() {
+          return this.getLinkByText(Button.IMPORTITEMS);
+      }
+
+      get buttonChooseFile() {
+          return this.getInputById(Input.FILE_CSV);
+      }
+
+      get buttonImport() {
+          return this.getButtonByText(Button.IMPORT);
+      }
+
+    file(data: Item) {
+        return SystemHelper.getFilePath(data.file);
+    }
+    
+      get inputSearchItems() {
+          return this.getInputAriaControls(Input.DATATABLES);
+      }
+
+      tableDescription(description: string) {
+          return this.getLinkByText(description);
+      }
+
+      tableLongDescription(longDescription: string) {
+          return this.getTDText(longDescription);
+      }
+
+      tableRate(longDescription: string) {
+          return this.getTDText(longDescription);
+      }
+
+      tableTax1(columnIndex: number, tax1: string) {
+          return this.getTDText2(columnIndex, tax1);
+      }
+
+      tableTax2(columnIndex: number, tax2: string) {
+          return this.getTDText2(columnIndex, tax2);
+      }
+      
+      tableUnit(unit: string) {
+          return this.getTDText(unit);
+      }
 
     async clickButtonImportItems() {
-        await this.buttonImportItems().waitFor({ state: 'visible' });
-        await this.buttonImportItems().click();
+        await this.click(this.buttonImportItems);
     }
 
-    async importCSVFile() {
-        await this.buttonChooseFile().setInputFiles(this.filePath);
+    async importCSVFile(data: Item) {
+        await this.buttonChooseFile.setInputFiles(this.file(data));
     }
 
     async clickToImportCSVFile() {
-        await this.buttonImport().waitFor({ state: 'visible' });
-        await this.buttonImport().click();
+        await this.click(this.buttonImport);
     }
 
-    async searchAndVerifyItems() {
-        await this.inputSearchItems().fill('Bin Long Description');
-        await expect(this.tableDescription()).toHaveText('Bin Description');
-        await expect(this.tableLongDescription()).toHaveText('Bin Long description');
-        await expect(this.tableRate()).toHaveText('$25.00');
-        await expect(this.tableTax1()).toHaveText('0.00%');
-        await expect(this.tableTax2()).toHaveText('0.00%');
-        await expect(this.tableUnit()).toHaveText('Bin Unit');
+    async searchAndVerifyItems(data: Item) {
+        await this.type(this.inputSearchItems, data.longDescription);
+        await this.verifyText(this.tableDescription(data.description), data.description);
+        await this.verifyText(this.tableLongDescription(data.longDescription), data.longDescription);
+        await this.verifyText(this.tableRate(data.rate), data.rate);
+        await this.verifyText(this.tableTax1(Number.FIVE, data.tax1), data.tax1);
+        await this.verifyText(this.tableTax2(Number.SIX, data.tax2), data.tax2);
+        await this.verifyText(this.tableUnit(data.unit), data.unit);
     }
 
-    async deleteImportedItem() {
-        await this.page.on('dialog', async dialog => { await dialog.accept(); });
-        await this.tableDescription().hover();
-        await this.buttonDelete().click();
-        await this.buttonX().click();
+    async deleteImportedItem(data: Item) {
+        await this.acceptAlert();
+        await this.hover(this.tableDescription(data.description));
+        await this.click(this.getButtonDelete());
+        await this.click(this.getbuttonCloseAlert());
     }
 
 }

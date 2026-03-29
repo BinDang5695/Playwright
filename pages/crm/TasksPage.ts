@@ -1,48 +1,121 @@
 import { expect } from '@playwright/test';
-import BasePage from './BasePage';
+import { CRMBasePage } from './CRMBasePage';
+import { Button, Header, Number, Input, Status, Label, Href, Delay } from '@constants/crm';
+import { DateHelpers } from '../../models/helpers/DateHelpers';
+import { Task } from '@models/types/task.model'
 
-export class TasksPage extends BasePage {
+export class TasksPage extends CRMBasePage {
 
-    private titleTaskPage = () => this.page.locator("//span[normalize-space()='Tasks Summary']");
-    private switchToKanBan = () => this.page.locator("//i[@class='fa-solid fa-grip-vertical']");
-    private switchToList = () => this.page.locator("//i[@class='fa-solid fa-table-list']");
-    private completeTaskTotal = () => this.page.locator("(//div[@class='panel-heading'])[5]");
-    private notStartedTaskTotal = () => this.page.locator("(//div[@class='panel-heading'])[1]");
-    private completeTaskAfterDragDrop = () => this.page.locator("//div[@class='panel-heading' and normalize-space()='Complete - 0 Tasks']");
-    private newTaskButton = () => this.page.locator("//a[normalize-space()='New Task']");
-    private titleAddNewTaskPopUp = () => this.page.locator("//h4[normalize-space()='Add new task']");
-    private inputStartDate = () => this.page.locator("//input[@id='startdate']");
-    private titleSubject = () => this.page.locator("//label[@for='name']");
-    private inputSubject = () => this.page.locator("//input[@id='name']");
-    private saveTask = () => this.page.locator("//button[normalize-space()='Save']");
-    private alertAddNewTaskSuccess = () => this.page.locator("//span[@class='alert-title']");
-    private taskName = () => this.page.locator("//h4[contains(@class,'modal-title ')]");
-    private taskStatus = () => this.page.locator("//span[contains(@class,'trigger') and normalize-space()='In Progress']");
-    private markComplete = () => this.page.locator("//i[@class='fa fa-check']");
-    private closePopUp = () => this.page.locator("//div[@class='modal-header task-single-header']//button[@aria-label='Close']");
-    private searchOnKanBan = () => this.page.locator("//input[@id='search']");
-    private nodataNotStarted = () => this.page.locator("(//h4[normalize-space()='No Tasks Found'])[1]");
-    private nodataInprogress = () => this.page.locator("(//h4[normalize-space()='No Tasks Found'])[2]");
-    private nodataTesting = () => this.page.locator("(//h4[normalize-space()='No Tasks Found'])[3]");
-    private nodataAwaitingFeedback = () => this.page.locator("(//h4[normalize-space()='No Tasks Found'])[4]");
-    private menu = () => this.page.locator("//a[@class='trigger manual-popover mright5']");
-    private editOption = () => this.page.locator("//div[@class='popover-content']//ul//li//a[@href='#'][normalize-space()='Edit']");
-    private binTask = () => this.page.locator("//span[normalize-space()='Bin Task']");
-    private from = () => this.page.locator("//ul[5]//li[1]//div[1]//div[2]//div[1]//ul[1]//li[1]");
-    private to = () => this.page.locator("//ul[1]//li[1]//div[1]//div[2]//div[1]//ul[1]//li[1]");
-    private searchOnList = () => this.page.locator("//input[@aria-controls='tasks']");
-    private binEditedTaskOnList = () => this.page.locator("//a[normalize-space()='NashTech']");
-    private deleteTask = () => this.page.locator("//a[normalize-space()='Delete']");
-    private nodataTask = () => this.page.locator("//td[@class='dataTables_empty']");
-    private dismissAlert = () => this.page.locator("//button[@data-dismiss='alert']");
+    get buttonNewTask() {
+        return this.getLinkByText(Button.NEWTASK);
+    }
+
+    get titleTaskPage() {
+        return this.getValue(Header.TASKS_SUMMARY);
+    } 
+
+    get switchToKanBan() {
+        return this.getLi(Button.VERTICAL);
+    }
+
+    get switchToList() {
+        return this.getLi(Button.TABLE_LIST);
+    }
+
+    get completeTaskTotal() {
+        return this.getStatus(Status.COMPLETE);
+    }
+
+    get notStartedTaskTotal() {
+        return this.getStatus(Status.NOTSTARTED);
+    }
+
+    get titleAddNewTaskPopUp() {
+        return this.getValue6(Header.ADDNEWTASK);
+    }
+
+    get inputStartDate() {
+        return this.getInputById(Input.STARTDATE);
+    }
+
+    get titleSubject() {
+        return this.getLabel(Label.NAME);
+    }
+
+    get inputSubject() {
+        return this.getInputById(Input.NAME);
+    }
+
+    get saveTask() {
+        return this.getButtonByText(Button.SAVE);
+    }
+
+    get taskName() {
+        return this.getTab4(Header.MODAL_TITLE);
+    }
+
+    get taskStatus() {
+        return this.getSpan(Status.INPROGRESS);
+    }
+
+    get markComplete() {
+        return this.getLi(Button.FA_CHECK);
+    }
+
+    get searchOnKanBan() {
+        return this.getInputById(Input.SEARCH);
+    }
+
+    get nodataNotStarted() {
+        return this.getTab5(Number.ONE);
+    }
+
+    get nodataInprogress() {
+        return this.getTab5(Number.FOUR);
+    }
+
+    get nodataTesting() {
+        return this.getTab5(Number.THREE);
+    }
+
+    get nodataAwaitingFeedback() {
+        return this.getTab5(Number.TWO);
+    }
+
+    get menu() {
+        return this.getBText(Button.TRIGGER);
+    }
+
+    get editOption() {
+        return this.getCheckbox3(Href.EDIT);
+    }
+
+    binTask(data: string) {
+        return this.getValue(data);
+    }
+
+    get from() {
+        return this.getTab6(Number.FIVE);
+    }
+
+    get to() {
+        return this.getTab5(Number.ONE);
+    }
+
+    get searchOnList() {
+        return this.getInputAriaControls(Input.TASKS);
+    }
+
+    binEditedTaskOnList(data: string) {
+        return this.getLinkByText(data);
+    }
 
     async verifyNavigateToTasksPage() {
-        await expect(this.titleTaskPage()).toHaveText('Tasks Summary');
-        await expect(this.switchToKanBan()).toBeVisible();
+        await this.verifyText(this.titleTaskPage, Header.TASKS_SUMMARY);
     }
 
     async clickButtonSwitchToKanBan() {
-        await this.switchToKanBan().click();
+        await this.click(this.switchToKanBan);
     }
 
     async scrollHorizontal() {
@@ -50,106 +123,92 @@ export class TasksPage extends BasePage {
     }
 
     async verifyNavigateToKanbanPage() {
-        await expect(this.switchToList()).toBeVisible();
+        await this.waitVisible(this.switchToList);
     }
 
     async clickButtonAddNewTask() {
-        await this.page.waitForLoadState('networkidle');
-        await this.newTaskButton().click();
+        await this.click(this.buttonNewTask);
     }
 
     async verifyAddNewTaskPopUp() {
-        await expect(this.titleAddNewTaskPopUp()).toBeVisible();
-        await expect(this.titleAddNewTaskPopUp()).toHaveText('Add new task');
-
-        await expect(this.inputSubject()).toBeVisible();
-        await expect(this.titleSubject()).toHaveText('* Subject');
-
-        await expect(this.inputStartDate()).toBeVisible();
-
-        const value = await this.inputStartDate().inputValue();
-        const today = new Date().toLocaleDateString('en-GB').replaceAll('/', '-');
-        expect(value).toContain(today);
+        await this.verifyText(this.titleAddNewTaskPopUp, Header.ADDNEWTASK);
+        await this.verifyText(this.titleSubject, Header.SUBJECT);
+        const value = await this.inputStartDate.inputValue();
+        expect(value).toContain(DateHelpers.getTodayDDMMYYYY());
     }
 
-    async submitDataForNewTask() {
-        await this.inputSubject().fill('Bin Task');
-        await this.saveTask().click();
+    async submitDataForNewTask(data: Task) {
+        await this.type(this.inputSubject, data.subject);
+        await this.click(this.saveTask);
     }
 
-    async verifyNewTaskAfterCreated() {
-        await expect(this.alertAddNewTaskSuccess()).toBeVisible();
-        await expect(this.alertAddNewTaskSuccess()).toHaveText('Task added successfully.');
-
-        await expect(this.taskName()).toBeVisible();
-        const rawText = await this.taskName().textContent();
-        const normalizedText = rawText?.replace(/\s+/g, ' ').trim();
-
-        expect(normalizedText).toBe('Bin Task In Progress');
-
-        await expect(this.taskStatus()).toBeVisible();
-        await expect(this.taskStatus()).toHaveText('In Progress');
+    async verifyNewTaskAfterCreated(data: Task) {
+        await this.verifyText(this.getAlert(), data.alertAddNewTaskSuccess);
+        await this.waitVisible(this.taskName);
+        const rawText = await this.taskName.textContent();
+        expect(this.normalizeText(rawText)).toBe(data.taskName);
+        await this.verifyText(this.taskStatus, Status.INPROGRESS);
     }
 
-    async markCompletedAndRefreshPage() {
-        await this.markComplete().click();
-        await this.closePopUp().click();
-        await this.page.reload();
-        await expect(this.binTask()).toBeVisible();
+    async markCompletedAndRefreshPage(data: Task) {
+        await this.click(this.markComplete);
+        await this.click(this.closePopUp);
+        await this.reloadPage();
+        await this.waitVisible(this.binTask(data.subject));
     }
 
-    async verifyCompleteTasksAfterRefreshed() {
-        await expect(this.completeTaskTotal()).toBeVisible();
-        await expect(this.completeTaskTotal()).toHaveText('Complete - 1 Tasks');
+    async verifyCompleteTasksAfterRefreshed(data: Task) {
+        await this.verifyText(this.completeTaskTotal, data.completeTaskTotal);
     }
 
-    async editTask() {
-        await this.binTask().click();
-        await this.menu().click();
-        await this.editOption().click();
-        await this.inputSubject().fill('NashTech');
-        await this.saveTask().click();
-        await this.closePopUp().click();
+    async editTask(data: Task) {
+        await this.click(this.binTask(data.subject));
+        await this.click(this.menu);
+        await this.click(this.editOption);
+        await this.type(this.inputSubject, data.updatedSubject);
+        await this.click(this.saveTask);
+        await this.click(this.getbuttonCloseAlert());
+        await this.click(this.closePopUp);
     }
 
-    async searchAndVerifyAfterSearch() {
-        await this.searchOnKanBan().fill('NashTech');
-        await expect(this.nodataNotStarted()).toHaveText('No Tasks Found');
-        await expect(this.nodataInprogress()).toHaveText('No Tasks Found');
-        await expect(this.nodataTesting()).toHaveText('No Tasks Found');
-        await expect(this.nodataAwaitingFeedback()).toHaveText('No Tasks Found');
+    async searchAndVerifyAfterSearch(data: Task) {
+        await this.type(this.searchOnKanBan, data.updatedSubject, Delay.ONE_HUNDRED_MILLISECONDS);
+        await this.page.waitForTimeout(1000);
+        await this.verifyText(this.nodataNotStarted, data.noData);
+        await this.verifyText(this.nodataInprogress, data.noData);
+        await this.verifyText(this.nodataTesting, data.noData);
+        await this.verifyText(this.nodataAwaitingFeedback, data.noData);
         await this.scrollHorizontal();
     }
 
-    async dragAndDrop() {
-        await this.from().dragTo(this.to());
+    async dragAndDropTask() {
+        await this.dragAndDrop(this.from, this.to);
     }
 
-    async verifyTotalTasksAfterDragDrop() {
-        await expect(this.completeTaskAfterDragDrop()).toHaveText('Complete - 0 Tasks');
-        await expect(this.notStartedTaskTotal()).toHaveText('Not Started - 1 Tasks');
+    async verifyTotalTasksAfterDragDrop(data: Task) {
+        await this.verifyText(this.completeTaskTotal, data.completeTaskAfterDragDrop);
+        await this.verifyText(this.notStartedTaskTotal, data.notStartedTaskTotal);
     }
 
-    async searchAndDeleteTask() {
-        await this.page.on('dialog', dialog => dialog.accept());
-        await this.switchToList().click();
-        await this.searchOnList().fill('NashTech');
+    async searchAndDeleteTask(data: Task) {
+        await this.acceptAlert();
+        await this.click(this.switchToList);
+        await this.type(this.searchOnList, data.updatedSubject);
         await this.page.evaluate(() => window.scrollTo(0, 0));
-        await this.binEditedTaskOnList().hover();
-        await this.deleteTask().click();
+        await this.hover(this.binEditedTaskOnList(data.updatedSubject));
+        await this.click(this.buttonDelete);
     }
 
-    async searchAfterDeleted() {
-        await this.searchOnList().fill('NashTech');
+    async searchAfterDeleted(data: Task) {
+        await this.type(this.searchOnList, data.updatedSubject);
     }
 
     async verifyNoDataAfterDeleted() {
-        await expect(this.nodataTask()).toHaveText('No matching records found');
+        await this.waitVisible(this.getNoData());
     }
 
     async clickDismissAlert() {
-        await expect(this.dismissAlert()).toBeVisible();
-        await this.dismissAlert().click();
+        await this.click(this.getbuttonCloseAlert());
     }
 
 }

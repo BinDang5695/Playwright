@@ -1,42 +1,75 @@
-import { expect } from '@playwright/test';
-import BasePage from './BasePage';
+import { Header, Input, Label, Option, Button, Status, Dropdown, Number, Message } from '@constants/crm';
+import { CRMBasePage } from './CRMBasePage';
+import { Project } from '@models/types/project.model'
 
-export class ProjectsPage extends BasePage {
+export class ProjectsPage extends CRMBasePage {
 
-    private titleProjectPage = () => this.page.locator("//span[normalize-space()='Projects Summary']");
-    private inputSearchProject = () => this.page.locator("//input[@aria-controls='projects']");
-    private itemCustomerFirst = () => this.page.locator("//a[normalize-space()='Bin Project']");
-    private buttonNewProject = () => this.page.locator("//a[normalize-space()='New Project']");
-    private inputProjectName = () => this.page.locator("//input[@id='name']");
-    private inputCustomer = () => this.page.locator("//button[@data-id='clientid']");
-    private searchCustomer = () => this.page.locator("//input[@aria-controls='bs-select-6']");
-    private selectCustomer = () => this.page.locator("//span[normalize-space()='Bin Customer']");
-    private checkBoxCalculate = () => this.page.locator("//label[normalize-space()='Calculate progress through tasks']");
-    private saveProject = () => this.page.locator("//button[normalize-space()='Save']");
-    private projectNameCustomer = () => this.page.locator("//button[@title='Bin Project - Bin Customer']");
-    private projectProgress = () => this.page.locator("//p[contains(@class,'project-info')]");
-    private customer = () => this.page.locator("//dt[normalize-space()='Customer']");
-    private projectNameCreated = () => this.page.locator("//a[normalize-space()='Bin Customer']");
-    private status = () => this.page.locator("//dt[normalize-space()='Status']");
-    private statusProject = () => this.page.locator("//dd[normalize-space()='In Progress']");
-    private alertSuccess = () => this.page.locator("//span[@class='alert-title']");
-    private projectNameOnProjectTab = () => this.page.locator("//a[normalize-space()='Bin Project']");
-    private deleteProject = () => this.page.locator("//a[@class='text-danger _delete']");
-    private buttonX = () => this.page.locator("//button[@data-dismiss='alert']");
-    private noData = () => this.page.locator("//td[@class='dataTables_empty']");
-    private sliderTrack = () => this.page.locator("//div[contains(@class,'ui-slider')]");
-
-    async verifyNavigateToProjectPage() {
-        await expect(this.titleProjectPage()).toBeVisible();
-        await expect(this.titleProjectPage()).toHaveText('Projects Summary');
+    get titleProjectPage() {
+        return this.getValue(Header.PROJECTSSUMMARY);
     }
 
-    async clickButtonAddNewCustomer() {
-        await this.buttonNewProject().click();
+    get buttonNewProject() {
+        return this.getLinkByText(Button.NEWPROJECT);
+    }
+
+    get inputSearchProject() {
+        return this.getInputAriaControls(Input.PROJECTS);
+    }
+
+    itemCustomerFirst(name: string) {
+        return this.getLinkByText(name);
+    }
+
+    get inputProjectName() {
+        return this.getInputById(Input.NAME);
+    }
+
+    get checkBoxCalculate() {
+        return this.getLabelText(Label.CALCULATE);
+    }
+
+    get saveProject() {
+        return this.getButtonByText(Button.SAVE);
+    }
+
+    projectNameCustomer(verifyProjectNameCustomer: string) {
+        return this.getButtonByTitle(verifyProjectNameCustomer);
+    }
+
+    get projectProgress() {
+        return this.getButtonByP(Input.PROJECT_INFO);
+    }
+
+    get customer() {
+        return this.getValue8(Option.CUSTOMER);
+    }
+
+    projectNameCreated(customer: string) {
+        return this.getLinkByText(customer);
+    }
+
+    get statusProject() {
+        return this.getValue9(Status.INPROGRESS);
+    }
+
+    projectNameOnProjectTab(data: string) {
+        return this.getLinkByText(data);
+    }
+
+    get sliderTrack() {
+        return this.getButton5(Input.UI_SLIDER);
+    }
+
+    async clickNewProject() {
+        await this.click(this.buttonNewProject);
+    }
+
+    async verifyNavigateToProjectPage() {
+        await this.verifyText(this.titleProjectPage, Header.PROJECTSSUMMARY);
     }
 
     async moveSliderToMiddle() {
-        const track = this.sliderTrack();
+        const track = this.sliderTrack;
         const box = await track.boundingBox();
         if (!box) throw new Error('Slider track not visible');
 
@@ -50,48 +83,39 @@ export class ProjectsPage extends BasePage {
         await this.page.mouse.up();
     }
 
-
-    async submitDataForNewCustomer() {
-        await this.inputProjectName().fill('Bin Project');
-        await this.inputCustomer().click();
-        await this.searchCustomer().pressSequentially('Bin Customer', { delay: 100 });
-        await this.selectCustomer().click();
-        await this.checkBoxCalculate().click();
+    async submitDataForNewProject(data: Project) {
+        await this.type(this.inputProjectName, data.name);
+        await this.selectDropdown(Dropdown.CLIENT_ID, Number.SIX, data.customer);
+        await this.click(this.checkBoxCalculate);
         await this.moveSliderToMiddle();
-        await this.saveProject().click();
+        await this.selectDropdownNotSearch(Dropdown.BILLING_TYPE, Option.PROJECTHOURS);
+        await this.click(this.saveProject);
     }
 
-    async verifyProjectCreated() {
-        await expect(this.alertSuccess()).toHaveText('Project added successfully.');
-        await expect(this.projectNameCustomer()).toHaveText('Bin Project - Bin Customer');
-        await expect(this.projectProgress()).toHaveText('Project Progress 50%');
-        await expect(this.customer()).toBeVisible();
-        await expect(this.projectNameCreated()).toHaveText('Bin Customer');
-        await expect(this.status()).toBeVisible();
-        await expect(this.statusProject()).toHaveText('In Progress');
+    async verifyProjectCreated(data: Project) {
+        await this.verifyText(this.getAlert(), Message.CREATEDPROJECT);
+        await this.verifyText(this.projectNameCustomer(data.verifyProjectNameCustomer), data.verifyProjectNameCustomer);
+        await this.verifyText(this.projectNameCreated(data.customer), data.customer);
+        await this.verifyText(this.statusProject, data.verifyStatusProject);
     }
 
-    async searchAndCheckCustomerInTable() {
-        await this.inputSearchProject().fill('Bin Project');
-        await expect(this.itemCustomerFirst()).toHaveText('Bin Project');
+    async searchAndCheckProjectInTable(data: Project) {
+        await this.type(this.inputSearchProject, data.name);
+        await this.verifyText(this.itemCustomerFirst(data.name), data.name);
     }
 
-    async moveToProjectName() {
-        await this.projectNameOnProjectTab().hover();
+    async moveToProjectName(data: Project) {
+        await this.hover(this.projectNameOnProjectTab(data.name));
     }
 
     async clickAndDeleteProject() {
-        this.page.once('dialog', dialog => dialog.accept());
-        await this.deleteProject().click();
-        await this.buttonX().click();
+        await this.acceptAlert();
+        await this.click(this.getButtonDelete());
+        await this.click(this.getCloseAlert());
     }
 
-    async searchAndCheckProjectInTable() {
-        await this.inputSearchProject().fill('Bin Project');
-    }
-
-    async verifyNoDataAfterDeletedProject() {
-        await expect(this.noData()).toBeVisible();
-        await expect(this.noData()).toHaveText('No matching records found');
+    async searchAndverifyNoData(data: Project) {
+        await this.type(this.inputSearchProject, data.name);
+        await this.waitVisible(this.getNoData());
     }
 }

@@ -11,16 +11,13 @@ import { VerifyImageHeaders } from '../../api/image/VerifyImageHeaders';
 import { VerifyImageResponseBody } from '../../api/image/VerifyImageResponseBody';
 let createdImage: any;
 let createdImageId: number;
-let updatedImageData: any;
 test.describe.serial('API Image Tests', () => {
 
   test('Post Image', async ({ request, token }) => {
     const resultPost = await ImageService.postCreate(request, token);
     validateSchema(CreateImageSchema, resultPost.body);
     VerifyImageHeaders.verify(resultPost.response);
-    VerifyImageResponseBody.verifyCreateImage(
-      resultPost.body,
-    );
+    VerifyImageResponseBody.verifyCreateImage( resultPost.body );
     const created = resultPost.body.response;
     expect(created.id).toBeGreaterThan(0);
     createdImage = resultPost.body.response;
@@ -31,28 +28,28 @@ test.describe.serial('API Image Tests', () => {
     const resultGet = await ImageService.get(request, token, createdImageId);
     validateSchema(GetImageSchema, resultGet.body);
     VerifyImageHeaders.verify(resultGet.response);
-    VerifyImageResponseBody.verifyGetImage(resultGet.body, createdImage);
+    VerifyImageResponseBody.verifyGetImage(resultGet.body);
   });
 
   test('Put Image', async ({ request, token }) => {
     const resultPut = await ImageService.postUpdate(request, token, createdImageId);
     validateSchema(UpdateImageSchema, resultPut.body);
     VerifyImageHeaders.verify(resultPut.response);
-    VerifyImageResponseBody.verifyUpdateImage(resultPut.body, updatedImageData);
+    VerifyImageResponseBody.verifyUpdateImage(resultPut.body);
   });
 
   test('Get Image After Put', async ({ request, token }) => {
     const resultGetAfterPut = await ImageService.get(request, token, createdImageId);
     validateSchema(GetImageAfterPutSchema, resultGetAfterPut.body);
     VerifyImageHeaders.verify(resultGetAfterPut.response);
-    VerifyImageResponseBody.verifyGetImage(resultGetAfterPut.body, updatedImageData);
+    VerifyImageResponseBody.verifyGetImage(resultGetAfterPut.body);
   });
 
   test('Delete Image', async ({ request, token }) => {
     const result = await ImageService.delete(request, token, createdImageId);
     validateSchema(DeleteImageSchema, result.body);
     VerifyImageHeaders.verify(result.response);
-    VerifyImageResponseBody.verifyDeleteImage(result.body, updatedImageData);
+    VerifyImageResponseBody.verifyDeleteImage(result.body);
   });
 
   test('Get Image After Delete', async ({ request, token }) => {

@@ -1,22 +1,20 @@
 import { test } from './BaseTest';
+import { Menu } from '@constants/crm';
+import { projectData } from '@data/crm/project.data';
 
 test.describe('CRM Test Suite', () => {
 
-    test('Create, Verify and Delete Project Successfully', async ({ pages }) => {
-        await pages.loginPage().loginCRM('admin@example.com', '123456');
-        await pages.basePage().clickMenuCustomers();
-        await pages.basePage().clickMenuProjects();
-        await pages.projectsPage().verifyNavigateToProjectPage();
-        await pages.projectsPage().clickButtonAddNewCustomer();
-        await pages.projectsPage().submitDataForNewCustomer();
-        await pages.projectsPage().verifyProjectCreated();
-        await pages.basePage().clickMenuProjects();
-        await pages.projectsPage().searchAndCheckCustomerInTable();
-        await pages.projectsPage().moveToProjectName();
-        await pages.projectsPage().clickAndDeleteProject();
-        await pages.basePage().clickMenuProjects();
-        await pages.projectsPage().searchAndCheckProjectInTable();
-        await pages.projectsPage().verifyNoDataAfterDeletedProject();
-        await pages.headerPage().logout();
+    test('Create, Verify and Delete Project Successfully', async ({ projectsPage, CRMBasePage }) => {
+        await CRMBasePage.clickValue(Menu.PROJECTS);
+        await projectsPage.verifyNavigateToProjectPage();
+        await projectsPage.clickNewProject();
+        await projectsPage.submitDataForNewProject(projectData);
+        await projectsPage.verifyProjectCreated(projectData);
+        await CRMBasePage.clickValue(Menu.PROJECTS);
+        await projectsPage.searchAndCheckProjectInTable(projectData);
+        await projectsPage.moveToProjectName(projectData);
+        await projectsPage.clickAndDeleteProject();
+        await CRMBasePage.clickValue(Menu.PROJECTS);
+        await projectsPage.searchAndverifyNoData(projectData);
     });
 });

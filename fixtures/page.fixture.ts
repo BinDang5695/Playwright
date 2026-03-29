@@ -1,11 +1,10 @@
-import { test as baseTest } from '@playwright/test';
+import { test as baseTest, Page } from '@playwright/test';
 import { LoginPage } from '@pages/crm/LoginPage';
 import { CustomersPage } from '@pages/crm/CustomersPage';
 import { LeadsPage } from '@pages/crm/LeadsPage';
 import { ContactsPage } from '@pages/crm/ContactsPage';
 import { ContractsPage } from '@pages/crm/ContractsPage';
 import { ExpensesPage } from '@pages/crm/ExpensesPage';
-import { HeaderPage } from '@pages/crm/HeaderPage';
 import { ProjectsPage } from '@pages/crm/ProjectsPage';
 import { ProposalsPage } from '@pages/crm/ProposalsPage';
 import { KnowledgeBasePage } from '@pages/crm/KnowledgeBasePage';
@@ -14,7 +13,7 @@ import { TasksPage } from '@pages/crm/TasksPage';
 import { CRMBasePage } from '@pages/crm/CRMBasePage';
 
 export type PageFixtureType = {
-    authenticatedPage: void;
+    authenticatedPage: Page;
     loginPage: LoginPage;
     CRMBasePage: CRMBasePage;
     customersPage: CustomersPage;
@@ -23,7 +22,6 @@ export type PageFixtureType = {
     contactsPage: ContactsPage;
     contractsPage: ContractsPage;
     expensesPage: ExpensesPage;
-    headerPage: HeaderPage;
     proposalsPage: ProposalsPage;
     knowledgeBasePage: KnowledgeBasePage;
     itemsPage: ItemsPage;
@@ -36,58 +34,54 @@ export const pageFixture: ExtendParams[0] = {
 
     authenticatedPage: async ({ page }, use) => {
         await page.goto(process.env.BASE_URL!);
-        await use();
+        await use(page);
     },
 
     loginPage: async ({ page }, use) => {
         await use(new LoginPage(page));
     },
 
-    CRMBasePage: async ({ page, authenticatedPage }, use) => {
-        await use(new CRMBasePage(page));
+    CRMBasePage: async ({ authenticatedPage }, use) => {
+        await use(new CRMBasePage(authenticatedPage));
     },
 
-    customersPage: async ({ page, authenticatedPage }, use) => {
-        await use(new CustomersPage(page));
+    customersPage: async ({ authenticatedPage }, use) => {
+        await use(new CustomersPage(authenticatedPage));
     },
 
-    leadsPage: async ({ page, authenticatedPage }, use) => {
-        await use(new LeadsPage(page));
+    leadsPage: async ({ authenticatedPage }, use) => {
+        await use(new LeadsPage(authenticatedPage));
     },
 
-    projectsPage: async ({ page, authenticatedPage }, use) => {
-        await use(new ProjectsPage(page));
+    projectsPage: async ({ authenticatedPage }, use) => {
+        await use(new ProjectsPage(authenticatedPage));
     },
 
-    contactsPage: async ({ page, authenticatedPage }, use) => {
-        await use(new ContactsPage(page));
+    contactsPage: async ({ authenticatedPage }, use) => {
+        await use(new ContactsPage(authenticatedPage));
     },
 
-    contractsPage: async ({ page, authenticatedPage }, use) => {
-        await use(new ContractsPage(page));
+    contractsPage: async ({ authenticatedPage }, use) => {
+        await use(new ContractsPage(authenticatedPage));
     },
 
-    expensesPage: async ({ page, authenticatedPage }, use) => {
-        await use(new ExpensesPage(page));
+    expensesPage: async ({ authenticatedPage }, use) => {
+        await use(new ExpensesPage(authenticatedPage));
     },
 
-    headerPage: async ({ page, authenticatedPage }, use) => {
-        await use(new HeaderPage(page));
+    proposalsPage: async ({ authenticatedPage }, use) => {
+        await use(new ProposalsPage(authenticatedPage));
     },
 
-    proposalsPage: async ({ page, authenticatedPage }, use) => {
-        await use(new ProposalsPage(page));
+    knowledgeBasePage: async ({ authenticatedPage }, use) => {
+        await use(new KnowledgeBasePage(authenticatedPage));
     },
 
-    knowledgeBasePage: async ({ page, authenticatedPage }, use) => {
-        await use(new KnowledgeBasePage(page));
+    itemsPage: async ({ authenticatedPage }, use) => {
+        await use(new ItemsPage(authenticatedPage));
     },
 
-    itemsPage: async ({ page, authenticatedPage }, use) => {
-        await use(new ItemsPage(page));
-    },
-
-    tasksPage: async ({ page, authenticatedPage }, use) => {
-        await use(new TasksPage(page));
+    tasksPage: async ({ authenticatedPage }, use) => {
+        await use(new TasksPage(authenticatedPage));
     },
 };

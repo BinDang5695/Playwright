@@ -1,78 +1,71 @@
 import { expect } from '@playwright/test';
-import BasePage from './BasePage';
-import { de } from '@faker-js/faker';
+import { CRMBasePage } from './CRMBasePage';
+import { Button, Table, Dropdown, Number, Input, Search, Message } from '@constants/crm';
+import { Lead } from '@models/types/lead.model'
 
-export class LeadsPage extends BasePage {
+export class LeadsPage extends CRMBasePage {
 
-  private buttonNewLead = () => this.page.locator("//a[normalize-space()='New Lead']");
-  private dropdownStatus = () => this.page.locator("//button[@data-id='status']");
-  private inputStatus = () => this.page.locator("//div[@class='dropdown bootstrap-select input-group-btn _select_input_group bs3 open']//input[@aria-label='Search']");
-  private optionActive = () => this.page.locator("//span[@class='text'][normalize-space()='Active']");
-  private dropdownSource = () => this.page.locator("//button[@data-id='source']");
-  private inputSource = () => this.page.locator("//div[@class='dropdown bootstrap-select input-group-btn _select_input_group bs3 open']//input[@aria-label='Search']");
-  private optionFacebook = () => this.page.locator("//span[normalize-space()='Facebook']");
-  private dropdownTags = () => this.page.locator("//div[@id='inputTagsWrapper']//input[@placeholder='Tag']");
-  private optionSelenium = () => this.page.locator("//li[contains(@class,'menu')]//div[normalize-space()='Selenium']");
-  private inputName = () => this.page.locator("//div[@class='col-md-6']//input[@id='name']");
-  private buttonSave = () => this.page.locator("//button[@id='lead-form-submit']");
-  private dropdownPagination = () => this.page.locator("//select[@name='leads_length']");
-  private inputSearchLead = () => this.page.locator("//input[@aria-controls='leads']");
-  private contentLeads_info1To1 = () => this.page.locator("//div[@id='leads_info' and contains(., 'Showing 1 to 2 of 2 entries')]");
-  private checkboxSelectAllLead = () => this.page.locator(".checkbox.mass_select_all_wrap:visible");
-  private allBinLeadcheckbox = () => this.page.locator("//div[@class='checkbox']//input[@type='checkbox']");
-  private buttonBulkActions = () => this.page.locator("//span[normalize-space()='Bulk Actions']");
-  private checkboxMassDelete = () => this.page.locator("//label[normalize-space()='Mass Delete']");
-  private buttonConfirm = () => this.page.locator("//a[normalize-space()='Confirm']");
-  private alertSuccess = () => this.page.locator("//span[@class='alert-title']");
-  private noDataAfterDelete = () => this.page.locator("//td[@class='dataTables_empty']");
-  private buttonXAlert = () => this.page.locator("//button[@data-dismiss='alert']//span[@aria-hidden='true'][normalize-space()='×']");
-  private leadNameCells = () => this.page.locator("//table//tbody/tr/td[3]");
+    get buttonNewLead() {
+        return this.getLinkByText(Button.NEWLEAD);
+    }
 
-  
+    get dropdownStatus() {
+        return this.getDropdown(Button.STATUS);
+    }   
 
+    get inputName() {
+        return this.getCheckbox2(Input.NAME);
+    }
 
-  async addNewLead(leadName: string) {
+    get buttonSave() {
+        return this.getButtonById(Button.LEAD_FORM_SUBMIT);
+    }
 
-    await this.clickWithRetry(this.dropdownStatus());
-    await this.inputStatus().fill('Active');
-    await this.optionActive().click();
+    get dropdownPagination() {
+        return this.getDropdownSelect(Dropdown.LEADS_LENGTH);
+    }
 
-    await this.dropdownSource().click();
-    await this.inputSource().fill('Facebook');
-    await this.optionFacebook().click();
+    get inputSearchLead() {
+        return this.getInputAriaControls(Search.LEADS);
+    }
 
-    await this.dropdownTags().click();
-    await this.dropdownTags().fill('Selenium');
-    await this.optionSelenium().click();
+    get contentLeads_info1To1() {
+        return this.getDivText(Table.LEADS_INFO);
+    }
+    
+    get leadNameCells() {
+        return this.getCells(Number.THREE);
+    }
 
-    await this.inputName().fill(leadName);
+  async addNewLead(data: Lead) {
 
-    await this.buttonSave().click();
-    await this.page.reload({ waitUntil: 'networkidle' });
-    await expect(this.buttonNewLead()).toBeVisible();
+    await this.selectDropdownNotSearch2(Button.STATUS, data.status);
+    await this.selectDropdownNotSearch(Button.SOURCE, data.source);
+    await this.type(this.inputName, data.name);
+    await this.click(this.buttonSave);
+    await this.reloadPage();
+    await this.waitVisible(this.buttonNewLead);
   }
 
-  async createMultipleLeads(totalLead: number) {
+  async createMultipleLeads(totalLead: number, data: Lead) {
     for (let i = 1; i <= totalLead; i++) {
-      const leadName = `Bin Lead ${i}`;
-
-      console.log(`Creating Lead: ${leadName}`);
+      data.name = `Bin Lead ${i}`;
+      console.log(`Creating Lead: ${data.name}`);
 
       let formOpened = false;
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
           console.log(`🔄 Attempt ${attempt} to open New Lead form`);
 
-          await this.clickWithRetry(this.buttonNewLead());
-
-          await this.dropdownStatus().waitFor({ state: 'visible' });
+          await this.click(this.buttonNewLead);
+          await this.waitVisible(this.dropdownStatus);
           console.log(`✅ New Lead form opened successfully`);
           formOpened = true;
           break;
 
         } catch (err) {
           console.log(`⚠️ Form didn't open on attempt ${attempt}, refreshing page`);
-          await this.page.reload({ waitUntil: 'networkidle' });
+          await this.reloadPage();
         }
       }
 
@@ -80,56 +73,41 @@ export class LeadsPage extends BasePage {
         throw new Error(`❌ Failed to open New Lead form after 3 attempts`);
       }
 
-      await this.addNewLead(leadName);
+      await this.addNewLead(data);
     }
   }
 
-  async checkLeadNameContains(value: string) {
-    const texts = await this.leadNameCells().allTextContents();
+  async checkLeadNameContains(value: string | Lead) {
+  const searchValue = typeof value === 'string' ? value : value.name;
+  const texts = await this.leadNameCells.allTextContents();
+  const normalizedValue = this.normalizeText(searchValue);
+  const matched = texts.filter(text => this.normalizeText(text).includes(normalizedValue));
 
-    console.log(`📋 Total lead rows: ${texts.length}`);
+  console.log(`📋 Total rows: ${texts.length} | ✅ Matched: ${matched.length}`);
+  expect(matched.length).toBeGreaterThan(0);
+}
 
-    texts.forEach((text, index) => {
-      console.log(`  🔹 Row ${index + 1}: "${text.trim()}"`);
-    });
+  async searchAndCheckDataInTable(data: Lead) {
 
-    const matched = texts.filter(text =>
-      this.normalizeText(text).includes(this.normalizeText(value))
-    );
-
-    console.log(`✅ Rows matching "${value}": ${matched.length}`);
-
-    expect(matched.length).toBeGreaterThan(0);
-  }
-
-  async searchAndCheckDataInTable(columnIndex: number, data: string) {
-
-    const dropdown = this.dropdownPagination();
-
-    await expect(dropdown).toBeVisible();
-    await this.dropdownPagination().selectOption('10');
-    await expect(this.inputSearchLead()).toBeVisible();
-    await this.inputSearchLead().fill('Bin Lead');
-    await expect(this.contentLeads_info1To1()).toBeVisible();
+    await this.selectOption(this.dropdownPagination, Number.TEN);
+    await this.type(this.inputSearchLead, "Bin Lead");
+    await this.verifyContainsText(this.contentLeads_info1To1, Table.SHOWING1TO2OF2);
     await this.checkLeadNameContains(data);
   }
 
   async selectAllAndEnsureChecked(maxRetry = 3) {
-    const selectAll = this.checkboxSelectAllLead();
-    const checkboxes = this.allBinLeadcheckbox();
 
     for (let attempt = 1; attempt <= maxRetry; attempt++) {
       console.log(`🔁 Select All attempt ${attempt}`);
       
-      await selectAll.scrollIntoViewIfNeeded();
-      await selectAll.click();
-      await this.page.waitForTimeout(300);
+      await this.scrollIntoView(this.checkboxSelectAll);
+      await this.click(this.checkboxSelectAll);
 
-      const total = await checkboxes.count();
+      const total = await this.checkboxSelectEach.count();
       let checked = 0;
 
       for (let i = 0; i < total; i++) {
-        if (await checkboxes.nth(i).isChecked()) {
+        if (await this.checkboxSelectEach.nth(i).isChecked()) {
           checked++;
         }
       }
@@ -148,21 +126,18 @@ export class LeadsPage extends BasePage {
   }
 
   async deleteDataAfterSearched() {
-    this.page.once('dialog', dialog => dialog.accept());
-    await this.dropdownPagination().selectOption('25');
+    await this.acceptAlert();
+    await this.selectOption(this.dropdownPagination, Number.TWENTYFIVE);
     await this.selectAllAndEnsureChecked();
-    await this.buttonBulkActions().click();
-    await expect(this.checkboxMassDelete()).toBeVisible();
-    await this.checkboxMassDelete().click();
-    await this.buttonConfirm().click();
+    await this.click(this.buttonBulkActions);
+    await this.click(this.checkboxMassDelete);
+    await this.click(this.buttonConfirm);
   }
 
-  async verifyDeletedLeads() {
-    await expect(this.alertSuccess()).toBeVisible();
-    await expect(this.alertSuccess()).toHaveText('Total leads deleted: 2');
-    await this.buttonXAlert().click();
-    await this.inputSearchLead().fill('Bin Lead');
-    await expect(this.noDataAfterDelete()).toBeVisible();
-    await expect(this.noDataAfterDelete()).toHaveText('No matching records found');
+  async verifyDeletedLeads(data: Lead) {
+    await this.verifyText(this.getAlert(), Message.TOTALLEADSDELETE2);
+    await this.click(this.getCloseAlert());
+    await this.type(this.inputSearchLead, data.name);
+    await this.waitVisible(this.getNoData());
   }
 }

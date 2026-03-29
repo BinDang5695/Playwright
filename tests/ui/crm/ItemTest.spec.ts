@@ -1,18 +1,18 @@
 import { test } from './BaseTest';
+import { Menu } from '@constants/crm';
+import { itemData } from '@data/crm/item.data';
 
 test.describe('CRM Test Suite', () => {
 
-    test('Add new Item, verify and delete Item Successfully', async ({ pages }) => {
-        await pages.loginPage().loginCRM('admin@example.com', '123456');
-        await pages.basePage().clickMenuSales();
-        await pages.basePage().clickMenuItems();
-        await pages.itemsPage().clickButtonImportItems();
-        await pages.itemsPage().importCSVFile();
-        await pages.itemsPage().clickToImportCSVFile();
-        await pages.basePage().clickMenuSales();
-        await pages.basePage().clickMenuItems();
-        await pages.itemsPage().searchAndVerifyItems();
-        await pages.itemsPage().deleteImportedItem();
-        await pages.headerPage().logout();
+    test('Add new Item, verify and delete Item Successfully', async ({ itemsPage, CRMBasePage }) => {
+        await CRMBasePage.clickValue2(Menu.SALES);
+        await CRMBasePage.clickValue(Menu.ITEMS);
+        await itemsPage.clickButtonImportItems();
+        await itemsPage.importCSVFile(itemData);
+        await itemsPage.clickToImportCSVFile();
+        await CRMBasePage.clickValue2(Menu.SALES);
+        await CRMBasePage.clickValue(Menu.ITEMS);
+        await itemsPage.searchAndVerifyItems(itemData);
+        await itemsPage.deleteImportedItem(itemData);
     });
 });
