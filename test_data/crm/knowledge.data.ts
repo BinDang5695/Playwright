@@ -1,4 +1,4 @@
-import { Article } from '@models/types/knowledge.model';
+import { Article } from '@models/types/crm/knowledge.model';
 
 export const articleData: Article = {
   subject: 'Bin Article',

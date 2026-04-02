@@ -1,138 +1,132 @@
 import { expect } from '@playwright/test';
 import fs from 'fs';
-import { extractTextFromPDF, readExcelAsText, deleteFile } from '../../models/helpers/FileHelpers';
+import { extractTextFromPDF, readExcelAsText, deleteFile } from '@models/helpers/FileHelpers';
 import path from 'path';
-import { ExportFileType } from '@models/types/file.model';
-import { CRMBasePage } from './CRMBasePage';
-import { Button, Message, Dropdown, Number, Option, Label, Toogle, Search, Href, Currency, Date, Status, Delay, Attribute, Input, Table } from '@constants/crm';
-import { Proposal } from '@models/types/proposal.model'
+import { ExportFileType } from '@models/types/crm/file.model';
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { Message, Dropdown, Toogle, Attribute } from '@constants/crm';
+import { Proposal } from '@models/types/crm/proposal.model'
 
 export class ProposalsPage extends CRMBasePage {
 
-    get buttonNewProposal() {
-        return this.getLinkByText(Button.NEWPROPOSAL);
+    private get buttonNewProposal() {
+        return this.page.locator("//a[normalize-space()='New Proposal']")
     }
 
-    get inputSubject() {
-        return this.getInputById(Input.SUBJECT);
+    private get inputSubject() {
+        return this.page.locator("#subject")
     }
 
-    get dropdownRelated() {
-        return this.getDropdown(Dropdown.RELATED);
+    private get dropdownRelated() {
+        return this.page.locator("//button[@data-id='rel_type']")
     }
 
-    get optionCustomer() {
-        return this.getType(Option.CUSTOMER);
+    private get optionCustomer() {
+        return this.page.locator("//a[@role='option']//span[normalize-space()='Customer']")
     }
 
-    inputDate(date: string) {
-        return this.getInputById(date);
+    private get inputDate() {
+        return this.page.locator("#date")
     }
 
-    get selectDate() {
-        return this.getDivId(Number.TWENTY);
+    private get selectDate() {
+        return this.page.locator("//div[normalize-space()='20']")
     }
 
-    get clickToogle() {
-        return this.getLabel(Label.ALLOW_COMMENTS);
-    }    
-
-    inputEmail(email: string) {
-        return this.getInputById(Input.EMAIL);
+    private get labelToogle() {
+        return this.page.locator("//label[@for='allow_comments']")
     }
 
-    get selectLabelHours() {
-        return this.getLabelText(Label.HOURS);
+    private get inputEmail() {
+        return this.page.locator("#email")
     }
 
-    get clickButtonPull() {
-        return this.getButtonByClass(Button.PULL);
+    private get selectLabelHours() {
+        return this.page.locator("//label[normalize-space()='Hours']")
     }
 
-    get clickButtonSave() {
-        return this.getButtonText(Button.SAVE);
+    private get buttonSelect() {
+        return this.page.locator("//button[@class='btn pull-right btn-primary']")
     }
 
-    get hoverToogle() {
-        return this.getToogle(Toogle.FULLVIEW);
+    private get clickButtonSave() {
+        return this.page.locator("//button[@type='button'][normalize-space()='Save']")
     }
 
-    get clickButtonDoubleRight() {
-        return this.getLi(Button.DOUBLERIGHT);
+    private get hoverToogle() {
+        return this.page.locator("//li[@data-title='Toggle full view']")
     }
 
-    get inputSearchProposal() {
-        return this.getInputAriaControls(Search.PROPOSALS);
+    private get buttonToogleTableRight() {
+        return this.page.locator("//i[@class='fa fa-angle-double-right']")
     }
 
-    get verifyTotal() {
-        return this.getDivText(Table.PROPOSALS_INFO);
+    private get inputSearchProposal() {
+        return this.page.locator("//input[@aria-controls='proposals']")
     }
 
-    get verifySubject() {
-        return this.getTableLink(Number.TWO, Href.LIST_PROPOSALS);
+    private get verifyTotal() {
+        return this.page.locator("//div[@id='proposals_info' and contains(., 'Showing 1 to 1 of 1 entries')]")
     }
 
-    get clickButtonMore() {
-        return this.getButtonByText(Button.MORE);
+    verifySubject(subject: string) {
+        return this.page.locator(`//tr[@class='has-row-options odd']//a[contains(text(),'${subject}')]`)
+    }
+    
+    private get clickButtonMore() {
+        return this.page.locator("//button[normalize-space()='More']")
     }
 
-    get clickButtonDelete() {
-        return this.getLinkByText(Button.DELETE);
+    private get clickButtonDelete() {
+        return this.page.locator("//a[normalize-space()='Delete']")
     }
 
-    get clickButtonExport() {
-        return this.getValue(Button.EXPORT);
+    private get clickButtonExport() {
+        return this.page.locator("//span[normalize-space()='Export']")
     }
 
-    get selectOptionPDF() {
-        return this.getLinkByText(Option.PDF);
+    private get optionPDF() {
+        return this.page.locator("//a[normalize-space()='PDF']")
     }
 
-    get selectOptionExcel() {
-        return this.getLinkByText(Option.EXCEL);
+    private get optionExcel() {
+        return this.page.locator("//a[normalize-space()='Excel']")
     }
 
-    get selectOptionCSV() {
-        return this.getLinkByText(Option.CSV);
+    private get optionCSV() {
+        return this.page.locator("//a[normalize-space()='CSV']")
     }
 
-    get clickTable() {
-        return this.getTable(Option.CSV);
-    }
-
-    //Compare file PDF with data on UI table
-
-    get captureTableProposal() {
-        return this.getTableLink(Number.ONE, Href.LIST_PROPOSALS);
+    private get captureTableProposal() {
+        return this.page.locator("//td[1]//a[contains(@href,'list_proposals')]")
     }
 
     captureTableSubject(subject: string) {
-        return this.getTableLink(Number.TWO, subject);
+        return this.page.locator(`//td[2]//a[normalize-space()='${subject}']`)
     }
 
     captureTableTo(customer: string) {
-        return this.getTableLink(Number.THREE, customer);
+        return this.page.locator(`//a[contains(text(),'${customer}')]`)
     }
 
-    get captureTableTotal() {
-        return this.getTDText(Currency.EURO);
+    captureTableTotal(total: string) {
+        return this.page.locator(`//td[contains(text(),'${total}')]`)
     }
 
-    get captureTableDate() {
-        return this.getTDText(Date.DATE);
+    captureTableDate(date: string) {
+        return this.page.locator(`//td[normalize-space()='${date}']`)
     }
 
-    get captureTableOpenTill() {
-        return this.getTDText(Date.OPENTILL);
+    captureTableOpenTill(date: string) {
+        return this.page.locator(`//td[normalize-space()='${date}']`)
     }
 
-    get captureTableCreated() {
-        return this.getTD(Date.DATECREATED);
+    private get captureTableCreated() {
+        return this.page.locator("//td[@class='sorting_1']")
     }
 
-    get captureTableStatus() {
-        return this.getTDSpan(Status.PROPOSAL_STATUS);
+    private get captureTableStatus() {
+        return this.page.locator("//td//span[contains(@class,'proposal-status')]")
     }
 
     private uiProposalNumber = '';
@@ -146,18 +140,18 @@ export class ProposalsPage extends CRMBasePage {
     private uiCreated = '';
     private uiStatus = '';
 
-    async captureUITableData() {
-        await this.waitVisible(this.getTableLink(Number.ONE, Href.LIST_PROPOSALS));
-        this.uiProposalNumber = (await this.getTableLink(Number.ONE, Href.LIST_PROPOSALS).textContent())?.trim() ?? '';
-        this.uiSubject = (await this.getTableLink(Number.TWO, Href.LIST_PROPOSALS).textContent())?.trim() ?? '';
-        this.uiTo = (await this.getTableLink(Number.THREE, Href.CLIENT).first().textContent())?.trim() ?? '';
-        this.uiTotal = (await this.getTDText(Currency.EURO).textContent())?.trim() ?? '';
-        this.uiDate = (await this.getTDText(Date.DATE).textContent())?.trim() ?? '';
-        this.uiOpenTill = (await this.getTDText(Date.OPENTILL).textContent())?.trim() ?? '';
+    async captureUITableData(data: Proposal) {
+        await expect(this.captureTableProposal).toBeVisible();
+        this.uiProposalNumber = (await this.captureTableProposal.textContent())?.trim() ?? '';
+        this.uiSubject = (await this.captureTableSubject(data.subject).textContent())?.trim() ?? '';
+        this.uiTo = (await this.captureTableTo(data.customer).first().textContent())?.trim() ?? '';
+        this.uiTotal = (await this.captureTableTotal(data.total).textContent())?.trim() ?? '';
+        this.uiDate = (await this.captureTableDate(data.date).textContent())?.trim() ?? '';
+        this.uiOpenTill = (await this.captureTableOpenTill(data.openTill).textContent())?.trim() ?? '';
         this.uiProject = '';
         this.uiTags = '';
-        this.uiCreated = (await this.getTD(Date.DATECREATED).textContent())?.trim() ?? '';
-        this.uiStatus = (await this.getTDSpan(Status.PROPOSAL_STATUS).textContent())?.trim() ?? '';
+        this.uiCreated = (await this.captureTableCreated.textContent())?.trim() ?? '';
+        this.uiStatus = (await this.captureTableStatus.textContent())?.trim() ?? '';
         console.log('📋 UI data:', {
             proposal: this.uiProposalNumber,
             subject: this.uiSubject,
@@ -171,24 +165,24 @@ export class ProposalsPage extends CRMBasePage {
     }
 
     async clickButtonNewProposal() {
-        await this.click(this.buttonNewProposal);
+        await this.buttonNewProposal.click();
     }
 
     async addNewProposal(data: Proposal) {
-        await this.type(this.inputSubject, data.subject);
-        await this.click(this.dropdownRelated);
-        await this.click(this.optionCustomer);
-        await this.selectDropdown(Dropdown.CUSTOMER, Number.THIRDTEEN, data.customer);
-        await this.type(this.inputDate(Input.DATE), data.date);
-        await this.click(this.selectDate);
-        await this.click(this.clickToogle);
-        await this.type(this.inputEmail(data.email), data.email);
-        await this.selectDropdown(Dropdown.ADDITEM, Number.SEVEN, data.description, Option.BINDESCRIPTION);
-        await this.click(this.selectLabelHours);
-        await this.click(this.clickButtonPull);
-        await this.scrollIntoView(this.clickButtonSave);
-        await this.click(this.clickButtonSave);
-        await this.click(this.getbuttonCloseAlert());
+        await this.inputSubject.fill(data.subject);
+        await this.dropdownRelated.click();
+        await this.optionCustomer.click();
+        await this.selectDropdownWithSearch(Dropdown.CUSTOMER, 13, data.customer);
+        await this.inputDate.fill(data.date);
+        await this.selectDate.click();
+        await this.labelToogle.click();
+        await this.inputEmail.fill(data.email);
+        await this.selectDropdownWithSearch(Dropdown.ADDITEM, 7, data.description, data.binDescription);
+        await this.selectLabelHours.click();
+        await this.buttonSelect.click();
+        await this.clickButtonSave.scrollIntoViewIfNeeded();
+        await this.clickButtonSave.click();
+        await this.getbuttonCloseAlert().click();
     }
 
     async addNewProposalWithRetry(data: Proposal) {
@@ -196,25 +190,25 @@ export class ProposalsPage extends CRMBasePage {
     }
 
     async verifyTooltip() {
-        await this.hover(this.hoverToogle);
-        await this.waitVisible(this.hoverToogle);
-        await this.verifyAttribute(this.hoverToogle, Attribute.DATA_TITLE, Toogle.FULLVIEW);
+        await this.hoverToogle.hover();
+        await expect(this.hoverToogle).toBeVisible();
+        await expect(this.hoverToogle).toHaveAttribute(Attribute.DATA_TITLE, Toogle.FULLVIEW);
     }
 
     async searchCreatedProposal(data: Proposal) {
-        await this.click(this.clickButtonDoubleRight);
-        await this.type(this.inputSearchProposal, data.subject);
-        await this.verifyContainsText(this.verifyTotal, Message.SHOWING1TO1OFENTRIES);
+        await this.buttonToogleTableRight.click();
+        await this.inputSearchProposal.fill(data.subject);
+        await expect(this.verifyTotal).toContainText(Message.SHOWING1TO1OFENTRIES);
     }
 
-    async deleteCreatedProposal() {
+    async deleteCreatedProposal(data: Proposal) {
         await this.acceptAlert();
-        await this.pressEscape();
-        await this.waitForNetwork();
-        await this.click(this.verifySubject);
-        await this.reloadPage();
-        await this.click(this.clickButtonMore);
-        await this.click(this.clickButtonDelete);
+        await this.page.keyboard.press('Escape');
+        await this.page.waitForLoadState('networkidle');
+        await this.verifySubject(data.subject).click();
+        await this.page.reload();
+        await this.clickButtonMore.click();
+        await this.clickButtonDelete.click();
     }
 
     async exportFile(type: ExportFileType): Promise<string> {
@@ -227,9 +221,9 @@ export class ProposalsPage extends CRMBasePage {
         await this.click(this.clickButtonExport);
 
         const optionMap = {
-            pdf: this.selectOptionPDF,
-            excel: this.selectOptionExcel,
-            csv: this.selectOptionCSV,
+            pdf: this.optionPDF,
+            excel: this.optionExcel,
+            csv: this.optionCSV,
         };
 
         const [download] = await Promise.all([

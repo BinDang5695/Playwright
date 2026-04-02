@@ -1,253 +1,242 @@
-import { CRMBasePage } from './CRMBasePage';
-import { Button, Input, Option, Dropdown, Table, Number, Delay, Error } from '@constants/crm';
-import { Customer } from '@models/types/customer.model'
-import { CustomerDataDriven } from '@models/types/customerdriven.model'
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { Dropdown } from '@constants/crm';
+import { Customer } from '@models/types/crm/customer.model'
+import { CustomerDataDriven } from '@models/types/crm/customerdriven.model'
+import { expect } from '@playwright/test';
 
 export class CustomersPage extends CRMBasePage {
 
-  get buttonAddNewCustomer() {
-      return this.getLinkByText(Button.NEWCUSTOMER);
-  }
-
-  get searchInput() {
-      return this.getInputAriaControls(Input.CLIENTS);
-  }
-
-  get inputCompany() {
-      return this.getInputById(Input.COMPANY);
-  }
-
-  get inputVATNumber() {
-      return this.getInputById(Input.VAT);
-  }
-
-  get inputPhoneNumber() {
-      return this.getInputById(Input.PHONENUMBER);
-  }
-
-  get inputWebsite() {
-      return this.getInputById(Input.WEBSITE);
-  }
-
-  get clickDropdown() {
-      return this.getDropdown(Dropdown.GROUPS_IN);
-  }
-
-  get currencyDropdown() {
-      return this.getDropdown(Dropdown.DEFAULT_CURRENCY);
-  }
-
-  get optionEuro() {
-      return this.getValue1(Option.EURO);
-  }
-  
-  get defaultLanguageDropdown() {
-      return this.getDropdown(Dropdown.DEFAULT_LANGUAGE);
-  }
-
-  get optionVietnamese() {
-      return this.getValue(Option.VIETNAMESE);
-  }
-
-  get inputAddress() {
-      return this.getTextArea2(Input.ADDRESS);
-  }
-
-  get inputCity() {
-      return this.getInputById(Input.CITY);
-  }
-
-  get inputState() {
-      return this.getInputById(Input.STATE);
-  }
-
-  get inputZipCode() {
-      return this.getInputById(Input.ZIP);
-  }
-
-  get countryDropdown() {
-      return this.getDropdown(Dropdown.COUNTRY);
-  }
-
-  get buttonSave() {
-      return this.getButtonByClass(Button.ONLY_SAVE);
-  }
-
-  dataInTable(company: string) {
-      return this.getLinkByText(company);
-  }
-
-  get totalCustomer() {
-      return this.getTotalCustomer(Table.TOTAL_CUSTOMERS);
-  }
-
-  get buttonDelete() {
-      return this.getLinkByText(Button.DELETE);
-  }
-
-  get errorCompany() {
-      return this.getErrorCompany(Error.COMPANY_ERROR);
-  }  
-
-  dataTable(company: string) {
-      return this.getAText(company);
-  }  
-
-  async clickButtonAddNewCustomer() {
-    await this.click(this.buttonAddNewCustomer);
-  }
-
-  async addNewCustomer(data: Customer) {
-    await this.type(this.inputCompany, data.company);
-    await this.type(this.inputVATNumber, data.vat);
-    await this.type(this.inputPhoneNumber, data.phone);
-    await this.type(this.inputWebsite, data.website);
-    await this.selectDropdown(Dropdown.GROUPS_IN, Number.ONE, data.group);
-    await this.click(this.clickDropdown);
-    await this.click(this.currencyDropdown);
-    await this.click(this.optionEuro);
-    await this.click(this.defaultLanguageDropdown);
-    await this.click(this.optionVietnamese);
-    await this.type(this.inputAddress, data.address);
-    await this.type(this.inputCity, data.city);
-    await this.type(this.inputState, data.state);
-    await this.type(this.inputZipCode, data.zip);
-    await this.selectDropdown(Dropdown.COUNTRY, Number.FOUR, data.country);
-    await this.click(this.buttonSave);
-  }
-
-  async addNewCustomerDataDriven(data: CustomerDataDriven) {
-
-    if (data.company)
-        await this.type(this.inputCompany, data.company);
-
-    if (data.vat)
-        await this.type(this.inputVATNumber, data.vat);
-
-    if (data.phone)
-        await this.type(this.inputPhoneNumber, data.phone, Delay.ONE_HUNDRED_MILLISECONDS);
-
-    if (data.website)
-        await this.type(this.inputWebsite, data.website, Delay.ONE_HUNDRED_MILLISECONDS);
-
-    if (data.group) {
-      await this.selectDropdown(Dropdown.GROUPS_IN, Number.ONE, data.group);
+    private get buttonAddNewCustomer() {
+        return this.page.getByRole('link', { name: 'New Customer' });
     }
 
-    if (data.currency) {
-      await this.click(this.clickDropdown);
-      await this.click(this.currencyDropdown);
-      await this.click(this.optionEuro);
+    private get searchInput() {
+        return this.page.locator("//input[@aria-controls='clients']");
     }
 
-    if (data.language) {
-      await this.click(this.defaultLanguageDropdown);
-      await this.click(this.optionVietnamese);
+    private get inputCompany() {
+        return this.page.getByLabel('Company');
     }
 
-    if (data.address)
-      await this.type(this.inputAddress, data.address);
-
-    if (data.city)
-      await this.type(this.inputCity, data.city);
-
-    if (data.state)
-      await this.type(this.inputState, data.state);
-
-    if (data.zip)
-      await this.type(this.inputZipCode, data.zip);
-
-    if (data.country) {
-        await this.selectDropdown(Dropdown.COUNTRY, Number.FOUR, data.country);
+    private get inputVATNumber() {
+        return this.page.getByLabel('VAT Number');
     }
 
-    await this.scrollIntoView(this.buttonSave);
-    await this.click(this.buttonSave);
-  }
+    private get inputPhoneNumber() {
+        return this.page.getByLabel('Phone');
+    }
 
-  async verifyCreateFail(expectedMessage: string) {
-    await this.waitVisible(this.errorCompany);
-    await this.verifyText(this.errorCompany, expectedMessage);
-  }
+    private get inputWebsite() {
+        return this.page.getByLabel('Website');
+    }
 
-  async verifyCustomerAddedDataDriven(data: CustomerDataDriven) {
+    private get dropDownGroups() {
+        return this.page.locator("//button[@data-id='groups_in[]']");
+    }
 
-    if (data.company)
-        await this.verifyValue(this.inputCompany, data.company)
+    textOption(name: string) {
+        return this.page.locator(`//span[normalize-space()='${name}']`);
+    }
 
-    if (data.vat)
-        await this.verifyValue(this.inputVATNumber, data.vat)
+    private get currencyDropdown() {
+        return this.page.locator("//button[@data-id='default_currency']");
+    }
 
-    if (data.phone)
-        await this.verifyValue(this.inputPhoneNumber, data.phone)
+    private get currencyOption() {
+        return this.page.getByText('€', { exact: true });
+    }
 
-    if (data.website)
-        await this.verifyValue(this.inputWebsite, data.website)
+    private get defaultLanguageDropdown() {
+        return this.page.locator("//button[@data-id='default_language']");
+    }
 
-    if (data.address)
-        await this.verifyValue(this.inputAddress, data.address)
+    private get inputAddress() {
+        return this.page.getByRole('textbox', { name: 'Address' });
+    }
 
-    if (data.city)
-        await this.verifyValue(this.inputCity, data.city)
+    private get inputCity() {
+        return this.page.locator("#city");
+    }
 
-    if (data.state)
-        await this.verifyValue(this.inputState, data.state)
+    private get inputState() {
+        return this.page.locator("#state");
+    }
 
-    if (data.zip)
-        await this.verifyValue(this.inputZipCode, data.zip)
+    private get inputZipCode() {
+        return this.page.locator("#zip");
+    }
 
-  }
+    private get countryDropdown() {
+        return this.page.locator('button[data-id="country"]');
+    }
 
-  async verifyCustomerAdded(data: Customer) {
-    await this.verifyValue(this.inputCompany, data.company);
-    await this.verifyValue(this.inputVATNumber, data.vat);
-    await this.verifyValue(this.inputPhoneNumber, data.phone);
-    await this.verifyValue(this.inputWebsite, data.website);
-    await this.verifyText(this.clickDropdown, data.group);
-    await this.verifyText(this.currencyDropdown, data.currency);
-    await this.verifyText(this.defaultLanguageDropdown, data.language);
-    await this.verifyValue(this.inputAddress, data.address);
-    await this.verifyValue(this.inputCity, data.city);
-    await this.verifyValue(this.inputState, data.state);
-    await this.verifyValue(this.inputZipCode, data.zip);
-    await this.verifyValue(this.inputState, data.state);
-    await this.verifyText(this.countryDropdown, data.country);
-  }
+    private get buttonSave() {
+        return this.page.locator("//button[contains(@class,'only-save')]");
+    }
 
-  async getTotalCustomers(): Promise<number> {
-    return this.getTextAsNumber(this.totalCustomer);
-  }
+    private get totalCustomer() {
+        return this.page.locator("//span[normalize-space()='Total Customers']/preceding-sibling::span");
+    }
 
-  async searchCustomer(data: Customer) {
-    await this.type(this.searchInput, data.company);
-    await this.waitVisible(this.dataInTable(data.company));
-  }
+    private get errorMessage() {
+        return this.page.locator("#company-error");
+    }
 
-  async deleteCustomer(data: Customer) {
-    await this.hover(this.dataInTable(data.company));
-    await this.acceptAlert();
-    await this.click(this.buttonDelete);
-    await this.click(this.getbuttonCloseAlert());
-  }
+    customerInTable(name: string) {
+        return this.page.getByRole('link', { name });
+    }
 
-  async deleteCustomerIfExist(data: CustomerDataDriven): Promise<void> {
-      if (!data.company) {
-    console.log('⚠️ No company name provided, cannot delete');
-    return;
-  }
-    await this.type(this.searchInput, data.company);
-    await this.hover(this.dataTable(data.company));
-    await this.acceptAlert();
-    await this.click(this.buttonDelete);
-    await this.waitForNetwork();
-    await this.click(this.getbuttonCloseAlert());
-    await this.waitForNetwork();
-    await this.type(this.searchInput, data.company);
-  }
+    async clickButtonAddNewCustomer() {
+        await this.buttonAddNewCustomer.click();
+    }
 
-  async verifyCustomerDeleted(data: Customer) {
-    await this.type(this.searchInput, data.company);
-    await this.waitVisible(this.getNoData());
-  }
+    async addNewCustomer(data: Customer) {
+        await this.inputCompany.fill(data.company);
+        await this.inputVATNumber.fill(data.vat);
+        await this.inputPhoneNumber.fill(data.phone);
+        await this.inputWebsite.fill(data.website);
+        await this.selectDropdownWithSearch(Dropdown.GROUPS_IN, 1, data.group);
+        await this.dropDownGroups.click();
+        await this.currencyDropdown.click();
+        await this.currencyOption.click();
+        await this.selectDropdownBySpanText(Dropdown.DEFAULT_LANGUAGE, data.language);
+        await this.inputAddress.fill(data.address);
+        await this.inputCity.fill(data.city);
+        await this.inputState.fill(data.state);
+        await this.inputZipCode.fill(data.zip);
+        await this.selectDropdownWithSearch(Dropdown.COUNTRY, 4, data.country);
+        await this.buttonSave.click();
+    }
+
+    async addNewCustomerDataDriven(data: CustomerDataDriven) {
+
+        if (data.company)
+            await this.inputCompany.fill(data.company);
+
+        if (data.vat)
+            await this.inputVATNumber.fill(data.vat);
+
+        if (data.phone)
+            await this.inputPhoneNumber.fill(data.phone);
+
+        if (data.website)
+            await this.inputWebsite.fill(data.website);
+
+        if (data.group) {
+            await this.selectDropdownWithSearch(Dropdown.GROUPS_IN, 1, data.group);
+            await this.dropDownGroups.click();
+        }
+
+        if (data.currency) {
+            await this.currencyDropdown.click();
+            await this.currencyOption.click();
+        }
+
+        if (data.language) {
+            await this.selectDropdownBySpanText(Dropdown.DEFAULT_LANGUAGE, data.language);
+        }
+
+        if (data.address)
+            await this.inputAddress.fill(data.address);
+
+        if (data.city)
+            await this.inputCity.fill(data.city);
+
+        if (data.state)
+            await this.inputState.fill(data.state);
+
+        if (data.zip)
+            await this.inputZipCode.fill(data.zip);
+
+        if (data.country) {
+            await this.selectDropdownWithSearch(Dropdown.COUNTRY, 4, data.country);
+        }
+
+        await this.buttonSave.scrollIntoViewIfNeeded();
+        await this.buttonSave.click();
+    }
+
+    async verifyCreateFail(message: string) {
+        await expect(this.errorMessage).toBeVisible();
+        await expect(this.errorMessage).toHaveText(message);
+    }
+
+    async verifyCustomerAddedDataDriven(data: CustomerDataDriven) {
+
+        if (data.company)
+            await expect(this.inputCompany).toHaveValue(data.company);
+
+        if (data.vat)
+            await expect(this.inputVATNumber).toHaveValue(data.vat);
+
+        if (data.phone)
+            await expect(this.inputPhoneNumber).toHaveValue(data.phone);
+
+        if (data.website)
+            await expect(this.inputWebsite).toHaveValue(data.website);
+
+        if (data.address)
+            await expect(this.inputAddress).toHaveValue(data.address);
+
+        if (data.city)
+            await expect(this.inputCity).toHaveValue(data.city);
+
+        if (data.state)
+            await expect(this.inputState).toHaveValue(data.state);
+
+        if (data.zip)
+            await expect(this.inputZipCode).toHaveValue(data.zip);
+    }
+
+    async verifyCustomerAdded(data: Customer) {
+        await expect(this.inputCompany).toHaveValue(data.company);
+        await expect(this.inputVATNumber).toHaveValue(data.vat);
+        await expect(this.inputPhoneNumber).toHaveValue(data.phone);
+        await expect(this.inputWebsite).toHaveValue(data.website);
+        await expect(this.dropDownGroups).toHaveText(data.group);
+        await expect(this.currencyDropdown).toHaveText(data.currency);
+        await expect(this.defaultLanguageDropdown).toHaveText(data.language);
+        await expect(this.inputAddress).toHaveValue(data.address);
+        await expect(this.inputCity).toHaveValue(data.city);
+        await expect(this.inputState).toHaveValue(data.state);
+        await expect(this.inputZipCode).toHaveValue(data.zip);
+        await expect(this.inputState).toHaveValue(data.state);
+        await expect(this.countryDropdown).toHaveText(data.country);
+    }
+
+    async getTotalCustomers(): Promise<number> {
+        const totalText = await this.totalCustomer.textContent();
+        return Number(totalText);
+    }
+
+    async searchCustomer(data: Customer) {
+        await this.searchInput.fill(data.company);
+        await expect(this.customerInTable(data.company));
+    }
+
+    async deleteCustomer(data: Customer) {
+        await this.customerInTable(data.company).hover();
+        await this.acceptAlert();
+        await this.buttonDelete.click();
+        await this.getbuttonCloseAlert().click();
+    }
+
+    async deleteCustomerIfExist(data: CustomerDataDriven): Promise<void> {
+        if (!data.company) {
+            console.log('⚠️ No company name provided, cannot delete');
+            return;
+        }
+        await this.searchInput.fill(data.company);
+        await this.customerInTable(data.company).hover();
+        await this.acceptAlert();
+        await this.buttonDelete.click();
+        await this.getbuttonCloseAlert().click();
+        await this.searchInput.fill(data.company);
+    }
+
+    async verifyCustomerDeleted(data: Customer) {
+        await this.searchInput.fill(data.company);
+        await expect(this.getNoData()).toBeVisible();
+    }
 
 }

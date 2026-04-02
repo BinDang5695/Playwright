@@ -1,4 +1,4 @@
-import { Task } from '@models/types/task.model'
+import { Task } from '@models/types/crm/task.model'
 
 export const taskData: Task = {
   subject: 'Bin Task',

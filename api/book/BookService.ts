@@ -31,7 +31,6 @@ export class BookService extends BaseApiService {
     return await this.sendRequest('DELETE', request, this.url(`/${bookId}`), token);
   }
 
-  // expectedStatus khác 200 thì truyền vào
   static async getAfterDelete(request: APIRequestContext, token: string, bookId: number) {
     return await this.sendRequest('GET', request, this.url(`/${bookId}`), token, undefined, 400);
   }

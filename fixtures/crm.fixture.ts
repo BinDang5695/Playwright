@@ -20,13 +20,19 @@ export type PageFixtureType = {
     leadsPage: LeadsPage;
     projectsPage: ProjectsPage;
     contactsPage: ContactsPage;
-    contractsPage: ContractsPage;   
+    contractsPage: ContractsPage;
     expensesPage: ExpensesPage;
     proposalsPage: ProposalsPage;
     knowledgeBasePage: KnowledgeBasePage;
     itemsPage: ItemsPage;
     tasksPage: TasksPage;
 };
+
+function createPageFixture<T>(PageClass: new (page: Page) => T) {
+    return async ({ authenticatedPage }: { authenticatedPage: Page }, use: (page: T) => Promise<void>) => {
+        await use(new PageClass(authenticatedPage));
+    };
+}
 
 export const test = baseTest.extend<PageFixtureType>({
 
@@ -39,49 +45,17 @@ export const test = baseTest.extend<PageFixtureType>({
         await use(new LoginPage(page));
     },
 
-    CRMBasePage: async ({ authenticatedPage }, use) => {
-        await use(new CRMBasePage(authenticatedPage));
-    },
-
-    customersPage: async ({ authenticatedPage }, use) => {
-        await use(new CustomersPage(authenticatedPage));
-    },
-
-    leadsPage: async ({ authenticatedPage }, use) => {
-        await use(new LeadsPage(authenticatedPage));
-    },
-
-    projectsPage: async ({ authenticatedPage }, use) => {
-        await use(new ProjectsPage(authenticatedPage));
-    },
-
-    contactsPage: async ({ authenticatedPage }, use) => {
-        await use(new ContactsPage(authenticatedPage));
-    },
-
-    contractsPage: async ({ authenticatedPage }, use) => {
-        await use(new ContractsPage(authenticatedPage));
-    },
-
-    expensesPage: async ({ authenticatedPage }, use) => {
-        await use(new ExpensesPage(authenticatedPage));
-    },
-
-    proposalsPage: async ({ authenticatedPage }, use) => {
-        await use(new ProposalsPage(authenticatedPage));
-    },
-
-    knowledgeBasePage: async ({ authenticatedPage }, use) => {
-        await use(new KnowledgeBasePage(authenticatedPage));
-    },
-
-    itemsPage: async ({ authenticatedPage }, use) => {
-        await use(new ItemsPage(authenticatedPage));
-    },
-
-    tasksPage: async ({ authenticatedPage }, use) => {
-        await use(new TasksPage(authenticatedPage));
-    },
+    CRMBasePage: createPageFixture(CRMBasePage),
+    customersPage: createPageFixture(CustomersPage),
+    leadsPage: createPageFixture(LeadsPage),
+    projectsPage: createPageFixture(ProjectsPage),
+    contactsPage: createPageFixture(ContactsPage),
+    contractsPage: createPageFixture(ContractsPage),
+    expensesPage: createPageFixture(ExpensesPage),
+    proposalsPage: createPageFixture(ProposalsPage),
+    knowledgeBasePage: createPageFixture(KnowledgeBasePage),
+    itemsPage: createPageFixture(ItemsPage),
+    tasksPage: createPageFixture(TasksPage),
 });
 
 export { expect };

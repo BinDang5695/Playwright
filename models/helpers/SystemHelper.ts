@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-export default class SystemHelper {
+export class SystemHelper {
 
   static getCurrentDir(): string {
     return process.cwd();

@@ -1,7 +1,7 @@
 import { defineConfig, FullProject } from '@playwright/test';
 import dotenv from 'dotenv';
 
-const envName = process.env.env || 'crm-dev';
+const envName = process.env.env;
 dotenv.config({
   path: `env/profiles/.env.${envName}`,
 });
@@ -10,7 +10,6 @@ export default defineConfig({
 
     globalSetup: './env/global.setup.ts',
     fullyParallel: true,
-    testDir: './tests/',
     workers: 1,
     timeout: 90 * 1000, //timeout for each test
     expect: {
@@ -18,8 +17,24 @@ export default defineConfig({
     },
     projects:[
       {
-        name: "chrome",
-        testDir: './tests/ui',
+        name: 'crm',
+        testDir: './tests/ui/crm',
+        retries: 1,
+        use: {
+              browserName: 'chromium',
+              channel: 'chrome',
+              headless: false,
+              viewport: null,
+              launchOptions: {
+              args: ['--start-maximized'],
+              },
+              storageState: '.auth/crm-user.json',
+            }
+      },
+
+      {
+        name: "cms",
+        testDir: './tests/ui/cms',
         retries: 1,
         use: {
               browserName: 'chromium',
@@ -29,27 +44,13 @@ export default defineConfig({
               launchOptions: {
               args: ['--start-maximized'],
         },
-            }
-      },
-
-      {
-        name: "edge",
-        testDir: './tests/ui',
-        retries: 1,
-        use: {
-              browserName: 'chromium',
-              channel: 'msedge',
-              headless: false,
-              viewport: null,
-              launchOptions: {
-              args: ['--start-maximized'],
-        },
+        storageState: '.auth/cms-user.json',
             }
       },
       
       {
         name: 'api',
-        testDir: './tests/api',
+        testDir: `./tests/api`,
         retries: 1,
         use: {
             baseURL: process.env.API_BASE_URL,
@@ -61,7 +62,6 @@ export default defineConfig({
     ],
     use: {
         baseURL: process.env.BASE_URL,
-        storageState: '.auth/user.json',
         actionTimeout: 20 * 1000, //timeout for each action like click, fill
         screenshot: 'only-on-failure',
         video: 'retain-on-failure',

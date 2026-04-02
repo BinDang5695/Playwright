@@ -1,11 +1,11 @@
-import { test } from '@fixtures/page.fixture';
+import { test } from '@fixtures/crm.fixture';
 import { Menu } from '@constants/crm';
 import { taskData } from '@data/crm/task.data';
 
 test.describe('CRM Test Suite', () => {
 
     test('Create, Verify and Delete Task Successfully', async ({ tasksPage, CRMBasePage }) => {
-        await CRMBasePage.clickValue(Menu.TASKS);
+        await CRMBasePage.clickByMenuName(Menu.TASKS);
         await tasksPage.verifyNavigateToTasksPage();
         await tasksPage.clickButtonSwitchToKanBan();
         await tasksPage.verifyNavigateToKanbanPage();

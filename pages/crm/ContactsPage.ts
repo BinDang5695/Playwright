@@ -1,70 +1,64 @@
-import SystemHelper from '../../models/helpers/SystemHelper';
-import { Button, Input, Delay } from '@constants/crm';
-import { CRMBasePage } from './CRMBasePage';
-import { Contact } from '@models/types/contact.model'
+import { Contact } from '@models/types/crm/contact.model';
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { expect } from '@playwright/test';
 
 export class ContactsPage extends CRMBasePage {
 
-    get buttonNewContact() {
-        return this.getLinkByText(Button.NEWCONTACT);
+    private get buttonNewContact() {
+        return this.page.locator("//a[normalize-space()='New Contact']")
     }
 
-    get inputFirstName() {
-        return this.getInputById(Input.FIRSTNAME);
+    private get buttonSave() {
+        return this.page.locator("//button[normalize-space()='Save']")
     }
 
-    get inputLastName() {
-        return this.getInputById(Input.LASTNAME);
+    private get buttonChooseFile() {
+        return this.page.locator('input[type="file"]')
     }
 
-    get inputEmail() {
-        return this.getInputById(Input.EMAIL);
+    private get fieldFirstName() {
+        return this.page.locator("#firstname")
     }
 
-    get inputPassword() {
-        return this.getInputByName(Input.PASSWORD);
+    private get fieldLastName() {
+        return this.page.locator("#lastname")
     }
 
-    get inputFile() {
-        return this.getInputFile(Input.FILE);
+    private get fieldEmail() {
+        return this.page.locator("#email")
     }
 
-    file(data: Contact) {
-        return SystemHelper.getFilePath(data.file)
+    private get fieldPassword() {
+        return this.page.locator("//input[@name='password']")
     }
 
-    get clickButtonSave() {
-        return this.getButtonByText(Button.SAVE);
+    contactByName(name: string) {
+        return this.page.getByRole('link', { name })
+    }
+    
+    async clickButtonNewContact(): Promise<void> {
+        await expect(this.buttonNewContact).toBeVisible();
+        await this.buttonNewContact.click();
     }
 
-    createdContact(data: Contact) {
-        return this.getLinkByText(`${data.firstName} ${data.lastName}`);
+    async addNewContact(data: Contact): Promise<void> {
+        await expect(this.fieldFirstName).toBeVisible();
+        await this.fieldFirstName.pressSequentially(data.firstName, { delay: 100 });
+        await this.fieldLastName.pressSequentially(data.lastName, { delay: 100 });
+        await this.fieldEmail.pressSequentially(data.email, { delay: 100 });
+        await this.fieldPassword.pressSequentially(data.password, { delay: 100 });
+        await this.buttonChooseFile.setInputFiles(data.file);
+        await this.buttonSave.click();
     }
 
-    get clickButtonX() {
-        return this.getbuttonX(Button.CLOSE);
-    }
-
-    async clickButtonNewContact(){
-        await this.click(this.buttonNewContact);
-    }
-
-    async addNewContact(data: Contact){
-        await this.type(this.inputFirstName, data.firstName, Delay.ONE_HUNDRED_MILLISECONDS);
-        await this.type(this.inputLastName, data.lastName, Delay.ONE_HUNDRED_MILLISECONDS);
-        await this.type(this.inputEmail, data.email, Delay.ONE_HUNDRED_MILLISECONDS);
-        await this.type(this.inputPassword, data.password, Delay.ONE_HUNDRED_MILLISECONDS);
-        await this.inputFile.setInputFiles(this.file(data));
-        await this.click(this.clickButtonSave);
-    }
-
-    async verifyCreatedContact(data: Contact, message: string){
-        await this.verifyText(this.getAlert(), message)
-        await this.click(this.createdContact(data));
-        await this.verifyValue(this.inputFirstName, data.firstName)
-        await this.verifyValue(this.inputLastName, data.lastName)
-        await this.verifyValue(this.inputEmail, data.email)
-        await this.verifyValue(this.inputPassword, Input.BLANK)
-        await this.click(this.clickButtonX);
+    async verifyCreatedContact(data: Contact): Promise<void> {
+        await expect(this.getAlert()).toHaveText(data.messageAddedContactSuccess);
+        await this.contactByName(`${data.firstName} ${data.lastName}`).click();
+        await expect(this.fieldFirstName).toHaveValue(data.firstName);
+        await expect(this.fieldLastName).toHaveValue(data.lastName);
+        await expect(this.fieldEmail).toHaveValue(data.email);
+        await expect(this.fieldPassword).toHaveValue(data.blankPassword);
+        await this.getbuttonCloseAlert().click();
+        await this.closePopUp.click();
     }
 }

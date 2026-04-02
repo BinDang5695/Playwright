@@ -1,71 +1,72 @@
-import { Header, Input, Label, Option, Button, Status, Dropdown, Number, Message } from '@constants/crm';
-import { CRMBasePage } from './CRMBasePage';
-import { Project } from '@models/types/project.model'
+import { Option, Dropdown, Message } from '@constants/crm';
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { Project } from '@models/types/crm/project.model'
+import { expect } from '@playwright/test';
 
 export class ProjectsPage extends CRMBasePage {
 
-    get titleProjectPage() {
-        return this.getValue(Header.PROJECTSSUMMARY);
+    private get titleProjectPage() {
+        return this.page.locator("//span[normalize-space()='Projects Summary']")
     }
 
-    get buttonNewProject() {
-        return this.getLinkByText(Button.NEWPROJECT);
+    private get buttonNewProject() {
+        return this.page.locator("//a[normalize-space()='New Project']")
     }
 
-    get inputSearchProject() {
-        return this.getInputAriaControls(Input.PROJECTS);
+    private get inputSearchProject() {
+        return this.page.locator("//input[@aria-controls='projects']")
     }
 
-    itemCustomerFirst(name: string) {
-        return this.getLinkByText(name);
+    itemCustomerFirst(customerName: string) {
+        return this.page.locator(`//a[normalize-space()='${customerName}']`)
     }
 
-    get inputProjectName() {
-        return this.getInputById(Input.NAME);
+    private get inputProjectName() {
+        return this.page.locator("#name")
     }
 
-    get checkBoxCalculate() {
-        return this.getLabelText(Label.CALCULATE);
+    private get checkBoxCalculate() {
+        return this.page.locator("//label[normalize-space()='Calculate progress through tasks']")
     }
 
-    get saveProject() {
-        return this.getButtonByText(Button.SAVE);
+    private get saveProject() {
+        return this.page.locator("//button[normalize-space()='Save']")
     }
 
-    projectNameCustomer(verifyProjectNameCustomer: string) {
-        return this.getButtonByTitle(verifyProjectNameCustomer);
+    projectNameCustomer(name: string) {
+        return this.page.locator(`//button[@title='${name}']`)
     }
 
-    get projectProgress() {
-        return this.getButtonByP(Input.PROJECT_INFO);
+    private get projectProgress() {
+        return this.page.locator("//p[contains(@class,'project-info')]")
     }
 
-    get customer() {
-        return this.getValue8(Option.CUSTOMER);
+    private get customer() {
+        return this.page.locator("//dt[normalize-space()='Customer']")
     }
 
-    projectNameCreated(customer: string) {
-        return this.getLinkByText(customer);
+    projectNameCreated(name: string) {
+        return this.page.locator(`//a[normalize-space()='${name}']`)
     }
 
-    get statusProject() {
-        return this.getValue9(Status.INPROGRESS);
+    private get statusProject() {
+        return this.page.locator("//dd[normalize-space()='In Progress']")
     }
 
-    projectNameOnProjectTab(data: string) {
-        return this.getLinkByText(data);
+    projectNameOnProjectTab(name: string) {
+        return this.page.locator(`//a[normalize-space()='${name}']`)
     }
 
-    get sliderTrack() {
-        return this.getButton5(Input.UI_SLIDER);
+    private get sliderTrack() {
+        return this.page.locator("//div[contains(@class,'ui-slider')]")
     }
 
     async clickNewProject() {
-        await this.click(this.buttonNewProject);
+        await this.buttonNewProject.click();
     }
 
     async verifyNavigateToProjectPage() {
-        await this.verifyText(this.titleProjectPage, Header.PROJECTSSUMMARY);
+        await expect(this.titleProjectPage).toBeVisible();
     }
 
     async moveSliderToMiddle() {
@@ -84,38 +85,38 @@ export class ProjectsPage extends CRMBasePage {
     }
 
     async submitDataForNewProject(data: Project) {
-        await this.type(this.inputProjectName, data.name);
-        await this.selectDropdown(Dropdown.CLIENT_ID, Number.SIX, data.customer);
-        await this.click(this.checkBoxCalculate);
+        await this.inputProjectName.fill(data.name);
+        await this.selectDropdownWithSearch(Dropdown.CLIENT_ID, 6, data.customer);
+        await this.checkBoxCalculate.click();
         await this.moveSliderToMiddle();
-        await this.selectDropdownNotSearch(Dropdown.BILLING_TYPE, Option.PROJECTHOURS);
-        await this.click(this.saveProject);
+        await this.selectDropdownBySpanText(Dropdown.BILLING_TYPE, Option.PROJECTHOURS);
+        await this.saveProject.click();
     }
 
     async verifyProjectCreated(data: Project) {
-        await this.verifyText(this.getAlert(), Message.CREATEDPROJECT);
-        await this.verifyText(this.projectNameCustomer(data.verifyProjectNameCustomer), data.verifyProjectNameCustomer);
-        await this.verifyText(this.projectNameCreated(data.customer), data.customer);
-        await this.verifyText(this.statusProject, data.verifyStatusProject);
+        await expect(this.getAlert()).toHaveText(Message.CREATEDPROJECT);
+        await expect(this.projectNameCustomer(data.verifyProjectNameCustomer)).toHaveText(data.verifyProjectNameCustomer);
+        await expect(this.projectNameCreated(data.customer)).toHaveText(data.customer);
+        await expect(this.statusProject).toHaveText(data.verifyStatusProject);
     }
 
     async searchAndCheckProjectInTable(data: Project) {
-        await this.type(this.inputSearchProject, data.name);
-        await this.verifyText(this.itemCustomerFirst(data.name), data.name);
+        await this.inputSearchProject.fill(data.name);
+        await expect(this.itemCustomerFirst(data.name)).toHaveText(data.name);
     }
 
     async moveToProjectName(data: Project) {
-        await this.hover(this.projectNameOnProjectTab(data.name));
+        await this.projectNameOnProjectTab(data.name).hover();
     }
 
     async clickAndDeleteProject() {
         await this.acceptAlert();
-        await this.click(this.getButtonDelete());
-        await this.click(this.getCloseAlert());
+        await this.getButtonDelete().click();
+        await this.getbuttonCloseAlert().click();
     }
 
     async searchAndverifyNoData(data: Project) {
-        await this.type(this.inputSearchProject, data.name);
-        await this.waitVisible(this.getNoData());
+        await this.inputSearchProject.fill(data.name);
+        await expect(this.getNoData()).toBeVisible();
     }
 }

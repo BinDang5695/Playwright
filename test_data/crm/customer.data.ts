@@ -1,4 +1,4 @@
-import { Customer } from '@models/types/customer.model'
+import { Customer } from '@models/types/crm/customer.model'
 
 export const customerData: Customer = {
   company: 'Nashtech Company',

@@ -1,121 +1,122 @@
 import { expect } from '@playwright/test';
-import { CRMBasePage } from './CRMBasePage';
-import { Button, Header, Number, Input, Status, Label, Href, Delay } from '@constants/crm';
-import { DateHelpers } from '../../models/helpers/DateHelpers';
-import { Task } from '@models/types/task.model'
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { Header, Status } from '@constants/crm';
+import { DateHelpers } from '@models/helpers/DateHelpers';
+import { Task } from '@models/types/crm/task.model'
 
 export class TasksPage extends CRMBasePage {
 
-    get buttonNewTask() {
-        return this.getLinkByText(Button.NEWTASK);
+    private get buttonNewTask() {
+        return this.page.locator("//a[normalize-space()='New Task']")
     }
 
-    get titleTaskPage() {
-        return this.getValue(Header.TASKS_SUMMARY);
-    } 
-
-    get switchToKanBan() {
-        return this.getLi(Button.VERTICAL);
+    private get titleTaskPage() {
+        return this.page.locator("//span[normalize-space()='Tasks Summary']")
     }
 
-    get switchToList() {
-        return this.getLi(Button.TABLE_LIST);
+    private get switchToKanBan() {
+        return this.page.locator("//i[@class='fa-solid fa-grip-vertical']")
     }
 
-    get completeTaskTotal() {
-        return this.getStatus(Status.COMPLETE);
+    private get switchToList() {
+        return this.page.locator("//i[@class='fa-solid fa-table-list']")
     }
 
-    get notStartedTaskTotal() {
-        return this.getStatus(Status.NOTSTARTED);
+    private get completeTaskTotal() {
+        return this.page.locator("//div[@class='panel-heading'][contains(text(),'Complete')]")
     }
 
-    get titleAddNewTaskPopUp() {
-        return this.getValue6(Header.ADDNEWTASK);
+    private get notStartedTaskTotal() {
+        return this.page.locator("//div[@class='panel-heading'][contains(text(),'Not Started')]")
     }
 
-    get inputStartDate() {
-        return this.getInputById(Input.STARTDATE);
+    private get titleAddNewTaskPopUp() {
+        return this.page.locator("//h4[normalize-space()='Add new task']")
     }
 
-    get titleSubject() {
-        return this.getLabel(Label.NAME);
+    private get inputStartDate() {
+        return this.page.locator("#startdate")
     }
 
-    get inputSubject() {
-        return this.getInputById(Input.NAME);
+    private get titleSubject() {
+        return this.page.locator("//label[@for='name']")
     }
 
-    get saveTask() {
-        return this.getButtonByText(Button.SAVE);
+    private get inputSubject() {
+        return this.page.locator("#name")
     }
 
-    get taskName() {
-        return this.getTab4(Header.MODAL_TITLE);
+    private get saveTask() {
+        return this.page.locator("//button[normalize-space()='Save']")
     }
 
-    get taskStatus() {
-        return this.getSpan(Status.INPROGRESS);
+    private get taskName() {
+        return this.page.locator("//h4[contains(@class,'modal-title ')]")
     }
 
-    get markComplete() {
-        return this.getLi(Button.FA_CHECK);
+    private get taskStatus() {
+        return this.page.locator("//span[contains(@class,'trigger') and normalize-space()='In Progress']")
     }
 
-    get searchOnKanBan() {
-        return this.getInputById(Input.SEARCH);
+    private get markComplete() {
+        return this.page.locator("//i[@class='fa fa-check']")
     }
 
-    get nodataNotStarted() {
-        return this.getTab5(Number.ONE);
+    private get searchOnKanBan() {
+        return this.page.locator("#search")
     }
 
-    get nodataInprogress() {
-        return this.getTab5(Number.FOUR);
+    private get nodataNotStarted() {
+        return this.page.locator("//ul[@data-col-status-id='1']//h4[contains(.,'No Tasks Found')]")
     }
 
-    get nodataTesting() {
-        return this.getTab5(Number.THREE);
+    private get nodataInprogress() {
+        return this.page.locator("//ul[@data-col-status-id='4']//h4[contains(.,'No Tasks Found')]")
     }
 
-    get nodataAwaitingFeedback() {
-        return this.getTab5(Number.TWO);
+    private get nodataTesting() {
+        return this.page.locator("//ul[@data-col-status-id='3']//h4[contains(.,'No Tasks Found')]")
     }
 
-    get menu() {
-        return this.getBText(Button.TRIGGER);
+    private get nodataAwaitingFeedback() {
+        return this.page.locator("//ul[@data-col-status-id='2']//h4[contains(.,'No Tasks Found')]")
     }
 
-    get editOption() {
-        return this.getCheckbox3(Href.EDIT);
+    private get menu() {
+        return this.page.locator("//a[@class='trigger manual-popover mright5']")
     }
 
-    binTask(data: string) {
-        return this.getValue(data);
+    private get editOption() {
+        return this.page.locator("//div[@class='popover-content']//ul//li//a[@href='#'][normalize-space()='Edit']")
     }
 
-    get from() {
-        return this.getTab6(Number.FIVE);
+    binTask(name: string) {
+        return this.page.locator(`//span[normalize-space()='${name}']`)
     }
 
-    get to() {
-        return this.getTab5(Number.ONE);
+    private get from() {
+        return this.page.locator("//ul[@data-task-status-id='5']")
     }
 
-    get searchOnList() {
-        return this.getInputAriaControls(Input.TASKS);
+    private get to() {
+        return this.page.locator(`//ul[@data-col-status-id='1']//h4[contains(.,'No Tasks Found')]`)
     }
 
-    binEditedTaskOnList(data: string) {
-        return this.getLinkByText(data);
+    private get searchOnList() {
+        return this.page.locator(`//input[@aria-controls='tasks']`)
     }
+
+    binEditedTaskOnList(updatedName: string) {
+        return this.page.locator(`//a[normalize-space()='${updatedName}']`)
+    }
+
 
     async verifyNavigateToTasksPage() {
-        await this.verifyText(this.titleTaskPage, Header.TASKS_SUMMARY);
+        await expect(this.titleTaskPage).toBeVisible();
     }
 
     async clickButtonSwitchToKanBan() {
-        await this.click(this.switchToKanBan);
+        await this.switchToKanBan.click();
     }
 
     async scrollHorizontal() {
@@ -123,92 +124,91 @@ export class TasksPage extends CRMBasePage {
     }
 
     async verifyNavigateToKanbanPage() {
-        await this.waitVisible(this.switchToList);
+        await expect(this.switchToList).toBeVisible();
     }
 
     async clickButtonAddNewTask() {
-        await this.click(this.buttonNewTask);
+        await this.buttonNewTask.click();
     }
 
     async verifyAddNewTaskPopUp() {
-        await this.verifyText(this.titleAddNewTaskPopUp, Header.ADDNEWTASK);
-        await this.verifyText(this.titleSubject, Header.SUBJECT);
+        await expect(this.titleAddNewTaskPopUp).toHaveText(Header.ADDNEWTASK);
+        await expect(this.titleSubject).toHaveText(Header.SUBJECT);
         const value = await this.inputStartDate.inputValue();
         expect(value).toContain(DateHelpers.getTodayDDMMYYYY());
     }
 
     async submitDataForNewTask(data: Task) {
-        await this.type(this.inputSubject, data.subject);
-        await this.click(this.saveTask);
+        await this.inputSubject.fill(data.subject);
+        await this.saveTask.click();
     }
 
     async verifyNewTaskAfterCreated(data: Task) {
-        await this.verifyText(this.getAlert(), data.alertAddNewTaskSuccess);
-        await this.waitVisible(this.taskName);
+        await expect(this.getAlert()).toHaveText(data.alertAddNewTaskSuccess);
+        await expect(this.taskName).toBeVisible();
         const rawText = await this.taskName.textContent();
         expect(this.normalizeText(rawText)).toBe(data.taskName);
-        await this.verifyText(this.taskStatus, Status.INPROGRESS);
+        await expect(this.taskStatus).toHaveText(Status.INPROGRESS);
     }
 
     async markCompletedAndRefreshPage(data: Task) {
-        await this.click(this.markComplete);
-        await this.click(this.closePopUp);
-        await this.reloadPage();
-        await this.waitVisible(this.binTask(data.subject));
+        await this.markComplete.click();
+        await this.closePopUp.click();
+        await this.page.reload();
+        await expect(this.binTask(data.subject)).toBeVisible();
     }
 
     async verifyCompleteTasksAfterRefreshed(data: Task) {
-        await this.verifyText(this.completeTaskTotal, data.completeTaskTotal);
+        await expect(this.completeTaskTotal).toHaveText(data.completeTaskTotal);
     }
 
     async editTask(data: Task) {
-        await this.click(this.binTask(data.subject));
-        await this.click(this.menu);
-        await this.click(this.editOption);
-        await this.type(this.inputSubject, data.updatedSubject);
-        await this.click(this.saveTask);
-        await this.click(this.getbuttonCloseAlert());
-        await this.click(this.closePopUp);
+        await this.binTask(data.subject).click();
+        await this.menu.click();
+        await this.editOption.click();
+        await this.inputSubject.fill(data.updatedSubject);
+        await this.saveTask.click();
+        await this.getbuttonCloseAlert().click();
+        await this.closePopUp.click();
     }
 
     async searchAndVerifyAfterSearch(data: Task) {
-        await this.type(this.searchOnKanBan, data.updatedSubject, Delay.ONE_HUNDRED_MILLISECONDS);
-        await this.page.waitForTimeout(1000);
-        await this.verifyText(this.nodataNotStarted, data.noData);
-        await this.verifyText(this.nodataInprogress, data.noData);
-        await this.verifyText(this.nodataTesting, data.noData);
-        await this.verifyText(this.nodataAwaitingFeedback, data.noData);
+        await this.searchOnKanBan.pressSequentially(data.updatedSubject, { delay: 100 });
+        await expect(this.nodataNotStarted).toHaveText(data.noData);
+        await expect(this.nodataInprogress).toHaveText(data.noData);
+        await expect(this.nodataTesting).toHaveText(data.noData);
+        await expect(this.nodataAwaitingFeedback).toHaveText(data.noData);
         await this.scrollHorizontal();
     }
 
     async dragAndDropTask() {
-        await this.dragAndDrop(this.from, this.to);
+        await this.from.dragTo(this.to);
     }
 
     async verifyTotalTasksAfterDragDrop(data: Task) {
-        await this.verifyText(this.completeTaskTotal, data.completeTaskAfterDragDrop);
-        await this.verifyText(this.notStartedTaskTotal, data.notStartedTaskTotal);
+        await expect(this.completeTaskTotal).toHaveText(data.completeTaskAfterDragDrop);
+        await expect(this.notStartedTaskTotal).toHaveText(data.notStartedTaskTotal);
     }
 
     async searchAndDeleteTask(data: Task) {
         await this.acceptAlert();
-        await this.click(this.switchToList);
-        await this.type(this.searchOnList, data.updatedSubject);
+        await this.switchToList.click();
+        await this.searchOnList.fill(data.updatedSubject);
         await this.page.evaluate(() => window.scrollTo(0, 0));
-        await this.hover(this.binEditedTaskOnList(data.updatedSubject));
-        await this.click(this.buttonDelete);
+        await this.binEditedTaskOnList(data.updatedSubject).hover();
+        await this.buttonDelete.click();
     }
 
     async searchAfterDeleted(data: Task) {
-        await this.type(this.searchOnList, data.updatedSubject);
+        await this.searchOnList.fill(data.updatedSubject);
     }
 
     async verifyNoDataAfterDeleted() {
-        await this.waitVisible(this.getNoData());
+        await expect(this.getNoData()).toBeVisible();
     }
 
     async clickDismissAlert() {
-        await this.click(this.getbuttonCloseAlert());
+        await this.getbuttonCloseAlert().click();
     }
 
 }

@@ -1,50 +1,50 @@
 import { expect } from '@playwright/test';
-import { CRMBasePage } from './CRMBasePage';
-import { Button, Table, Dropdown, Number, Input, Search, Message } from '@constants/crm';
-import { Lead } from '@models/types/lead.model'
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { Button } from '@constants/crm';
+import { Lead } from '@models/types/crm/lead.model'
 
 export class LeadsPage extends CRMBasePage {
 
-    get buttonNewLead() {
-        return this.getLinkByText(Button.NEWLEAD);
+    private get buttonNewLead() {
+        return this.page.locator("//a[normalize-space()='New Lead']")
     }
 
-    get dropdownStatus() {
-        return this.getDropdown(Button.STATUS);
-    }   
-
-    get inputName() {
-        return this.getCheckbox2(Input.NAME);
+    private get dropdownStatus() {
+        return this.page.locator("//button[@data-id='status']")
     }
 
-    get buttonSave() {
-        return this.getButtonById(Button.LEAD_FORM_SUBMIT);
+    private get inputName() {
+        return this.page.locator("//div[@class='col-md-6']//input[@id='name']")
     }
 
-    get dropdownPagination() {
-        return this.getDropdownSelect(Dropdown.LEADS_LENGTH);
+    private get buttonSave() {
+        return this.page.locator("#lead-form-submit")
     }
 
-    get inputSearchLead() {
-        return this.getInputAriaControls(Search.LEADS);
+    private get dropdownPagination() {
+        return this.page.locator("//select[@name='leads_length']")
     }
 
-    get contentLeads_info1To1() {
-        return this.getDivText(Table.LEADS_INFO);
+    private get inputSearchLead() {
+        return this.page.locator("//input[@aria-controls='leads']")
     }
-    
-    get leadNameCells() {
-        return this.getCells(Number.THREE);
+
+    private get contentLeads_info1To1() {
+        return this.page.locator("//div[@id='leads_info' and contains(., 'Showing 1 to 2 of 2 entries')]")
+    }
+
+    private get leadNameCells() {
+        return this.page.locator("//table//tbody/tr/td[3]")
     }
 
   async addNewLead(data: Lead) {
 
-    await this.selectDropdownNotSearch2(Button.STATUS, data.status);
-    await this.selectDropdownNotSearch(Button.SOURCE, data.source);
-    await this.type(this.inputName, data.name);
-    await this.click(this.buttonSave);
-    await this.reloadPage();
-    await this.waitVisible(this.buttonNewLead);
+    await this.selectDropdownByType(Button.STATUS, data.status);
+    await this.selectDropdownBySpanText(Button.SOURCE, data.source);
+    await this.inputName.fill(data.name);
+    await this.buttonSave.click();
+    await this.page.reload();
+    await expect(this.buttonNewLead).toBeVisible();
   }
 
   async createMultipleLeads(totalLead: number, data: Lead) {
@@ -57,15 +57,15 @@ export class LeadsPage extends CRMBasePage {
         try {
           console.log(`🔄 Attempt ${attempt} to open New Lead form`);
 
-          await this.click(this.buttonNewLead);
-          await this.waitVisible(this.dropdownStatus);
+          await this.buttonNewLead.click();
+          await expect(this.dropdownStatus).toBeVisible();
           console.log(`✅ New Lead form opened successfully`);
           formOpened = true;
           break;
 
         } catch (err) {
           console.log(`⚠️ Form didn't open on attempt ${attempt}, refreshing page`);
-          await this.reloadPage();
+          await this.page.reload();
         }
       }
 
@@ -89,9 +89,9 @@ export class LeadsPage extends CRMBasePage {
 
   async searchAndCheckDataInTable(data: Lead) {
 
-    await this.selectOption(this.dropdownPagination, Number.TEN);
-    await this.type(this.inputSearchLead, "Bin Lead");
-    await this.verifyContainsText(this.contentLeads_info1To1, Table.SHOWING1TO2OF2);
+    await this.dropdownPagination.selectOption('10');
+    await this.type(this.inputSearchLead, data.search);
+    await expect(this.contentLeads_info1To1).toContainText(data.totalLead);
     await this.checkLeadNameContains(data);
   }
 
@@ -100,8 +100,8 @@ export class LeadsPage extends CRMBasePage {
     for (let attempt = 1; attempt <= maxRetry; attempt++) {
       console.log(`🔁 Select All attempt ${attempt}`);
       
-      await this.scrollIntoView(this.checkboxSelectAll);
-      await this.click(this.checkboxSelectAll);
+      await this.checkboxSelectAll.scrollIntoViewIfNeeded();
+      await this.checkboxSelectAll.click();
 
       const total = await this.checkboxSelectEach.count();
       let checked = 0;
@@ -127,17 +127,17 @@ export class LeadsPage extends CRMBasePage {
 
   async deleteDataAfterSearched() {
     await this.acceptAlert();
-    await this.selectOption(this.dropdownPagination, Number.TWENTYFIVE);
+    await this.dropdownPagination.selectOption('25');
     await this.selectAllAndEnsureChecked();
-    await this.click(this.buttonBulkActions);
-    await this.click(this.checkboxMassDelete);
-    await this.click(this.buttonConfirm);
+    await this.buttonBulkActions.click();
+    await this.checkboxMassDelete.click();
+    await this.buttonConfirm.click();
   }
 
   async verifyDeletedLeads(data: Lead) {
-    await this.verifyText(this.getAlert(), Message.TOTALLEADSDELETE2);
-    await this.click(this.getCloseAlert());
-    await this.type(this.inputSearchLead, data.name);
-    await this.waitVisible(this.getNoData());
+    await expect(this.getAlert(), data.totalLeadDeleted).toBeVisible();
+    await this.getbuttonCloseAlert().click();
+    await this.inputSearchLead.fill(data.search);
+    await expect(this.getNoData()).toBeVisible();
   }
 }

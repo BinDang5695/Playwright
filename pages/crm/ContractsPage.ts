@@ -1,109 +1,138 @@
-import { Contract } from '@models/types/contract.model'
-import { Button, Dropdown, Number, Input } from '@constants/crm';
-import { CRMBasePage } from './CRMBasePage';
+import { Contract } from '@models/types/crm/contract.model'
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { expect } from '@playwright/test';
+import { Message } from '@constants/crm';
 
 export class ContractsPage extends CRMBasePage {
 
-    get buttonNewContract() {
-        return this.getLinkByText(Button.NEWCONTRACT);
+    private get buttonNewContract() {
+        return this.page.locator("//a[normalize-space()='New Contract']")
     }
 
-    get inputCustomer() {
-        return this.getDropdown(Dropdown.CLIENT_ID);
+    private get inputCustomer() {
+        return this.page.locator("//button[@data-id='clientid']")
     }
 
-    get searchCustomer() {
-        return this.getDropdownSearch(Number.ONE);
+    private get searchCustomer() {
+        return this.page.locator("//input[@aria-controls='bs-select-2']")
     }
 
-    get inputSubject() {
-        return this.getInputById(Input.SUBJECT);
+    customerOption(name: string) {
+        return this.page.locator(`//span[normalize-space()='${name}']`)
     }
 
-    get inputContractValue() {
-        return this.getInputValue(Input.CONTRACT_VALUE);
+    private get inputSubject() {
+        return this.page.locator("#subject")
     }
 
-    get selectContractType() {
-        return this.getType(Number.ONE);
+    private get inputContractValue() {
+        return this.page.locator("//input[@name='contract_value']")
     }
 
-    get inputStartDate() {
-        return this.getInputById(Input.DATESTART);
+    private get inputContractType() {
+        return this.page.locator("//button[@data-id='contract_type']")
     }
 
-    get inputEndDate() {
-        return this.getInputById(Input.DATEEND);
+    private get inputValueForContractType() {
+        return this.page.locator("//input[@aria-controls='bs-select-1']")
     }
 
-    get inputDescription() {
-        return this.getTextArea(Input.DESCRIPTION);
+    contractTypeOption(type: string) {
+        return this.page.locator(`//span[@class='text'][normalize-space()='${type}']`)
     }
 
-    get buttonSave() {
-        return this.getButton(Button.SUBMIT);
+    private get inputStartDate() {
+        return this.page.locator("#datestart")
     }
 
-    selectedCustomer(customer: string) {
-        return this.getText(customer);
+    private get inputEndDate() {
+        return this.page.locator("#dateend")
     }
 
-    get selectedContractType() {
-        return this.getText(Number.ONE);
+    private get inputDescription() {
+        return this.page.getByRole('textbox', { name: 'Description' })
     }
 
-    get dropdownMore() {
-        return this.getButtonByText(Button.MORE);
+    private get buttonSave() {
+        return this.page.locator("//div[contains(@class,'btn')]//button[@type='submit']")
     }
 
-    get buttonDelete() {
-        return this.getLinkByText(Button.DELETE);
+    selectedCustomer(name: string) {
+        return this.page.locator(`//div[contains(text(),'${name}')]`)
     }
 
-    get searchContract() {
-        return this.getInputAriaControls(Input.SEARCH_CONTRACT);
+    selectedContractType(type: string) {
+        return this.page.locator(`//div[contains(text(),'${type}')]`)
     }
 
-    async clickNewContract() {
-        await this.click(this.buttonNewContract);
+    private get dropdownMore() {
+        return this.page.locator("//button[normalize-space()='More']")
+    }
+    private get searchContract() {
+        return this.page.locator("//input[@aria-controls='contracts']")
     }
 
-    async fillContractForm(data: Contract, haveDropdown: boolean = false) {
-        if (haveDropdown) {
-            await this.selectDropdown(Dropdown.CLIENT_ID, Number.TWO, data.customer);
-        }
-        await this.type(this.inputSubject, data.subject);
-        await this.type(this.inputContractValue, data.value);
-        if (haveDropdown) {
-            await this.selectDropdown(Dropdown.CONTRACT_TYPE, Number.ONE, data.contractType);
-        }
-        await this.type(this.inputStartDate, data.startDate);
-        await this.type(this.inputEndDate, data.endDate);
-        await this.type(this.inputDescription, data.description);
-        await this.click(this.buttonSave);
+    async clickButtonNewContract() {
+        await this.buttonNewContract.click();
     }
 
-    async verifyContract(data: Contract, message: string) {
-        await this.verifyText(this.getAlert(), message);
-        await this.verifyText(this.selectedCustomer(data.customer), data.customer);
-        await this.verifyValue(this.inputSubject, data.subject);
-        await this.verifyCurrency(this.inputContractValue, `${data.value}`);
-        await this.verifyText(this.selectedContractType, data.contractType);
-        await this.verifyValue(this.inputStartDate, data.startDate);
-        await this.verifyValue(this.inputEndDate, data.endDate);
-        await this.verifyValue(this.inputDescription, data.description);
+    async addNewContract(data: Contract) {
+        await this.inputCustomer.click();
+        await this.searchCustomer.pressSequentially(data.customer, { delay: 100 });
+        await this.customerOption(data.customer).click();
+        await this.inputSubject.fill(data.subject);
+        await this.inputContractValue.fill(data.value);
+        await this.inputContractType.click();
+        await this.inputValueForContractType.fill(data.contractType);
+        await expect(this.contractTypeOption(data.contractType)).toBeVisible();
+        await this.contractTypeOption(data.contractType).click();
+        await this.inputStartDate.fill(data.startDate);
+        await this.inputEndDate.fill(data.endDate);
+        await this.inputDescription.fill(data.description);
+        await this.buttonSave.click();
+    }
+
+    async verifyCreatedContract(data: Contract) {
+        await expect(this.getAlert()).toHaveText(Message.CREATEDCONTRACT);
+        await expect(this.selectedCustomer(data.customer)).toHaveText(data.customer);
+        await expect(this.inputSubject).toHaveValue(data.subject);
+        await expect(this.inputContractValue).toHaveValue(Number(data.value).toFixed(2));
+        await expect(this.selectedContractType(data.contractType)).toHaveText(data.contractType);
+        await expect(this.inputStartDate).toHaveValue(data.startDate);
+        await expect(this.inputEndDate).toHaveValue(data.endDate);
+        await expect(this.inputDescription).toHaveValue(data.description);
+    }
+
+    async updateContract(data: Contract) {
+        await this.inputSubject.fill(data.subject);
+        await this.inputContractValue.fill(data.value);
+        await this.inputStartDate.fill(data.startDate);
+        await this.inputEndDate.fill(data.endDate);
+        await this.inputDescription.fill(data.description);
+        await this.buttonSave.click();
+    }
+
+    async verifyUpdatedContract(data: Contract) {
+        await expect(this.getAlert()).toHaveText(Message.UPDATEDCONTRACT);
+        await expect(this.selectedCustomer(data.customer)).toHaveText(data.customer);
+        await expect(this.inputSubject).toHaveValue(data.subject);
+        await expect(this.inputContractValue).toHaveValue(Number(data.value).toFixed(2));
+        await expect(this.selectedContractType(data.contractType)).toHaveText(data.contractType);
+        await expect(this.inputStartDate).toHaveValue(data.startDate);
+        await expect(this.inputEndDate).toHaveValue(data.endDate);
+        await expect(this.inputDescription).toHaveValue(data.description);
     }
 
     async deleteContract() {
         await this.acceptAlert();
-        await this.click(this.dropdownMore);
-        await this.click(this.buttonDelete);
-        await this.click(this.getCloseAlert());
+        await this.dropdownMore.click();
+        await this.buttonDelete.click();
+        await this.getbuttonCloseAlert().click();
     }
 
     async verifyDeletedContract(data: Contract) {
-        await this.type(this.searchContract, data.subject);
-        await this.waitVisible(this.getNoData());
+        await this.searchContract.fill(data.subject);
+        await expect(this.getNoData()).toBeVisible();
     }
 
 }

@@ -1,4 +1,4 @@
-import { Expense } from '@models/types/expenses.model';
+import { Expense } from '@models/types/crm/expenses.model';
 
 export const expenseData: Expense = {
   receipt: 'test_data/UK.jpg',
@@ -11,10 +11,11 @@ export const expenseData: Expense = {
   paymentMode: 'Bank',
   verifyPaymentMode: 'Paid Via Bank',
   reference: '1000',
+  repeatEvery: 'Week',
   totalCycles: '10',
   verifyAmount: '$1,000.00',
   alertSuccess: '',
-  deleteAlertSuccess: ''
+  deleteAlertSuccess: '',
 };
 
 export const updatedExpenseData: Expense = {
@@ -22,12 +23,13 @@ export const updatedExpenseData: Expense = {
   verifyReceipt: 'UK.jpg',
   name: 'Bin Name Updated',
   note: 'Bin Note Updated',
-  category: 'Bin Category',
+  category: 'Bin Category Updated',
   expenseDate: '18-11-2028',
   amount: '2000',
   paymentMode: 'Bank',
   verifyPaymentMode: 'Paid Via Bank',
   reference: '1000',
+  repeatEvery: 'Week',
   totalCycles: '10',
   verifyAmount: '$2,000.00',
   alertSuccess: 'Expense updated successfully.',

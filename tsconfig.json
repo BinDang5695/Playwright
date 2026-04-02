@@ -3,7 +3,7 @@
     "ignoreDeprecations": "6.0",
     "target": "ES2021",
     "module": "CommonJS",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "Node",
     "lib": ["ES2021", "DOM"],
     "strict": true,
     "esModuleInterop": true,
@@ -25,12 +25,14 @@
       "@models/*": ["models/*"],
       "@utils/*": ["utils/*"],
       "@constants/*": ["constants/*"],
-      "@.auth/*": ["auth/*"]
+      "@.auth/*": ["auth/*"],
+      "@helpers/*": ["models/helpers/*"]
     }
   },
 
   "include": [
     "tests/**/*.ts",
+    "pages/**/*.ts",
     "api/**/*.ts",
     "settings/**/*.ts",
     "models/**/*.ts",
@@ -38,6 +40,7 @@
     "test_data/**/*.ts",
     "utils/**/*.ts",
     "constants/**/*.ts",
-    "auth/**/*.ts"
+    "auth/**/*.ts",
+    "env/**/*.ts",
   ]
 }

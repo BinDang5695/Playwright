@@ -12,6 +12,10 @@ export const Menu = {
   ITEMS: "Items",
   PROPOSALS: "Proposals",
   CONTACTS: "Contacts",
+  PRODUCTS: "Products",
+  ALLPRODUCTS: "All products",
+  CATEGORY: "Category",
+  UPLOADEDFILES: "Uploaded Files",
 } as const;
 
 export const Message = {
@@ -79,20 +83,6 @@ export const Dropdown = {
   ARTICLEGROUP: "articlegroup",
   LEADS_LENGTH: "leads_length",
   BILLING_TYPE: "billing_type",
-} as const;
-
-export const Number = {
-  ONE: 1,
-  TWO: 2,
-  THREE: 3,
-  FOUR: 4,
-  FIVE: 5,
-  SIX: 6,
-  SEVEN: 7,
-  TEN: 10,
-  THIRDTEEN: 13,
-  TWENTY: 20,
-  TWENTYFIVE: 25,
 } as const;
 
 export const Delay = {

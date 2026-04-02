@@ -1,7 +1,7 @@
-import { test } from '@fixtures/page.fixture';
+import { test } from '@fixtures/crm.fixture';
 import customerCases from '../../../test_data/crm/CustomerData.json';
 import { Menu } from '@constants/crm';
-import { CustomerDataDriven } from '@models/types/customerdriven.model';
+import { CustomerDataDriven } from '@models/types/crm/customerdriven.model';
 
 type CustomerCase = {
   title: string;
@@ -18,13 +18,13 @@ test.describe.serial('CRM Add Customer Data Driven', () => {
 
     test(item.title, async ({ CRMBasePage, customersPage }) => {
 
-      await CRMBasePage.clickValue(Menu.CUSTOMERS);
+      await CRMBasePage.clickByMenuText(Menu.CUSTOMERS);
       await customersPage.clickButtonAddNewCustomer();
       await customersPage.addNewCustomerDataDriven(item.data);
 
       if (item.expectedType === 'success') {
         await customersPage.verifyCustomerAddedDataDriven(item.data);
-        await CRMBasePage.clickValue(Menu.CUSTOMERS);
+        await CRMBasePage.clickByMenuText(Menu.CUSTOMERS);
         await customersPage.deleteCustomerIfExist(item.data);
       } else {
         await customersPage.verifyCreateFail(item.expectedMessage!);

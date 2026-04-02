@@ -1,0 +1,45 @@
+{
+  "cookies": [
+    {
+      "name": "XSRF-TOKEN",
+      "value": "NPodIcX9ZGCUWgJmaVc0rRKzu47tdRVi4joGkl5e",
+      "domain": "cms.anhtester.com",
+      "path": "/",
+      "expires": 1775146676.764519,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "active_ecommerce_cms_session",
+      "value": "UO2LRXAZtkNRMzMZlWa4EPeZQgscZ6V8UkzL1Tr9",
+      "domain": "cms.anhtester.com",
+      "path": "/",
+      "expires": 1775146676.764749,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "remember_web_59ba36addc2b2f9401580f014c7f58ea4e30989d",
+      "value": "10%7CDC5iZFHLTFlrUxeubv0nfmSutysVwVWGWwHDfR0Opo2VuymDw3SnY6jDAoSk%7C%242y%2410%24hvBNaK9BJJqYk3GW6.4dPegTA2PncyUH232y9wFboDFdpExIJBeqi",
+      "domain": "cms.anhtester.com",
+      "path": "/",
+      "expires": 1809699476.266975,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": [
+    {
+      "origin": "https://cms.anhtester.com",
+      "localStorage": [
+        {
+          "name": "tusSupport",
+          "value": "null"
+        }
+      ]
+    }
+  ]
+}

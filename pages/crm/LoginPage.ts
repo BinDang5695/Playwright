@@ -1,49 +1,47 @@
-import { Menu, Url, Input, Header, Button } from '../../constants/crm';
-import { CRMBasePage } from './CRMBasePage';
+import { expect } from '@playwright/test';
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
 
 export class LoginPage extends CRMBasePage {
 
-    get headerLogin() {
-        return this.getValue3(Header.LOGIN);
+    private get headerLogin() {
+        return this.page.getByRole('heading', { name: 'Login' })
     }
 
-    get inputEmail() {
-        return this.getInputById(Input.EMAIL);
+    private get inputEmail() {
+        return this.page.getByLabel('Email')
     }
 
-    get inputPassword() {
-        return this.getInputById(Input.PASSWORD);
+    private get inputPassword() {
+        return this.page.getByLabel('Password')
     }
 
-    get checkboxRememberMe() {
-        return this.getInputById(Input.REMEMBER);
+    private get checkboxRememberMe() {
+        return this.page.getByRole('checkbox', { name: 'Remember me' })
     }
 
-    get buttonLogin() {
-        return this.getButtonByText(Button.LOGIN);
+    private get buttonLogin() {return this.page.getByRole('button', { name: 'Login' })
     }
 
-    get alertErrorMessage() {
-        return this.getValue4();
+    private get alertErrorMessage() {
+        return this.page.locator('.alert.alert-danger')
     }
 
     async loginCRM(email: string, password: string) {
-        await this.goto(process.env.BASE_URL!);
-        await this.waitVisible(this.headerLogin);
-        await this.type(this.inputEmail, email);
-        await this.type(this.inputPassword, password);
-        await this.check(this.checkboxRememberMe);
-        await this.click(this.buttonLogin);
+        await this.page.goto(process.env.BASE_URL!);
+        await expect(this.headerLogin).toBeVisible();
+        await this.inputEmail.fill(email);
+        await this.inputPassword.fill(password);
+        await this.checkboxRememberMe.check();
+        await this.buttonLogin.click();
     }
 
     async verifyLoginSuccess() {
-        await this.waitVisible(this.getValue(Menu.DASHBOARD));
-        await this.verifyUrlNotContains(Url.AUTHENTICATION);
+        await expect(this.page).not.toHaveURL(/authentication/);
     }
 
     async verifyLoginFail(expectedMessage: string | string[]) {
-        await this.verifyUrlContains(Url.AUTHENTICATION);
-        await this.waitVisible(this.alertErrorMessage);
-        await this.verifyText(this.alertErrorMessage, expectedMessage);
+        await expect(this.page).toHaveURL(/authentication/);
+        await expect(this.alertErrorMessage).toBeVisible();
+        await expect(this.alertErrorMessage).toHaveText(expectedMessage);
     }
 }

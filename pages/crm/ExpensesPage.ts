@@ -1,173 +1,179 @@
-import { CRMBasePage } from './CRMBasePage';
-import { Button, Dropdown, Input, Label, Option, Table, Toogle, Message } from '@constants/crm';
-import { Expense } from '@models/types/expenses.model'
+import { CRMBasePage } from '@pages/crm/CRMBasePage';
+import { Dropdown, Toogle } from '@constants/crm';
+import { Expense } from '@models/types/crm/expenses.model'
+import { expect } from '@playwright/test';
 
 export class ExpensesPage extends CRMBasePage {
 
-      get buttonRecordExpense() {
-          return this.getLinkByText(Button.RECORDEXPENSE);
-      }
+    private get buttonRecordExpense() {
+        return this.page.locator("//a[normalize-space()='Record Expense']")
+    }
 
-      get inputName() {
-          return this.getInputById(Input.EXPENSE_NAME);
-      }
+    private get inputName() {
+        return this.page.locator("#expense_name")
+    }
 
-      get inputNote() {
-          return this.getTextArea2(Input.NOTE);
-      }
+    private get inputNote() {
+        return this.page.locator("#note")
+    }
 
-      get inputExpenseDate() {
-          return this.getInputById(Input.DATE);
-      }
+    optionBinCategory(name: string) {
+        return this.page.locator(`//span[normalize-space()='${name}']`)
+    }
+    
+    private get inputExpenseDate() {
+        return this.page.locator("#date")
+    }
 
-      get inputAmount() {
-          return this.getInputById(Input.AMOUNT);
-      }
+    private get inputAmount() {
+        return this.page.locator("#amount")
+    }
 
-      get inputReference() {
-          return this.getInputById(Input.REFERENCE);
-      }
+    private get inputReference() {
+        return this.page.locator("#reference_no")
+    }
 
-      get checkboxInfinity() {
-          return this.getLabelText(Label.INFINITY);
-      }      
+    private get checkboxInfinity() {
+        return this.page.locator("//label[normalize-space()='Infinity']")
+    }
 
-      get inputTotalCycles() {
-          return this.getInputById(Input.CYCLES);
-      }
+    private get inputTotalCycles() {
+        return this.page.locator("#cycles")
+    }
 
-      get buttonSave() {
-          return this.getButton2(Button.SAVE);
-      }
+    private get buttonSave() {
+        return this.page.locator("//div[@class='btn-bottom-toolbar text-right']//button[@type='submit'][normalize-space()='Save']")
+    }
 
-      get hoverToogle() {
-          return this.getToogle3(Toogle.FULLVIEW);
-      }
+    hoverToogle() {
+        return this.page.locator(`//a[@data-title='Toggle full view']`);
+    }
+    
+    tooltipContent() {
+        return this.page.locator('.tooltip-inner', { hasText: 'Toggle full view' })
+    }
 
-      toogleItem(text: string) {
-          return this.gettooltipContent(text);
-      }
+    private get expenseName() {
+        return this.page.locator("#expenseName")
+    }
 
-      get expenseName() {
-          return this.getTab2(Input.EXPENSENAME);
-      }
+    expenseNote(name: string) {
+        return this.page.locator(`//div[normalize-space()='${name}']`)
+    }
 
-      expenseNote(note: string) {
-          return this.getDivId(note);
-      }
+    private get expenseCategory() {
+        return this.page.locator("#expenseCategory")
+    }
 
-      get expenseCategory() {
-          return this.getTab3(Input.EXPENSECATEGORY);
-      }
-      
-      expenseDate(date: string) {
-          return this.getValue(date);
-      }
+    expenseDate(date: string) {
+        return this.page.locator(`//span[normalize-space()='${date}']`)
+    }
 
-      expenseAmount(verifyAmount: string) {
-          return this.getValue1(verifyAmount);
-      }
+    expenseAmount(amount: string) {
+        return this.page.locator(`//span[contains(normalize-space(),'${amount}')]`)
+    }
 
-      get expensePaymentMode() {
-          return this.getValue1(Dropdown.PAIDVIABANK);
-      }
+    private get expensePaymentMode() {
+        return this.page.locator("//span[contains(normalize-space(),'Paid Via Bank')]")
+    }
+    
+    expenseRef(amount: string) {
+        return this.page.locator(`//span[normalize-space()='${amount}']`)
+    }
 
-      expenseRef(reference: string) {
-          return this.getValue(reference);
-      }
+    expenseRepeat(date: string) {
+        return this.page.locator(`//span[normalize-space()='${date}']`)
+    }
 
-      expenseRepeat(date: string) {
-          return this.getValue(date);
-      }
+    expenseCyclesRemaining(date: string) {
+        return this.page.locator(`//b[normalize-space()='${date}']`)
+    }
 
-      expenseCyclesRemaining(cycle: string) {
-          return this.getValue5(cycle);
-      }
+    attachedReceipt(receiptName: string) {
+        return this.page.locator(`//a[normalize-space()='${receiptName}']`)
+    }
 
-      attachedReceipt(receipt: string) {
-          return this.getLinkByText(receipt);
-      }
+    private get buttonEditExpense() {
+        return this.page.locator("//i[contains(@class,'pen')]")
+    }
 
-      get buttonEditExpense() {
-          return this.getLi(Button.PEN);
-      }
+    updatedExpenseAmount(amount: string) {
+        return this.page.locator(`//span[contains(normalize-space(),'${amount}')]`)
+    }
 
-      updatedExpenseAmount(updatedAmount: string) {
-          return this.getValue1(updatedAmount);
-      }
+    private get buttonDeleteExpense() {
+        return this.page.locator("//a[contains(@class,'delete')]//i[contains(@class,'remove')]")
+    }
 
-      get buttonDeleteExpense() {
-          return this.getCText(Button.REMOVE);
-      }
-
-      get inputSearchExpenses() {
-          return this.getInputAriaControls(Input.EXPENSES);
-      }    
+    private get inputSearchExpenses() {
+        return this.page.locator("//input[@aria-controls='expenses']")
+    }
        
     async clickButtonRecordExpense() {
-        await this.click(this.buttonRecordExpense);
+        await this.buttonRecordExpense.click();
     }
 
     async addNewExpense(data: Expense) {
         await this.attachFile(data.receipt);
         await this.type(this.inputName, data.name);
         await this.type(this.inputNote, data.note);
-        await this.selectDropdownNotSearch(Dropdown.CATEGORY, data.category);
+        await this.selectDropdownBySpanText(Dropdown.CATEGORY, data.category);
         await this.type(this.inputExpenseDate, data.expenseDate);
         await this.type(this.inputAmount, data.amount);
-        await this.selectDropdownNotSearch(Dropdown.PAYMENTMODE, data.paymentMode);
+        await this.selectDropdownBySpanText(Dropdown.PAYMENTMODE, data.paymentMode);
         await this.type(this.inputReference, data.reference);
-        await this.selectDropdownNotSearch(Dropdown.REPEAT_EVERY, Option.WEEK);
+        await this.selectDropdownBySpanText(Dropdown.REPEAT_EVERY, data.repeatEvery);
         await this.click(this.checkboxInfinity);
         await this.type(this.inputTotalCycles, data.totalCycles);
         await this.click(this.buttonSave);
     }
 
     async verifyCreatedExpense(data: Expense) {
-        await this.verifyText(this.expenseName, data.name);
-        await this.verifyText(this.expenseNote(data.note), data.note);
-        await this.verifyText(this.expenseCategory, data.category);
-        await this.verifyText(this.expenseDate(data.expenseDate), data.expenseDate);
-        await this.verifyText(this.expenseAmount(data.verifyAmount), data.verifyAmount);
-        await this.verifyText(this.expensePaymentMode, Dropdown.PAIDVIABANK);
-        await this.verifyText(this.expenseRef(data.reference), data.reference);
-        await this.verifyText(this.expenseRepeat(data.expenseDate), data.expenseDate);
-        await this.verifyText(this.expenseCyclesRemaining(data.totalCycles), data.totalCycles);
+        await expect(this.expenseName).toHaveText(data.name);
+        await expect(this.expenseNote(data.note)).toHaveText(data.note);
+        await expect(this.expenseCategory).toHaveText(data.category);
+        await expect(this.expenseDate(data.expenseDate)).toHaveText(data.expenseDate);
+        await expect(this.expenseAmount(data.verifyAmount)).toHaveText(data.verifyAmount);
+        await expect(this.expensePaymentMode).toHaveText(data.verifyPaymentMode);
+        await expect(this.expenseRef(data.reference)).toHaveText(data.reference);
+        await expect(this.expenseRepeat(data.expenseDate)).toHaveText(data.expenseDate);
+        await expect(this.expenseCyclesRemaining(data.totalCycles)).toHaveText(data.totalCycles);
         const fileName = data.receipt.split('/').pop();
-        await this.verifyText(this.attachedReceipt(fileName!), fileName!);
+        await expect(this.attachedReceipt(fileName!)).toHaveText(fileName!);
     }
 
     async updateExpense(data: Expense) {
-        await this.click(this.buttonEditExpense);
-        await this.type(this.inputName, data.name);
-        await this.type(this.inputNote, data.note);
-        await this.type(this.inputAmount, data.amount)
-        await this.click(this.buttonSave);
+        await this.buttonEditExpense.click();
+        await this.inputName.fill(data.name);
+        await this.inputNote.fill(data.note);
+        await this.inputAmount.fill(data.amount);
+        await this.buttonSave.click();
     }
 
     async verifyUpdatedExpense(data: Expense) {
-        await this.verifyText(this.getAlert(), data.alertSuccess);
-        await this.click(this.getbuttonCloseAlert());
-        await this.verifyText(this.expenseName, data.name);
-        await this.verifyText(this.expenseAmount(data.verifyAmount), data.verifyAmount);
+        await expect(this.getAlert()).toHaveText(data.alertSuccess);
+        await this.getbuttonCloseAlert().click();
+        await expect(this.expenseName).toHaveText(data.name);
+        await expect(this.expenseNote(data.note)).toHaveText(data.note);
+        await expect(this.expenseAmount(data.verifyAmount)).toHaveText(data.verifyAmount);
+
     }
 
     async verifyTooltipContent() {
-        await this.hover(this.hoverToogle);
-        await this.verifyText(this.toogleItem(Toogle.FULLVIEW), Toogle.FULLVIEW);
+        await this.hoverToogle().hover();
+        await this.tooltipContent(), Toogle.FULLVIEW;
     }
 
     async deleteExpense() {
         await this.acceptAlert();
-        await this.click(this.buttonDeleteExpense);
+        await this.buttonDeleteExpense.click();
     }
 
     async verifyDeletedExpense(data: Expense) {
-        await this.waitVisible(this.getAlert());
-        await this.verifyText(this.getAlert(), data.deleteAlertSuccess);
-        await this.click(this.getbuttonCloseAlert());
-        await this.type(this.inputSearchExpenses, data.category);
-        await this.waitVisible(this.getNoData());
+        await expect(this.getAlert()).toHaveText(data.deleteAlertSuccess);
+        await this.getbuttonCloseAlert().click();
+        await this.inputSearchExpenses.fill(data.category);
+        await expect(this.getNoData()).toBeVisible();
     }
 
 }

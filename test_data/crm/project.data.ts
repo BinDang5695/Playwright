@@ -1,4 +1,4 @@
-import { Project } from '@models/types/project.model';
+import { Project } from '@models/types/crm/project.model';
 
 export const projectData: Project = {
   name: 'Bin Project',

@@ -1,7 +1,7 @@
-import { test } from '@fixtures/page.fixture';
+import { test } from '@fixtures/crm.fixture';
 import { proposalData } from '@data/crm/proposal.data';
 import { Menu } from '@constants/crm';
-import { ExportFileType } from '@models/types/file.model';
+import { ExportFileType } from '@models/types/crm/file.model';
 
 const fileTypes: { type: ExportFileType; tag: string }[] = [
     { type: 'pdf', tag: '@P1' },
@@ -13,15 +13,15 @@ test.describe.serial('CRM Test Suite', () => {
 
     fileTypes.forEach(({ type, tag }) => {
         test(`Manage Proposals ${type.toUpperCase()} File ${tag}`, async ({ proposalsPage, CRMBasePage }) => {
-            await CRMBasePage.clickValue2(Menu.SALES);
-            await CRMBasePage.clickValue(Menu.PROPOSALS);
+            await CRMBasePage.clickByMenuText(Menu.SALES);
+            await CRMBasePage.clickByMenuName(Menu.PROPOSALS);
             await proposalsPage.clickButtonNewProposal();
             await proposalsPage.addNewProposal(proposalData);
             await proposalsPage.verifyTooltip();
             await proposalsPage.searchCreatedProposal(proposalData);
-            await proposalsPage.captureUITableData();
+            await proposalsPage.captureUITableData(proposalData);
             await proposalsPage.exportAndVerifyContentFile(type);
-            await proposalsPage.deleteCreatedProposal();
+            await proposalsPage.deleteCreatedProposal(proposalData);
         });
     });
 });

@@ -1,23 +1,22 @@
-import { test } from '@fixtures/page.fixture';
+import { test } from '@fixtures/crm.fixture';
 import { Menu } from '@constants/crm';
 import { customerData } from '@data/crm/customer.data';
-import { Message } from '@constants/crm';
 import { contactData } from '@data/crm/contact.data';
 
 test.describe('CRM Test Suite', () => {
 
     test('Create, Verify and Delete Customer Successfully', async ({ customersPage, contactsPage, CRMBasePage }) => {
-        await CRMBasePage.clickValue(Menu.CUSTOMERS);
+        await CRMBasePage.clickByMenuText(Menu.CUSTOMERS);
         const beforeAddCustomer = await customersPage.getTotalCustomers();
         console.log(`beforeAddCustomer = ${beforeAddCustomer}`);
         await customersPage.clickButtonAddNewCustomer();
         await customersPage.addNewCustomer(customerData)
         await customersPage.verifyCustomerAdded(customerData);
-        await CRMBasePage.clickValue3(Menu.CONTACTS);
+        await CRMBasePage.clickByLinkText(Menu.CONTACTS);
         await contactsPage.clickButtonNewContact();
         await contactsPage.addNewContact(contactData);
-        await contactsPage.verifyCreatedContact(contactData, Message.CREATEDCONTACT);
-        await CRMBasePage.clickValue(Menu.CUSTOMERS);
+        await contactsPage.verifyCreatedContact(contactData);
+        await CRMBasePage.clickByMenuText(Menu.CUSTOMERS);
         await customersPage.searchCustomer(customerData);
         const afterAddedCustomer = await customersPage.getTotalCustomers();
         await customersPage.expectEqual(afterAddedCustomer, beforeAddCustomer + 1);
