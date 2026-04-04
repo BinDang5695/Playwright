@@ -214,13 +214,18 @@ npx playwright install
 ![Run Test](https://user-images.githubusercontent.com/13063165/212737059-0c52cda1-829d-4cda-9ca8-33741c87dfff.png)
 
    
-### Run tests on Chrome (include CRM/CMS/FB test suite)
+### Run tests on Chrome/Edge (include CRM/CMS/FB test suite)
 
 ```sh
 For Chrome, Execute the command in the terminal: 
-npm run test:cms
-npm run test:fb
-npm run test:crm
+npm run test:cms:chrome
+npm run test:fb:chrome
+npm run test:crm:chrome
+
+For Firefox, Execute the command in the terminal: 
+npm run test:cms:edge
+npm run test:fb:edge
+npm run test:crm:edge
 ```
 
 ### Run API tests only (include all API test suite)
@@ -234,7 +239,8 @@ npm run test:api
 
 ```sh
 Execute the command in the terminal: 
-npm run test:crm:task
+npm run test:crm:task:chrome
+npm run test:crm:task:edge
 ```
 
 Please see the package.json file for more details
@@ -249,7 +255,7 @@ Option #2: Add --workers arguments in the test run commands (only affect for spe
 
 ```sh
 Run Login test suite with many workers
-npm run test:crm -- --workers=<number-of-workers>
+npm run test:crm:chrome -- --workers=<number-of-workers>
 ```
 
 For more details, please refer to Playwright document
@@ -276,10 +282,19 @@ npm run create:allure-report
 Execute the command in the terminal: 
 npm run lint
 ```
+### How to configure and run tests on different environment or browser
+Playwright has many options to configure how your tests are run. You can specify these options in the configuration file. Therefore, we can configure the enviroment which we use to run test in Project section of configuration file like below:
+
+![Config](_snapshots_/Config.png)
+
+In this sample, we configure 2 projects (1 for Chrome and 1 for Edge) in order to run all tests on different browsers. We can also configure different baseURl for different Environments here.
+Then, we can specify the scripts to run on multi environments on package.json file like below:
+![Script](_snapshots_/Script.png)
 
 Finally, we can use npm run command to specify the enviroment that we want to run. For example, if we want to run all tests UI and API on Chromium we can use below command:
 ```sh
-npm run test:all
+npm run test:all:chrome
+npm run test:all:edge
 ```
 For more details, please refer to Playwright document
 [Playwright Test Configuration](https://playwright.dev/docs/test-configuration)
