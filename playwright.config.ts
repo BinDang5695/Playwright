@@ -13,7 +13,7 @@ export default defineConfig({
 
   globalSetup: needsAuth ? './env/global.setup.ts' : undefined,
   fullyParallel: true,
-  workers: 1,
+  workers: process.env.CI ? 1 : 1,
   testDir: './tests/',
   timeout: 90 * 1000, //timeout for each test
   expect: {
@@ -30,7 +30,7 @@ export default defineConfig({
       }
     },
     {
-      name: "fb",
+      name: "fb-chrome",
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -42,9 +42,19 @@ export default defineConfig({
         },
       },
     },
-
+{
+      name: "fb-edge",
+      retries: 1,
+      use: {
+        browserName: 'chromium',
+        channel: 'msedge',
+        headless: false,
+        viewport: null,
+        launchOptions: { args: ['--start-maximized'] },
+      },
+    },
     {
-      name: "cms",
+      name: "cms-chrome",
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -57,8 +67,20 @@ export default defineConfig({
         storageState: '.auth/cms-user.json',
       },
     },
+        {
+      name: "cms-edge",
+      retries: 1,
+      use: {
+        browserName: 'chromium',
+        channel: 'msedge',
+        headless: false,
+        viewport: null,
+        launchOptions: { args: ['--start-maximized'] },
+        storageState: '.auth/cms-user.json',
+      },
+    },
     {
-      name: 'crm',
+      name: 'crm-chrome',
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -71,8 +93,21 @@ export default defineConfig({
         storageState: '.auth/crm-user.json',
       },
     },
+    {
+      name: 'crm-edge',
+      retries: 1,
+      use: {
+        browserName: 'chromium',
+        channel: 'msedge',
+        headless: false,
+        viewport: null,
+        launchOptions: { args: ['--start-maximized'] },
+        storageState: '.auth/crm-user.json',
+      },
+    },
 
   ],
+  
   use: {
     baseURL: process.env.BASE_URL,
     actionTimeout: 20 * 1000, //timeout for each action like click, fill
