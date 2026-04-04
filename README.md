@@ -33,7 +33,8 @@ non-bdd
 │   │   └─ playwright.yml                             # GitHub Actions file - auto run
 ├── .vscode/                                          
 │   └── settings.json                                 # Shared TypeScript & editor
-├── allure-results/                                   # Raw Allure test result files
+├── allure-results/                                   # Raw Allure result files generated after each test run
+├── allure-report/                                    # Generated Allure HTML report — served via allure open
 ├── api/                                              
 │   ├── book/                                         
 │   │   ├── BookBuilder.ts                            # Generate random Book data using faker
