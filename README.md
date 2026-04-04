@@ -289,6 +289,7 @@ Playwright has many options to configure how your tests are run. You can specify
 
 In this sample, we configure 2 projects (1 for Chrome and 1 for Edge) in order to run all tests on different browsers. We can also configure different baseURl for different Environments here.
 Then, we can specify the scripts to run on multi environments on package.json file like below:
+
 ![Script](_snapshots_/Script.png)
 
 Finally, we can use npm run command to specify the enviroment that we want to run. For example, if we want to run all tests UI and API on Chromium we can use below command:
