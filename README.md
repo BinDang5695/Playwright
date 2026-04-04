@@ -222,7 +222,7 @@ npm run test:cms:chrome
 npm run test:fb:chrome
 npm run test:crm:chrome
 
-For Firefox, Execute the command in the terminal: 
+For Edge, Execute the command in the terminal: 
 npm run test:cms:edge
 npm run test:fb:edge
 npm run test:crm:edge
