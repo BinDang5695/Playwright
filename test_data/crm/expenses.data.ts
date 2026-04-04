@@ -14,8 +14,6 @@ export const expenseData: Expense = {
   repeatEvery: 'Week',
   totalCycles: '10',
   verifyAmount: '$1,000.00',
-  alertSuccess: '',
-  deleteAlertSuccess: '',
 };
 
 export const updatedExpenseData: Expense = {
@@ -32,6 +30,4 @@ export const updatedExpenseData: Expense = {
   repeatEvery: 'Week',
   totalCycles: '10',
   verifyAmount: '$2,000.00',
-  alertSuccess: 'Expense updated successfully.',
-  deleteAlertSuccess: 'Expense deleted',
 };

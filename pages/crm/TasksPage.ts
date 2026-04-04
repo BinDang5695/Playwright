@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { CRMBasePage } from '@pages/crm/CRMBasePage';
-import { Header, Status } from '@constants/crm';
+import { Header, Message } from '@constants/crm';
 import { DateHelpers } from '@models/helpers/DateHelpers';
 import { Task } from '@models/types/crm/task.model'
 
@@ -144,11 +144,11 @@ export class TasksPage extends CRMBasePage {
     }
 
     async verifyNewTaskAfterCreated(data: Task) {
-        await expect(this.getAlert()).toHaveText(data.alertAddNewTaskSuccess);
+        await expect(this.getAlert()).toHaveText(Message.CREATEDTASK);
         await expect(this.taskName).toBeVisible();
         const rawText = await this.taskName.textContent();
         expect(this.normalizeText(rawText)).toBe(data.taskName);
-        await expect(this.taskStatus).toHaveText(Status.INPROGRESS);
+        await expect(this.taskStatus).toHaveText(data.status);
     }
 
     async markCompletedAndRefreshPage(data: Task) {

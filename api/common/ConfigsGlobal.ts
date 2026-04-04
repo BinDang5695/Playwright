@@ -1,6 +1,6 @@
 import { loadConfig } from '../common/ConfigLoader';
 
-const config = loadConfig('configs.json');
+const config = loadConfig('configs.json', 'api');
 
 export const ConfigsGlobal = {
   AUTHOR: config.AUTHOR,

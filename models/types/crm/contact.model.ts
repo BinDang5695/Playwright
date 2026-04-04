@@ -5,5 +5,4 @@ export interface Contact {
   password: string
   file: string
   blankPassword: string
-  messageAddedContactSuccess: string
 }

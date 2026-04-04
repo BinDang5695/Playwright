@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { CRMBasePage } from '@pages/crm/CRMBasePage';
-import { Button } from '@constants/crm';
+import { Button, Message } from '@constants/crm';
 import { Lead } from '@models/types/crm/lead.model'
 
 export class LeadsPage extends CRMBasePage {
@@ -29,7 +29,7 @@ export class LeadsPage extends CRMBasePage {
         return this.page.locator("//input[@aria-controls='leads']")
     }
 
-    private get contentLeads_info1To1() {
+    private get contentLeads_info1To2() {
         return this.page.locator("//div[@id='leads_info' and contains(., 'Showing 1 to 2 of 2 entries')]")
     }
 
@@ -91,7 +91,7 @@ export class LeadsPage extends CRMBasePage {
 
     await this.dropdownPagination.selectOption('10');
     await this.type(this.inputSearchLead, data.search);
-    await expect(this.contentLeads_info1To1).toContainText(data.totalLead);
+    await expect(this.contentLeads_info1To2).toContainText(Message.SHOWING1TO2OFENTRIES);
     await this.checkLeadNameContains(data);
   }
 
@@ -135,7 +135,7 @@ export class LeadsPage extends CRMBasePage {
   }
 
   async verifyDeletedLeads(data: Lead) {
-    await expect(this.getAlert(), data.totalLeadDeleted).toBeVisible();
+    await expect(this.getAlert(), Message.TOTALLEADSDELETE2).toBeVisible();
     await this.getbuttonCloseAlert().click();
     await this.inputSearchLead.fill(data.search);
     await expect(this.getNoData()).toBeVisible();

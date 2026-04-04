@@ -1,7 +1,7 @@
 import { Item } from '@models/types/crm/item.model';
 
 export const itemData: Item = {
-  file: 'test_data/BinItems.csv',
+  file: 'test_data/crm/BinItems.csv',
   description: 'Bin Description',
   longDescription: 'Bin Long description',
   rate: '$25.00',

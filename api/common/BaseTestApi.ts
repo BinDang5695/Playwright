@@ -2,7 +2,7 @@ import { test as base, expect } from '@playwright/test';
 import { EndPointGlobal } from './EndpointGlobal';
 import { LoginBuilder } from './LoginBuilder';
 import { ConfigsGlobal } from './ConfigsGlobal';
-import loginSchema from '../../test_data/LoginSchema.json';
+import loginSchema from '@data/api/LoginSchema.json';
 import { ApiLogger } from './ApiLogger';
 import { VerifyBookHeaders } from '../book/VerifyBookHeaders';
 import Ajv from 'ajv';

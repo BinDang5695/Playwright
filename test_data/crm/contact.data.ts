@@ -7,5 +7,4 @@ export const contactData: Contact = {
   password: '123456',
   file: 'test_data/UK.jpg',
   blankPassword: '',
-  messageAddedContactSuccess: 'Contact added successfully.',
 }

@@ -1,3 +1,4 @@
+import { Message } from '@constants/crm';
 import { Contact } from '@models/types/crm/contact.model';
 import { CRMBasePage } from '@pages/crm/CRMBasePage';
 import { expect } from '@playwright/test';
@@ -52,7 +53,7 @@ export class ContactsPage extends CRMBasePage {
     }
 
     async verifyCreatedContact(data: Contact): Promise<void> {
-        await expect(this.getAlert()).toHaveText(data.messageAddedContactSuccess);
+        await expect(this.getAlert()).toHaveText(Message.CREATEDCONTACT);
         await this.contactByName(`${data.firstName} ${data.lastName}`).click();
         await expect(this.fieldFirstName).toHaveValue(data.firstName);
         await expect(this.fieldLastName).toHaveValue(data.lastName);

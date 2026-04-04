@@ -5,6 +5,4 @@ export const leadData: Lead = {
   status: 'Active',
   source: 'Facebook',
   search: 'Bin Lead',
-  totalLead: 'Showing 1 to 2 of 2 entries',
-  totalLeadDeleted: 'Total leads deleted: 2',
 };

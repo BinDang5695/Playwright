@@ -1,5 +1,5 @@
 import { test } from '@fixtures/crm.fixture';
-import customerCases from '../../../test_data/crm/CustomerData.json';
+import customerCases from '@data/crm/CustomerData.json';
 import { Menu } from '@constants/crm';
 import { CustomerDataDriven } from '@models/types/crm/customerdriven.model';
 

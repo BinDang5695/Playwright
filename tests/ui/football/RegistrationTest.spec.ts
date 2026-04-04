@@ -1,5 +1,5 @@
-import { test } from './BaseTest';
-import validationCases from '../../../test_data/RegistrationData.json';
+import { test } from '@fixtures/fb.fixture';
+import validationCases from '@data/fb/RegistrationData.json';
 
 type ValidationCase = {
   title: string;
@@ -23,17 +23,16 @@ const cases = validationCases as ValidationCase[];
 test.describe('FB Validation Tests', () => {
 
   for (const item of cases) {
-    test(item.title, async ({ page, pages }) => {
+    test(item.title, async ({ page, registrationPage }) => {
       console.log(`\n[TEST] ${item.title}`);
-      
       await page.goto('https://football-questionnaire-dev.powerappsportals.com/');
-      await pages.registrationPage().clickButtonRegisterAndProceed();
-      await pages.registrationPage().fillSubmitRegistration(item.data);
+      await registrationPage.clickButtonRegisterAndProceed();
+      await registrationPage.fillSubmitRegistration(item.data);
       if (!item.data.emailCount) {
-        await pages.registrationPage().clickButtonSubmitRegistration();
+        await registrationPage.clickButtonSubmitRegistration();
       }
   
-      await pages.registrationPage().verifyErrorsByField(item.expectedErrors);
+      await registrationPage.verifyErrorsByField(item.expectedErrors);
     });
   }
 });

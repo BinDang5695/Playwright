@@ -12,6 +12,4 @@ export interface Expense {
   repeatEvery: string
   totalCycles: string
   verifyAmount: string
-  alertSuccess: string
-  deleteAlertSuccess: string
 }

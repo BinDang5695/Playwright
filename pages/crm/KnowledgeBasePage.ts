@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { Article } from '@models/types/crm/knowledge.model'
-import { Dropdown } from '@constants/crm';
+import { Dropdown, Message } from '@constants/crm';
 import { CRMBasePage } from '@pages/crm/CRMBasePage';
 
 export class KnowledgeBasePage extends CRMBasePage {
@@ -84,10 +84,10 @@ export class KnowledgeBasePage extends CRMBasePage {
         await expect(tab2.locator(this.descriptionArticle(data.description))).toHaveText(data.description);
 
         await tab2.locator(this.SELECTOR_BUTTON_YES).click();
-        await expect(tab2.locator(this.SELECTOR_MESSAGE_NOTIFICATION)).toHaveText(data.messageFirst);
+        await expect(tab2.locator(this.SELECTOR_MESSAGE_NOTIFICATION)).toHaveText(Message.THANKSFORYOUFEEDBACK);
 
         await tab2.locator(this.SELECTOR_BUTTON_YES).click();
-        await expect(tab2.locator(this.SELECTOR_MESSAGE_NOTIFICATION)).toHaveText(data.messageSecond);
+        await expect(tab2.locator(this.SELECTOR_MESSAGE_NOTIFICATION)).toHaveText(Message.YOUCANVOTEONCEIN24HOURS);
 
         await this.page.bringToFront();
     }

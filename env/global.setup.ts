@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 import { LoginPage as CRMLoginPage } from '../pages/crm/LoginPage';
-import { LoginPage as CSMLoginPage } from '../pages/cms/LoginPage';
+import { LoginPage as CMSLoginPage } from '../pages/cms/LoginPage';
 
 async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
     const envPath = path.resolve(__dirname, 'profiles', envFile);
@@ -32,7 +32,7 @@ async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
     const page = await context.newPage();
 
     if (app === 'cms') {
-        const loginPage = new CSMLoginPage(page);
+        const loginPage = new CMSLoginPage(page);
         await loginPage.loginCMS(username, password);
         await loginPage.verifyLoginSuccess();
     } else {
@@ -51,11 +51,16 @@ async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
 }
 
 async function globalSetup(): Promise<void> {
-    const envName = process.env.env || 'crm-dev';
+    const envName = process.env.env;
+    const project = process.env.project;
 
-    if (envName.startsWith('cms')) {
+    if (!project || project === 'api' || project === 'fb') {
+        console.log(`⏭️ Skip login: ${project ?? 'unknown'}`);
+        return;
+    }
+    if (envName?.startsWith('cms')) {
         await loginApp('cms', `.env.${envName}`);
-    } else if (envName.startsWith('crm')) {
+    } else if (envName?.startsWith('crm')) {
         await loginApp('crm', `.env.${envName}`);
     } else {
         await loginApp('crm', `.env.crm-dev`);

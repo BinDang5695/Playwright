@@ -80,7 +80,7 @@ export class CRMBasePage extends BasePage {
   async attachFile(relativeFilePath: string) {
     const absoluteFilePath = path.resolve(relativeFilePath);
     await this.getFile().setInputFiles(absoluteFilePath);
-    await expect(this.page.locator('.dz-preview'));
+    await expect(this.page.locator('.dz-preview')).toBeVisible();
   }
 
   get buttonView() {

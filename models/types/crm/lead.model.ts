@@ -3,6 +3,4 @@ export interface Lead {
   status: string;
   source: string;
   search: string;
-  totalLead: string;
-  totalLeadDeleted: string;
 }

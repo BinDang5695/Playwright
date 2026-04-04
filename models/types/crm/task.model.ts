@@ -1,7 +1,7 @@
 export interface Task {
   subject: string
-  alertAddNewTaskSuccess: string
   taskName: string
+  status: string
   completeTaskTotal: string
   updatedSubject: string
   noData: string

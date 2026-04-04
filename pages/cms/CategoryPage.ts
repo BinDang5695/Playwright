@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { CMSBasePage } from '@pages/cms/CMSBasePage';
-import { SystemHelper } from '../../models/helpers/SystemHelper';
+import { SystemHelper } from '@models/helpers/SystemHelper';
 import { Category } from '@models/types/cms/category.model';
 import { Menu } from '@constants/crm';
 

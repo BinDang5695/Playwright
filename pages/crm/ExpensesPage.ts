@@ -1,5 +1,5 @@
 import { CRMBasePage } from '@pages/crm/CRMBasePage';
-import { Dropdown, Toogle } from '@constants/crm';
+import { Dropdown, Message, Toogle } from '@constants/crm';
 import { Expense } from '@models/types/crm/expenses.model'
 import { expect } from '@playwright/test';
 
@@ -151,7 +151,7 @@ export class ExpensesPage extends CRMBasePage {
     }
 
     async verifyUpdatedExpense(data: Expense) {
-        await expect(this.getAlert()).toHaveText(data.alertSuccess);
+        await expect(this.getAlert()).toHaveText(Message.UPDATEDEXPENSE);
         await this.getbuttonCloseAlert().click();
         await expect(this.expenseName).toHaveText(data.name);
         await expect(this.expenseNote(data.note)).toHaveText(data.note);
@@ -170,7 +170,7 @@ export class ExpensesPage extends CRMBasePage {
     }
 
     async verifyDeletedExpense(data: Expense) {
-        await expect(this.getAlert()).toHaveText(data.deleteAlertSuccess);
+        await expect(this.getAlert()).toHaveText(Message.DELETEDEXPENSE);
         await this.getbuttonCloseAlert().click();
         await this.inputSearchExpenses.fill(data.category);
         await expect(this.getNoData()).toBeVisible();

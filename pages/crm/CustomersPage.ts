@@ -83,7 +83,7 @@ export class CustomersPage extends CRMBasePage {
     }
 
     customerInTable(name: string) {
-        return this.page.getByRole('link', { name });
+        return this.page.locator(`//a[normalize-space()='${name}']`);
     }
 
     async clickButtonAddNewCustomer() {
@@ -211,7 +211,7 @@ export class CustomersPage extends CRMBasePage {
 
     async searchCustomer(data: Customer) {
         await this.searchInput.fill(data.company);
-        await expect(this.customerInTable(data.company));
+        await expect(this.customerInTable(data.company)).toBeVisible();
     }
 
     async deleteCustomer(data: Customer) {

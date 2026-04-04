@@ -2,7 +2,7 @@ import { test as base, expect } from '@playwright/test';
 import { EndPointGlobal } from './EndpointGlobal';
 import { CreateToken } from '../booking/CreateToken';
 import { ConfigsBooking } from './ConfigsBooking';
-import CreateTokenSchema from '../../test_data/CreateTokenSchema.json';
+import CreateTokenSchema from '@data/api/CreateTokenSchema.json';
 import { ApiLogger } from './ApiLogger';
 import { VerifyBookingHeaders } from '../booking/VerifyBookingHeaders';
 import Ajv from 'ajv';

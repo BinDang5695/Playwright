@@ -1,8 +1,12 @@
 {
-  "name": "sdetpro-k18-playwright",
+  "name": "playwright",
   "scripts": {
     "test": "playwright test",
-    "test:computer": "playwright test tests/computer"
+    "test:api": "playwright test tests/api/ --project=api",
+    "test:fb": "playwright test tests/ui/football/RegistrationTest.spec.ts --project=fb",
+    "test:cms": "set env=cms-dev&& playwright test tests/ui/cms/ --project=cms",
+    "test:crm": "set env=crm-dev&& playwright test tests/ui/crm/ --project=crm",
+    "test:all": "npm run test:api && npm run test:cms && npm run test:fb && npm run test:crm"
   },
   "dependencies": {
     "@playwright/test": "^1.57.0",

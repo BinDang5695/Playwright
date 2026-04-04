@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "description": "",
+  "type": "object",
+  "properties": {
+    "message": {
+      "type": "string",
+      "minLength": 1
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "path",
+        "id"
+      ]
+    }
+  },
+  "required": [
+    "message",
+    "response"
+  ]
+}
