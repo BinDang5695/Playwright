@@ -130,7 +130,7 @@ export default defineConfig({
         headless: false,
         viewport: null,
         launchOptions: { args: ['--start-maximized'] },
-        storageState: '.auth/crm-user.json',
+        storageState: '.auth/crm-pm.json',
       },
     },
   ],

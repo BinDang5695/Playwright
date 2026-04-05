@@ -26,8 +26,9 @@ This is an automation framework using Playwright written in TypeScript.
 ```
 non-bdd
 ├── .auth/                                            
-│   ├── cms-user.json                                 # Auth of CMS after login
-│   └── crm-user.json                                 # Auth of CRM after login
+│   ├── cms-admin.json                                # CMS Admin session
+│   ├── crm-admin.json                                # CRM Admin session
+│   └── crm-pm.json                                   # CRM PM session
 ├── .github                                            
 │   └─ workflows                                       
 │   │   └─ playwright.yml                             # GitHub Actions file - auto run
@@ -79,8 +80,9 @@ non-bdd
 ├── downloads/                                        # Downloaded files during test runs
 ├── env/
 │   ├── profiles/
-│   │   ├── .env.crm-dev                              # CRM dev environment config
-│   │   └── .env.cms-dev                              # CRM dev environment config
+│   │   ├── .env.cms-dev-admin                        # CMS Admin dev environment config
+│   │   ├── .env.crm-dev-admin                        # CRM Admin dev environment config
+│   │   └── .env.crm-dev-pm                           # CRM PM dev environment config
 │   └── global.setup.ts                               # Global auth setup — login & save storageState for each app
 ├── fixtures/
 │   ├── cms.fixture.ts                                # Extends base test with CMS project object instances
@@ -218,14 +220,14 @@ npx playwright install
 
 ```sh
 For Chrome, Execute the command in the terminal: 
-npm run test:cms:chrome
+npm run test:cms:chrome:admin
 npm run test:fb:chrome
-npm run test:crm:chrome
+npm run test:crm:chrome:admin
 
 For Edge, Execute the command in the terminal: 
-npm run test:cms:edge
+npm run test:cms:edge:admin
 npm run test:fb:edge
-npm run test:crm:edge
+npm run test:crm:edge:admin
 ```
 
 ### Run API tests only (include all API test suite)
@@ -239,8 +241,8 @@ npm run test:api
 
 ```sh
 Execute the command in the terminal: 
-npm run test:crm:task:chrome
-npm run test:crm:task:edge
+npm run test:crm:task:chrome:pm
+npm run test:crm:task:edge:pm
 ```
 
 Please see the package.json file for more details
@@ -255,7 +257,7 @@ Option #2: Add --workers arguments in the test run commands (only affect for spe
 
 ```sh
 Run Login test suite with many workers
-npm run test:crm:chrome -- --workers=<number-of-workers>
+npm run test:crm:chrome:admin -- --workers=<number-of-workers>
 ```
 
 For more details, please refer to Playwright document
@@ -294,38 +296,9 @@ Then, we can specify the scripts to run on multi environments on package.json fi
 
 Finally, we can use npm run command to specify the enviroment that we want to run. For example, if we want to run all tests UI and API on Chromium we can use below command:
 ```sh
-npm run test:all:chrome
-npm run test:all:edge
+npm run test:all:chrome:admin
+npm run test:all:edge:admin
 ```
 For more details, please refer to Playwright document
 [Playwright Test Configuration](https://playwright.dev/docs/test-configuration)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

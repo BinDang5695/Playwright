@@ -5,6 +5,8 @@ import { leadData } from '@data/crm/lead.data';
 test.describe('CRM Test Suite', () => {
 
     test('Add new Leads, verify and delete Successfully', async ({ leadsPage, CRMBasePage }) => {
+        const role = process.env.ROLE;
+        test.skip(role !== 'admin')        
         await CRMBasePage.clickByMenuText(Menu.LEADS);
         await leadsPage.createMultipleLeads(2, leadData);
         await leadsPage.searchAndCheckDataInTable(leadData);
