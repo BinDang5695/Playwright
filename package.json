@@ -16,6 +16,7 @@
     "test:cms:category:edge:admin": "set env=cms-dev-admin&& playwright test tests/ui/cms/CategoryTest.spec.ts --project=cms-edge-admin",
     "test:cms:login:chrome:admin": "set env=cms-dev-admin&& playwright test tests/ui/cms/LoginTest.spec.ts --project=cms-chrome-admin",
     "test:cms:login:edge:admin": "set env=cms-dev-admin&& playwright test tests/ui/cms/LoginTest.spec.ts --project=cms-edge-admin",
+    "test:cms:login:edge:admin:login": "set env=crm-dev-admin&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-edge-admin --grep @login",
     "test:cms:product:chrome:admin": "set env=cms-dev-admin&& playwright test tests/ui/cms/ProductTest.spec.ts --project=cms-chrome-admin",
     "test:cms:product:edge:admin": "set env=cms-dev-admin&& playwright test tests/ui/cms/ProductTest.spec.ts --project=cms-edge-admin",
     "test:crm:chrome:admin": "set env=crm-dev-admin&& playwright test tests/ui/crm/ --project=crm-chrome-admin",
@@ -44,6 +45,7 @@
     "test:crm:lead:edge:admin": "set env=crm-dev-admin&& playwright test tests/ui/crm/LeadTest.spec.ts --project=crm-edge-admin",  
     "test:crm:login:chrome:admin": "set env=crm-dev-admin&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-chrome-admin",
     "test:crm:login:edge:admin": "set env=crm-dev-admin&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-edge-admin",
+    "test:crm:login:edge:admin:login": "set env=crm-dev-admin&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-edge-admin --grep @login",
     "test:crm:login:chrome:pm": "set env=crm-dev-pm&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-chrome-pm",
     "test:crm:login:edge:pm": "set env=crm-dev-pm&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-edge-pm",
     "test:crm:project:chrome:admin": "set env=crm-dev-admin&& playwright test tests/ui/crm/ProjectTest.spec.ts --project=crm-chrome-admin",
@@ -60,6 +62,7 @@
     "test:all:edge:admin": "npm run test:api && npm run test:cms:edge:admin && npm run test:fb:edge && npm run test:crm:edge:admin",
     "test:all:chrome:pm": "npm run test:api && npm run test:cms:chrome:admin && npm run test:fb:chrome && npm run test:crm:chrome:pm",
     "test:all:edge:pm": "npm run test:api && npm run test:cms:edge:admin && npm run test:fb:edge && npm run test:crm:edge:pm",
+    "test:edge:admin:login": "npm run test:cms:login:edge:admin:login && npm run test:crm:login:edge:admin:login",
     "create:report": "npx playwright show-report",
     "create:allure-report": "allure generate ./test-results/allure -o allure-report --clean & allure open allure-report"
   },

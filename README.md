@@ -241,8 +241,7 @@ npm run test:api
 
 ```sh
 Execute the command in the terminal: 
-npm run test:crm:task:chrome:pm
-npm run test:crm:task:edge:pm
+npm run test:edge:admin:login
 ```
 
 Please see the package.json file for more details
@@ -257,7 +256,7 @@ Option #2: Add --workers arguments in the test run commands (only affect for spe
 
 ```sh
 Run Login test suite with many workers
-npm run test:crm:chrome:admin -- --workers=<number-of-workers>
+npm run test:fb:chrome -- --workers=<number-of-workers>
 ```
 
 For more details, please refer to Playwright document
