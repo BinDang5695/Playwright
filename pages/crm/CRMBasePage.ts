@@ -107,6 +107,10 @@ export class CRMBasePage extends BasePage {
     return this.page.locator("//label[normalize-space()='Mass Delete']");
   }
 
+  get checkboxMarkAsLost() {
+    return this.page.locator("//label[normalize-space()='Mark as lost']");
+  }
+
   get buttonConfirm() {
     return this.page.locator("//a[normalize-space()='Confirm']");
   }

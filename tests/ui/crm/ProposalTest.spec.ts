@@ -13,6 +13,8 @@ test.describe.serial('CRM Test Suite', () => {
 
     fileTypes.forEach(({ type, tag }) => {
         test(`Manage Proposals ${type.toUpperCase()} File ${tag}`, async ({ proposalsPage, CRMBasePage }) => {
+            const role = process.env.ROLE;
+            test.skip(role !== 'admin')
             await CRMBasePage.clickByMenuText(Menu.SALES);
             await CRMBasePage.clickByMenuName(Menu.PROPOSALS);
             await proposalsPage.clickButtonNewProposal();

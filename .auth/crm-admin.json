@@ -1,0 +1,35 @@
+{
+  "cookies": [
+    {
+      "name": "csrf_cookie_name",
+      "value": "f7872c63f2e236bc7538a3626bd369eb",
+      "domain": "crm.anhtester.com",
+      "path": "/",
+      "expires": 1775380574.043503,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "sp_session",
+      "value": "6ec0d5355a6b3008e8a7f97d44e4717f7b6ac78b",
+      "domain": "crm.anhtester.com",
+      "path": "/",
+      "expires": 1775405713.567869,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "autologin",
+      "value": "a%3A2%3A%7Bs%3A7%3A%22user_id%22%3Bs%3A1%3A%222%22%3Bs%3A3%3A%22key%22%3Bs%3A16%3A%22174ac889dc7fbc09%22%3B%7D",
+      "domain": "crm.anhtester.com",
+      "path": "/",
+      "expires": 1780733713.898777,
+      "httpOnly": false,
+      "secure": true,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

@@ -5,6 +5,8 @@ import { itemData } from '@data/crm/item.data';
 test.describe('CRM Test Suite', () => {
 
     test('Add new Item, verify and delete Item Successfully', async ({ itemsPage, CRMBasePage }) => {
+        const role = process.env.ROLE;
+        test.skip(role !== 'admin')
         await CRMBasePage.clickByMenuText(Menu.SALES);
         await CRMBasePage.clickByMenuName(Menu.ITEMS);
         await itemsPage.clickButtonImportItems();

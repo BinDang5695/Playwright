@@ -3,10 +3,12 @@ import dotenv from 'dotenv';
 
 const envName = process.env.env;
 const project = process.env.project;
-dotenv.config({
-  path: `env/profiles/.env.${envName}`,
-  override: true,
-});
+if (envName) {
+    dotenv.config({
+        path: `env/profiles/.env.${envName}`,
+        override: true,
+    });
+}
 const needsAuth = project !== 'api' && project !== 'fb';
 
 export default defineConfig({
@@ -54,7 +56,7 @@ export default defineConfig({
       },
     },
     {
-      name: "cms-chrome",
+      name: "cms-chrome-admin",
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -64,11 +66,11 @@ export default defineConfig({
         launchOptions: {
           args: ['--start-maximized'],
         },
-        storageState: '.auth/cms-user.json',
+        storageState: '.auth/cms-admin.json',
       },
     },
         {
-      name: "cms-edge",
+      name: "cms-edge-admin",
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -76,11 +78,11 @@ export default defineConfig({
         headless: false,
         viewport: null,
         launchOptions: { args: ['--start-maximized'] },
-        storageState: '.auth/cms-user.json',
+        storageState: '.auth/cms-admin.json',
       },
     },
     {
-      name: 'crm-chrome',
+      name: 'crm-chrome-admin',
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -90,11 +92,37 @@ export default defineConfig({
         launchOptions: {
           args: ['--start-maximized'],
         },
-        storageState: '.auth/crm-user.json',
+        storageState: '.auth/crm-admin.json',
       },
     },
     {
-      name: 'crm-edge',
+      name: 'crm-edge-admin',
+      retries: 1,
+      use: {
+        browserName: 'chromium',
+        channel: 'msedge',
+        headless: false,
+        viewport: null,
+        launchOptions: { args: ['--start-maximized'] },
+        storageState: '.auth/crm-admin.json',
+      },
+    },
+{
+      name: 'crm-chrome-pm',
+      retries: 1,
+      use: {
+        browserName: 'chromium',
+        channel: 'chrome',
+        headless: false,
+        viewport: null,
+        launchOptions: {
+          args: ['--start-maximized'],
+        },
+        storageState: '.auth/crm-pm.json',
+      },
+    },
+    {
+      name: 'crm-edge-pm',
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -105,7 +133,6 @@ export default defineConfig({
         storageState: '.auth/crm-user.json',
       },
     },
-
   ],
   
   use: {

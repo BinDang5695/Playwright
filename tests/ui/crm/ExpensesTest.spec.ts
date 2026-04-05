@@ -5,6 +5,8 @@ import { Menu } from '@constants/crm';
 test.describe('CRM Test Suite', () => {
 
     test('Create Expense, update and delete Successfully', async ({ expensesPage, CRMBasePage }) => {
+        const role = process.env.ROLE;
+        test.skip(role !== 'admin')
         await CRMBasePage.clickByMenuText(Menu.EXPENSES);
         await expensesPage.clickButtonRecordExpense();
         await expensesPage.addNewExpense(expenseData);

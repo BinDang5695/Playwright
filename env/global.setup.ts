@@ -8,7 +8,6 @@ import { LoginPage as CMSLoginPage } from '../pages/cms/LoginPage';
 async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
     const envPath = path.resolve(__dirname, 'profiles', envFile);
     
-    // Add this debug line temporarily
     console.log(`Loading env from: ${envPath}`);
     console.log(`File exists: ${fs.existsSync(envPath)}`);
     
@@ -21,7 +20,8 @@ async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
     const baseURL = process.env.BASE_URL;
     const username = process.env.USERNAME;
     const password = process.env.PASSWORD;
-    const authStatePath = process.env.AUTH_STATE || `.auth/${app}-user.json`;
+    const role = process.env.ROLE ?? 'admin';
+    const authStatePath = `.auth/${app}-${role}.json`;
 
     if (!baseURL) throw new Error(`[${app}] BASE_URL undefined`);
     if (!username) throw new Error(`[${app}] USERNAME undefined`);
@@ -52,19 +52,24 @@ async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
 
 async function globalSetup(): Promise<void> {
     const envName = process.env.env;
-    const project = process.env.project;
 
-    if (!project || project === 'api' || project === 'fb') {
-        console.log(`⏭️ Skip login: ${project ?? 'unknown'}`);
+    if (!envName) {
+        await loginApp('crm', `.env.crm-dev-admin`);
+        await loginApp('crm', `.env.crm-dev-pm`);
+        await loginApp('cms', `.env.cms-dev-admin`);
         return;
     }
-    if (envName?.startsWith('cms')) {
+
+    if (envName.startsWith('cms')) {
         await loginApp('cms', `.env.${envName}`);
-    } else if (envName?.startsWith('crm')) {
-        await loginApp('crm', `.env.${envName}`);
+    } else if (envName === 'crm-dev-admin') {
+        await loginApp('crm', `.env.crm-dev-admin`);
+    } else if (envName === 'crm-dev-pm') {
+        await loginApp('crm', `.env.crm-dev-pm`);
     } else {
-        await loginApp('crm', `.env.crm-dev`);
-        await loginApp('cms', `.env.cms-dev`);
+        await loginApp('crm', `.env.crm-dev-admin`);
+        await loginApp('crm', `.env.crm-dev-pm`);
+        await loginApp('cms', `.env.cms-dev-admin`);
     }
 }
 
