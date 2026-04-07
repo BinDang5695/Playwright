@@ -5,8 +5,8 @@ import { usersData } from '@data/shopvn/users.data';
 test.describe.serial('ShopVN Test Suite', () => {
 
     test('Add new User successfully', async ({ HomePage, LoginPage, UsersPage }) => {
-                const role = process.env.ROLE;
-                test.skip(role !== 'admin')
+        const role = process.env.ROLE;
+        test.skip(role !== 'admin')
         await LoginPage.loginShopVN(ENV.username, ENV.password);
         await HomePage.clickLinkManageUsers();
         await UsersPage.addNewUser(usersData);
@@ -14,8 +14,8 @@ test.describe.serial('ShopVN Test Suite', () => {
     });
 
     test('Delete added User successfully', async ({ HomePage, LoginPage, UsersPage }) => {
-                const role = process.env.ROLE;
-                test.skip(role !== 'admin')
+        const role = process.env.ROLE;
+        test.skip(role !== 'admin')
         await LoginPage.loginShopVN(ENV.username, ENV.password);
         await HomePage.clickLinkManageUsers();
         await UsersPage.deleteAddedUser();
