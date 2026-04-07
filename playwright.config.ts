@@ -133,6 +133,28 @@ export default defineConfig({
         storageState: '.auth/crm-pm.json',
       },
     },
+    {
+      name: 'shopvn-chrome-customer',
+      retries: 1,
+      use: {
+        browserName: 'chromium',
+        channel: 'chrome',
+        headless: false,
+        viewport: null,
+        launchOptions: { args: ['--start-maximized'] },
+      },
+    },
+    {
+      name: 'shopvn-chrome-admin',
+      retries: 1,
+      use: {
+        browserName: 'chromium',
+        channel: 'chrome',
+        headless: false,
+        viewport: null,
+        launchOptions: { args: ['--start-maximized'] },
+      },
+    },
   ],
   
   use: {

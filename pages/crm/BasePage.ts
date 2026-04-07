@@ -41,12 +41,6 @@ export default class BasePage {
         });
     }
 
-    async acceptPrompt(text: string) {
-        this.page.once('dialog', async dialog => {
-            await dialog.accept(text);
-        });
-    }
-
     async click(locator: Locator) {
         await expect(locator).toBeVisible();
         await locator.click();

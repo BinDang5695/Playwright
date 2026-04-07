@@ -5,6 +5,14 @@ export class DateHelpers {
         return new Date().toLocaleDateString('en-GB').replaceAll('/', '-');
     }
 
+    static getTodayRegex(): RegExp {
+        const d = new Date();
+        const day = d.getDate();
+        const month = d.getMonth() + 1;
+        const year = d.getFullYear();
+        return new RegExp(`0?${day}[/\\-]0?${month}[/\\-]${year}`);
+    }
+
     // Format MM/DD/YYYY (en-US)
     static getTodayMMDDYYYY(): string {
         return new Date().toLocaleDateString('en-US');

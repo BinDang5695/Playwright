@@ -48,6 +48,15 @@
     "test:crm:login:edge:admin:login": "set env=crm-dev-admin&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-edge-admin --grep @login",
     "test:crm:login:chrome:pm": "set env=crm-dev-pm&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-chrome-pm",
     "test:crm:login:edge:pm": "set env=crm-dev-pm&& playwright test tests/ui/crm/LoginTest.spec.ts --project=crm-edge-pm",
+
+    "test:shopvn:login:chrome:customer": "set env=shopvn-dev-customer&& playwright test tests/ui/shopvn/LoginTest.spec.ts --project=shopvn-chrome-customer",
+    "test:shopvn:payment:chrome:customer": "set env=shopvn-dev-customer&& playwright test tests/ui/shopvn/PaymentTest.spec.ts --project=shopvn-chrome-customer",
+    "test:shopvn:product:chrome:admin": "set env=shopvn-dev-admin&& playwright test tests/ui/shopvn/ProductTest.spec.ts --project=shopvn-chrome-admin",
+    "test:shopvn:user:chrome:admin": "set env=shopvn-dev-admin&& playwright test tests/ui/shopvn/UserTest.spec.ts --project=shopvn-chrome-admin",
+    "test:shopvn:chrome:admin": "set env=shopvn-dev-admin&& playwright test tests/ui/shopvn/ --project=shopvn-chrome-admin",
+    "test:shopvn:chrome:customer": "set env=shopvn-dev-customer&& playwright test tests/ui/shopvn/ --project=shopvn-chrome-customer",
+
+
     "test:crm:project:chrome:admin": "set env=crm-dev-admin&& playwright test tests/ui/crm/ProjectTest.spec.ts --project=crm-chrome-admin",
     "test:crm:project:edge:admin": "set env=crm-dev-admin&& playwright test tests/ui/crm/ProjectTest.spec.ts --project=crm-edge-admin",
     "test:crm:project:chrome:pm": "set env=crm-dev-pm&& playwright test tests/ui/crm/ProjectTest.spec.ts --project=crm-chrome-pm",

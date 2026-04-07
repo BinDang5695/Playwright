@@ -2,8 +2,8 @@ import { chromium } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
-import { LoginPage as CRMLoginPage } from '../pages/crm/LoginPage';
-import { LoginPage as CMSLoginPage } from '../pages/cms/LoginPage';
+import { LoginPage as CRMLoginPage } from '@pages/crm/LoginPage';
+import { LoginPage as CMSLoginPage } from '@pages/cms/LoginPage';
 
 async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
     const envPath = path.resolve(__dirname, 'profiles', envFile);
@@ -66,10 +66,6 @@ async function globalSetup(): Promise<void> {
         await loginApp('crm', `.env.crm-dev-admin`);
     } else if (envName === 'crm-dev-pm') {
         await loginApp('crm', `.env.crm-dev-pm`);
-    } else {
-        await loginApp('crm', `.env.crm-dev-admin`);
-        await loginApp('crm', `.env.crm-dev-pm`);
-        await loginApp('cms', `.env.cms-dev-admin`);
     }
 }
 
