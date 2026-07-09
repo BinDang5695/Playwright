@@ -64,7 +64,7 @@
     "test:all:edge:pm": "npm run test:api && npm run test:cms:edge:admin && npm run test:saucedemo:edge && npm run test:crm:edge:pm",
     "test:edge:admin:login": "npm run test:cms:login:edge:admin:login && npm run test:crm:login:edge:admin:login",
     "create:report": "npx playwright show-report",
-    "create:allure-report": "allure generate ./test-results/allure -o allure-report --clean & allure open allure-report"
+    "create:allure-report": "allure generate allure-results -o allure-report --clean && allure open allure-report"
   },
   "dependencies": {
     "@playwright/test": "^1.57.0",
@@ -86,6 +86,7 @@
     "@types/pdf-parse": "^1.1.5",
     "allure-commandline": "^2.38.1",
     "allure-playwright": "^3.7.2",
-    "eslint": "^10.2.0"
+    "eslint": "^10.2.0",
+    "rimraf": "^6.1.3"
   }
 }
