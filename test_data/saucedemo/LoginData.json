@@ -1,0 +1,73 @@
+[
+  {
+    "title": "Validation - empty Email",
+    "data": {
+      "email": "",
+      "password": "secret_sauce"
+    },
+    "expectedError": "Epic sadface: Username is required"
+  },
+
+  {
+    "title": "Validation - invalid Email",
+    "data": {
+      "email": "standard_user123",
+      "password": "secret_sauce"
+    },
+    "expectedError": "Epic sadface: Username and password do not match any user in this service"
+  },
+
+  {
+    "title": "Validation - empty Password",
+    "data": {
+      "email": "standard_user",
+      "password": ""
+    },
+    "expectedError": "Epic sadface: Password is required"
+  },
+
+  {
+    "title": "Validation - invalid Password",
+    "data": {
+      "email": "standard_user",
+      "password": "secret_sauce123"
+    },
+    "expectedError": "Epic sadface: Username and password do not match any user in this service"
+  },
+
+  {
+    "title": "Validation - empty Email & Password",
+    "data": {
+      "email": "",
+      "password": ""
+    },
+    "expectedError": "Epic sadface: Username is required"
+  },
+
+  {
+    "title": "Validation - invalid Email & Password",
+    "data": {
+      "email": "standard_user123",
+      "password": "secret_sauce123"
+    },
+    "expectedError": "Epic sadface: Username and password do not match any user in this service"
+  },
+
+  {
+    "title": "Validation - empty Email & invalid Password",
+    "data": {
+      "email": "",
+      "password": "secret_sauce123"
+    },
+    "expectedError": "Epic sadface: Username is required"
+  },
+
+  {
+    "title": "Validation - invalid Email & empty Password",
+    "data": {
+      "email": "standard_user123",
+      "password": ""
+    },
+    "expectedError": "Epic sadface: Password is required"
+  }
+]

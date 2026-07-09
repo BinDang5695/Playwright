@@ -53,12 +53,7 @@ async function loginApp(app: 'crm' | 'cms', envFile: string): Promise<void> {
 async function globalSetup(): Promise<void> {
     const envName = process.env.env;
 
-    if (!envName) {
-        await loginApp('crm', `.env.crm-dev-admin`);
-        await loginApp('crm', `.env.crm-dev-pm`);
-        await loginApp('cms', `.env.cms-dev-admin`);
-        return;
-    }
+    if (!envName) return;
 
     if (envName.startsWith('cms')) {
         await loginApp('cms', `.env.${envName}`);

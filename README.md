@@ -87,7 +87,7 @@ non-bdd
 ├── fixtures/
 │   ├── cms.fixture.ts                                # Extends base test with CMS project object instances
 │   ├── crm.fixture.ts                                # Extends base test with CRM project object instances
-│   └── fb.fixture.ts                                 # Extends base test with Football project object instances
+│   └── saucedemo.fixture.ts                          # Extends base test with Sauce demo project object instances
 ├── models/
 │   ├── helpers/
 │   │   ├── DateHelpers.ts                            # Utility methods for date formatting and offset calculation
@@ -110,8 +110,8 @@ non-bdd
 │   │   │   ├── project.model.ts                      # Type definition for Project test data
 │   │   │   ├── proposal.model.ts                     # Type definition for Proposal test data
 │   │   │   └── task.model.ts                         # Type definition for Task test data
-│   │   └── fb/
-│   │   │   └── fb.model.ts                           # Type definition for FB test data
+│   │   └── saucedemo/
+│   │   │   └── login.model.ts                        # Type definition for Sauce demo test data
 ├── pages/
 │   ├── cms/
 │   │   ├── CategoryPage.ts                           # Category page actions
@@ -132,21 +132,21 @@ non-bdd
 │   │   ├── ProjectsPage.ts                           # Projects page actions
 │   │   ├── ProposalsPage.ts                          # Proposals page actions
 │   │   └── TasksPage.ts                              # Tasks page actions
-│   └── football/
-│   │   ├── FBBasePage.ts                             # FB-specific base page
-│   │   └── RegistrationPage.ts                       # Registration page actions
+│   └── saucedemo/
+│   │   ├── BasePage.ts                               # Sauce demo-specific base page
+│   │   └── LoginPage.ts                              # Login page actions
 ├── playwright-report/
 │   └── index.html                                    # Auto-generated HTML test report (gitignored)
 ├── test_data/
 │   ├── api/                                          # Static JSON files for API tests — request payloads,response schemas, and environment configs
 │   ├── cms/                                          # Typed test data objects for CMS UI tests — category, product,...
 │   ├── crm/                                          # Typed test data objects for CRM UI tests — leads, customers,...
-│   └── fb/                                           # Typed test data objects for FB UI tests
+│   └── saucedemo/                                    # Typed test data objects for Sauce demo UI tests
 ├── tests/
 │   ├── api/                                          # API test suites — serial flows covering CRUD operations with schema validation and response body verification
 │   ├── cms/                                          # CMS UI test suites — feature-based test files
 │   ├── crm/                                          # CRM UI test suites — feature-based test files
-│   └── football/                                     # FB UI test suites — feature-based test files
+│   └── saucedemo/                                    # Sauce demo UI test suites — feature-based test files
 ├── utils/
 │   └── env.ts                                        # Typed accessors for runtime environment variables
 ├─ package-lock.json                                  # Provide an immutable version of package.json
@@ -216,17 +216,17 @@ npx playwright install
 ![Run Test](https://user-images.githubusercontent.com/13063165/212737059-0c52cda1-829d-4cda-9ca8-33741c87dfff.png)
 
    
-### Run tests on Chrome/Edge (include CRM/CMS/FB test suite)
+### Run tests on Chrome/Edge (include CRM/CMS/Sauce demo test suite)
 
 ```sh
 For Chrome, Execute the command in the terminal: 
 npm run test:cms:chrome:admin
-npm run test:fb:chrome
+npm run test:saucedemo:chrome
 npm run test:crm:chrome:admin
 
 For Edge, Execute the command in the terminal: 
 npm run test:cms:edge:admin
-npm run test:fb:edge
+npm run test:saucedemo:edge
 npm run test:crm:edge:admin
 ```
 
@@ -256,7 +256,7 @@ Option #2: Add --workers arguments in the test run commands (only affect for spe
 
 ```sh
 Run Login test suite with many workers
-npm run test:fb:chrome -- --workers=<number-of-workers>
+npm run test:saucedemo:chrome -- --workers=<number-of-workers>
 ```
 
 For more details, please refer to Playwright document

@@ -16,10 +16,6 @@ export class ExpensesPage extends CRMBasePage {
     private get inputNote() {
         return this.page.locator("#note")
     }
-
-    optionBinCategory(name: string) {
-        return this.page.locator(`//span[normalize-space()='${name}']`)
-    }
     
     private get inputExpenseDate() {
         return this.page.locator("#date")

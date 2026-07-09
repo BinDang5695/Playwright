@@ -1,15 +1,18 @@
 import { defineConfig } from '@playwright/test';
 import dotenv from 'dotenv';
+import path from 'node:path';
 
 const envName = process.env.env;
 const project = process.env.project;
+
 if (envName) {
     dotenv.config({
-        path: `env/profiles/.env.${envName}`,
+        path: path.resolve(__dirname, `env/profiles/.env.${envName}`),
         override: true,
     });
 }
-const needsAuth = project !== 'api' && project !== 'fb';
+
+const needsAuth = project !== 'api';
 
 export default defineConfig({
 
@@ -32,7 +35,7 @@ export default defineConfig({
       }
     },
     {
-      name: "fb-chrome",
+      name: "saucedemo-chrome",
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -45,7 +48,7 @@ export default defineConfig({
       },
     },
 {
-      name: "fb-edge",
+      name: "saucedemo-edge",
       retries: 1,
       use: {
         browserName: 'chromium',
@@ -133,28 +136,7 @@ export default defineConfig({
         storageState: '.auth/crm-pm.json',
       },
     },
-    {
-      name: 'shopvn-chrome-customer',
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'chrome',
-        headless: false,
-        viewport: null,
-        launchOptions: { args: ['--start-maximized'] },
-      },
-    },
-    {
-      name: 'shopvn-chrome-admin',
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'chrome',
-        headless: false,
-        viewport: null,
-        launchOptions: { args: ['--start-maximized'] },
-      },
-    },
+    
   ],
   
   use: {

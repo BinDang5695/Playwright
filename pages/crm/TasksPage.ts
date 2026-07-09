@@ -119,10 +119,6 @@ export class TasksPage extends CRMBasePage {
         await this.switchToKanBan.click();
     }
 
-    async scrollHorizontal() {
-        await this.page.mouse.wheel(500, 0);
-    }
-
     async verifyNavigateToKanbanPage() {
         await expect(this.switchToList).toBeVisible();
     }
@@ -178,10 +174,10 @@ export class TasksPage extends CRMBasePage {
         await expect(this.nodataInprogress).toHaveText(data.noData);
         await expect(this.nodataTesting).toHaveText(data.noData);
         await expect(this.nodataAwaitingFeedback).toHaveText(data.noData);
-        await this.scrollHorizontal();
     }
 
     async dragAndDropTask() {
+        await this.to.hover();
         await this.from.dragTo(this.to);
     }
 

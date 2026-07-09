@@ -1,9 +1,9 @@
 import { test as baseTest, expect, Page } from '@playwright/test';
-import { RegistrationPage } from '@pages/football/RegistrationPage';
+import { LoginPage } from '@pages/saucedemo/LoginPage';
 
 export type PageFixtureType = {
     page: Page,
-    registrationPage: RegistrationPage;
+    loginPage: LoginPage;
 };
 
 function createPageFixture<T>(PageClass: new (page: Page) => T) {
@@ -13,7 +13,7 @@ function createPageFixture<T>(PageClass: new (page: Page) => T) {
 }
 
 export const test = baseTest.extend<PageFixtureType>({
-    registrationPage: createPageFixture(RegistrationPage),
+    loginPage: createPageFixture(LoginPage),
 });
 
 export { expect };

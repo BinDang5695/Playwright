@@ -34,10 +34,6 @@ export class CustomersPage extends CRMBasePage {
         return this.page.locator("//button[@data-id='groups_in[]']");
     }
 
-    textOption(name: string) {
-        return this.page.locator(`//span[normalize-space()='${name}']`);
-    }
-
     private get currencyDropdown() {
         return this.page.locator("//button[@data-id='default_currency']");
     }
