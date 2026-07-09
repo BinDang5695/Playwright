@@ -286,12 +286,12 @@ npm run lint
 ### How to configure and run tests on different environment or browser
 Playwright has many options to configure how your tests are run. You can specify these options in the configuration file. Therefore, we can configure the enviroment which we use to run test in Project section of configuration file like below:
 
-![Config](_snapshots_/Config.png)
+<img width="615" height="994" alt="image" src="https://github.com/user-attachments/assets/d20cd19b-7797-4a39-a9c1-8a608806d7bd" />
 
 In this sample, we configure 2 projects (1 for Chrome and 1 for Edge) in order to run all tests on different browsers. We can also configure different baseURl for different Environments here.
 Then, we can specify the scripts to run on multi environments on package.json file like below:
 
-![Script](_snapshots_/Script.png)
+<img width="1323" height="1364" alt="image" src="https://github.com/user-attachments/assets/1ce279a7-71f5-4b32-aff6-7002c1937a33" />
 
 Finally, we can use npm run command to specify the enviroment that we want to run. For example, if we want to run all tests UI and API on Chromium we can use below command:
 ```sh
