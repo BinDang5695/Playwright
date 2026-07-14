@@ -216,18 +216,14 @@ npx playwright install
 ![Run Test](https://user-images.githubusercontent.com/13063165/212737059-0c52cda1-829d-4cda-9ca8-33741c87dfff.png)
 
    
-### Run tests on Chrome/Edge (include CRM/CMS/Sauce demo test suite)
+### Run UI tests on Chrome/Edge
 
 ```sh
 For Chrome, Execute the command in the terminal: 
-npm run test:cms:chrome:admin
-npm run test:saucedemo:chrome
-npm run test:crm:chrome:admin
+npm run test:ui:dev:chrome
 
 For Edge, Execute the command in the terminal: 
-npm run test:cms:edge:admin
-npm run test:saucedemo:edge
-npm run test:crm:edge:admin
+npm run test:ui:dev:edge
 ```
 
 ### Run API tests only (include all API test suite)
@@ -241,7 +237,7 @@ npm run test:api
 
 ```sh
 Execute the command in the terminal: 
-npm run test:edge:admin:login
+npm run test:crm:login:chrome
 ```
 
 Please see the package.json file for more details
@@ -256,7 +252,7 @@ Option #2: Add --workers arguments in the test run commands (only affect for spe
 
 ```sh
 Run Login test suite with many workers
-npm run test:saucedemo:chrome -- --workers=<number-of-workers>
+npm run test:crm:login:edge -- --workers=<number-of-workers>
 ```
 
 For more details, please refer to Playwright document
@@ -273,8 +269,8 @@ The HTML report will be generated in folder TestReport in root folder
 
 We can change the type of reporter (JUnit, customized, 3rd party reporter - Allure, etc) in the playwright.config.ts file
 
-Execute this command for generating Allure report:
-npm run create:allure-report
+Execute this command for generating Playwright report:
+npm run create:playwright:report
 ```
 
 ### Run Linting to check coding convention of all projects (by ESLint)
@@ -286,18 +282,22 @@ npm run lint
 ### How to configure and run tests on different environment or browser
 Playwright has many options to configure how your tests are run. You can specify these options in the configuration file. Therefore, we can configure the enviroment which we use to run test in Project section of configuration file like below:
 
-<img width="615" height="994" alt="image" src="https://github.com/user-attachments/assets/d20cd19b-7797-4a39-a9c1-8a608806d7bd" />
+<img width="620" height="897" alt="image" src="https://github.com/user-attachments/assets/7f7af177-bada-4001-9650-c33ddeb7ad6e" />
 
 In this sample, we configure 2 projects (1 for Chrome and 1 for Edge) in order to run all tests on different browsers. We can also configure different baseURl for different Environments here.
 Then, we can specify the scripts to run on multi environments on package.json file like below:
 
-<img width="1323" height="1364" alt="image" src="https://github.com/user-attachments/assets/1ce279a7-71f5-4b32-aff6-7002c1937a33" />
+<img width="1143" height="961" alt="image" src="https://github.com/user-attachments/assets/0e2f841b-d8de-4a23-9f24-aa4a5ab5cf52" />
 
 Finally, we can use npm run command to specify the enviroment that we want to run. For example, if we want to run all tests UI and API on Chromium we can use below command:
 ```sh
-npm run test:all:chrome:admin
-npm run test:all:edge:admin
+npm run test:all
+npm run test:all:chrome
+npm run test:all:edge
 ```
+<img width="1474" height="398" alt="image" src="https://github.com/user-attachments/assets/ee24fdfd-f153-46f6-960c-f1c4d3842169" />
+<img width="1474" height="397" alt="image" src="https://github.com/user-attachments/assets/f3cee70a-652e-429d-9fc7-96f55472010a" />
+
 For more details, please refer to Playwright document
 [Playwright Test Configuration](https://playwright.dev/docs/test-configuration)
 
