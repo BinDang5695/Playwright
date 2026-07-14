@@ -1,0 +1,1 @@
+export const ENV_NAME = process.env.ENV || 'crm-prod';

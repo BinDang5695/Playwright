@@ -29,6 +29,9 @@ export const Message = {
   SHOWING1TO1OFENTRIES: "Showing 1 to 1 of 1 entries",
   SHOWING1TO2OFENTRIES: "Showing 1 to 2 of 2 entries",
   TOTALLEADSDELETE2: "Total leads deleted: 2",
+  NO_MATCHING_RECORDS_FOUND: "No matching records found",
+  NO_ENTRIES_FOUND: "No entries found"
+
 } as const;
 
 export const Button = {
@@ -50,10 +53,6 @@ export const Dropdown = {
   BILLING_TYPE: "billing_type",
 } as const;
 
-export const Delay = {
-  ONE_HUNDRED_MILLISECONDS: 100,
-} as const;
-
 export const Option = {
   PROJECTHOURS: "Project Hours",
 } as const;
@@ -70,3 +69,5 @@ export const Header = {
   ADDNEWTASK: "Add new task",
   SUBJECT: "* Subject",
 } as const;
+
+export const ROLES = ['admin', 'projectmanager'] as const;

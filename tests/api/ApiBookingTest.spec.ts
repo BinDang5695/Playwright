@@ -7,55 +7,181 @@ import { validateSchema } from '@api/common/ApiTestHelper';
 import { BookingService } from '@api/booking/BookingService';
 import { VerifyBookingHeaders } from '@api/booking/VerifyBookingHeaders';
 import { VerifyBookingResponseBody } from '@api/booking/VerifyBookingResponseBody';
+
 let createdBooking: any;
 let createdBookingId: number;
 let updatedBookingData: any;
+
 test.describe.serial('API Booking Tests', () => {
 
-  test('Post Booking', async ({ request, token }) => {
-    const resultPost = await BookingService.post(request, token);
-    validateSchema(CreateBookingSchema, resultPost.body);
-    VerifyBookingHeaders.verify(resultPost.response);
-    VerifyBookingResponseBody.verifyCreateBooking( resultPost.body, resultPost.requestData );
-    expect(resultPost.body.bookingid).toBeGreaterThan(0);
-    createdBooking = resultPost.body.booking;
-    createdBookingId = resultPost.body.bookingid;
-  });
+    test('[BOOKING_001] Create Booking Successfully', async ({ request, token }) => {
 
-  test('Get Booking', async ({ request, token }) => {
-    const resultGet = await BookingService.get(request, token, createdBookingId);
-    validateSchema(GetBookingSchema, resultGet.body);
-    VerifyBookingHeaders.verify(resultGet.response);
-    VerifyBookingResponseBody.verifyGetBooking(resultGet.body, createdBooking);
-  });
+        await test.step('Send POST request to create booking', async () => {
+            const resultPost = await BookingService.post(request, token);
 
-  test('Patch Booking', async ({ request, token }) => {
-    const resultPut = await BookingService.patch(request, token, createdBookingId);
-    validateSchema(UpdateBookingSchema, resultPut.body);
-    VerifyBookingHeaders.verify(resultPut.response);
-    updatedBookingData = resultPut.requestData;
-    const expectedBookingAfterPatch = { ...createdBooking, ...updatedBookingData };
-    VerifyBookingResponseBody.verifyUpdatePartialBooking(resultPut.body, expectedBookingAfterPatch);
-    createdBooking = expectedBookingAfterPatch;
-  });
+            await test.step('Validate response schema', async () => {
+                validateSchema(CreateBookingSchema, resultPost.body);
+            });
 
-  test('Get Booking After Patch', async ({ request, token }) => {
-    const resultGetAfterPut = await BookingService.get(request, token, createdBookingId);
-    validateSchema(GetBookingAfterPatchSchema, resultGetAfterPut.body);
-    VerifyBookingHeaders.verify(resultGetAfterPut.response);
-    VerifyBookingResponseBody.verifyGetBooking(resultGetAfterPut.body, createdBooking);
-  });
+            await test.step('Verify response headers', async () => {
+                VerifyBookingHeaders.verify(resultPost.response);
+            });
 
-  test('Delete Booking', async ({ request, token }) => {
-    const result = await BookingService.delete(request, token, createdBookingId);
-    VerifyBookingHeaders.verifyText(result.response);
-    VerifyBookingResponseBody.verifyDeleteBooking(result.body);
-  });
+            await test.step('Verify created booking response body', async () => {
+                VerifyBookingResponseBody.verifyCreateBooking(
+                    resultPost.body,
+                    resultPost.requestData
+                );
+            });
 
-  test('Get Booking After Delete', async ({ request, token }) => {
-    const result = await BookingService.getAfterDelete(request, token, createdBookingId);
-    VerifyBookingHeaders.verifyText(result.response);
-    VerifyBookingResponseBody.verifyGetAfterDeleteBooking(result.body);
-  });
+            await test.step('Save created booking information', async () => {
+                expect(resultPost.body.bookingid).toBeGreaterThan(0);
+
+                createdBooking = resultPost.body.booking;
+                createdBookingId = resultPost.body.bookingid;
+            });
+        });
+
+    });
+
+
+    test('[BOOKING_002] Get Booking Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request to get booking detail', async () => {
+            const resultGet = await BookingService.get(
+                request,
+                token,
+                createdBookingId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(GetBookingSchema, resultGet.body);
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookingHeaders.verify(resultGet.response);
+            });
+
+            await test.step('Verify booking response body', async () => {
+                VerifyBookingResponseBody.verifyGetBooking(
+                    resultGet.body,
+                    createdBooking
+                );
+            });
+        });
+
+    });
+
+
+    test('[BOOKING_003] Update Booking Successfully', async ({ request, token }) => {
+
+        await test.step('Send PATCH request to update booking', async () => {
+            const resultPatch = await BookingService.patch(
+                request,
+                token,
+                createdBookingId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(UpdateBookingSchema, resultPatch.body);
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookingHeaders.verify(resultPatch.response);
+            });
+
+            await test.step('Verify updated booking response body', async () => {
+                updatedBookingData = resultPatch.requestData;
+
+                const expectedBookingAfterPatch = {
+                    ...createdBooking,
+                    ...updatedBookingData
+                };
+
+                VerifyBookingResponseBody.verifyUpdatePartialBooking(
+                    resultPatch.body,
+                    expectedBookingAfterPatch
+                );
+
+                createdBooking = expectedBookingAfterPatch;
+            });
+        });
+
+    });
+
+
+    test('[BOOKING_004] Get Booking After Update Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request after update booking', async () => {
+            const resultGetAfterPatch = await BookingService.get(
+                request,
+                token,
+                createdBookingId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    GetBookingAfterPatchSchema,
+                    resultGetAfterPatch.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookingHeaders.verify(resultGetAfterPatch.response);
+            });
+
+            await test.step('Verify updated booking data', async () => {
+                VerifyBookingResponseBody.verifyGetBooking(
+                    resultGetAfterPatch.body,
+                    createdBooking
+                );
+            });
+        });
+
+    });
+
+
+    test('[BOOKING_005] Delete Booking Successfully', async ({ request, token }) => {
+
+        await test.step('Send DELETE request to remove booking', async () => {
+            const result = await BookingService.delete(
+                request,
+                token,
+                createdBookingId
+            );
+
+            await test.step('Verify delete response header', async () => {
+                VerifyBookingHeaders.verifyText(result.response);
+            });
+
+            await test.step('Verify delete response body', async () => {
+                VerifyBookingResponseBody.verifyDeleteBooking(result.body);
+            });
+        });
+
+    });
+
+
+    test('[BOOKING_006] Get Booking After Delete Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request after deleting booking', async () => {
+            const result = await BookingService.getAfterDelete(
+                request,
+                token,
+                createdBookingId
+            );
+
+            await test.step('Verify response header', async () => {
+                VerifyBookingHeaders.verifyText(result.response);
+            });
+
+            await test.step('Verify booking not found response', async () => {
+                VerifyBookingResponseBody.verifyGetAfterDeleteBooking(
+                    result.body
+                );
+            });
+        });
+
+    });
 
 });

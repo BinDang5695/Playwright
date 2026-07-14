@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
     "target": "ES2021",
     "module": "CommonJS",
     "moduleResolution": "Node",
@@ -20,13 +20,12 @@
       "@pages/*": ["pages/*"],
       "@fixtures/*": ["fixtures/*"],
       "@api/*": ["api/*"],
-      "@settings/*": ["settings/*"],
       "@data/*": ["test_data/*"],
       "@models/*": ["models/*"],
       "@utils/*": ["utils/*"],
       "@constants/*": ["constants/*"],
-      "@.auth/*": ["auth/*"],
-      "@helpers/*": ["models/helpers/*"]
+      "@helpers/*": ["models/helpers/*"],
+      "@env/*": ["env/*"]
     }
   },
 
@@ -34,13 +33,11 @@
     "tests/**/*.ts",
     "pages/**/*.ts",
     "api/**/*.ts",
-    "settings/**/*.ts",
     "models/**/*.ts",
     "fixtures/**/*.ts",
     "test_data/**/*.ts",
     "utils/**/*.ts",
     "constants/**/*.ts",
-    "auth/**/*.ts",
     "env/**/*.ts",
   ]
 }

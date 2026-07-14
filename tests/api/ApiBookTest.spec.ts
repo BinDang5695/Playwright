@@ -9,56 +9,197 @@ import { validateSchema } from '@api/common/ApiTestHelper';
 import { BookService } from '@api/book/BookService';
 import { VerifyBookHeaders } from '@api/book/VerifyBookHeaders';
 import { VerifyBookResponseBody } from '@api/book/VerifyBookResponseBody';
+
 let createdBook: any;
 let createdBookId: number;
 let updatedBookData: any;
+
 test.describe.serial('API Book Tests', () => {
 
-  test('Post Book', async ({ request, token }) => {
-    const resultPost = await BookService.post(request, token);
-    validateSchema(CreateBookSchema, resultPost.body);
-    VerifyBookHeaders.verify(resultPost.response);
-    VerifyBookResponseBody.verifyCreateBook( resultPost.body, resultPost.requestData );
-    const created = resultPost.body.response;
-    expect(created.id).toBeGreaterThan(0);
-    createdBook = resultPost.body.response;
-    createdBookId = created.id;
-  });
 
-  test('Get Book', async ({ request, token }) => {
-    const resultGet = await BookService.get(request, token, createdBookId);
-    validateSchema(GetBookSchema, resultGet.body);
-    VerifyBookHeaders.verify(resultGet.response);
-    VerifyBookResponseBody.verifyGetBook(resultGet.body, createdBook);
-  });
+    test('[BOOK_001] Create Book Successfully', async ({ request, token }) => {
 
-  test('Put Book', async ({ request, token }) => {
-    const resultPut = await BookService.put(request, token, createdBookId);
-    validateSchema(UpdateBookSchema, resultPut.body);
-    VerifyBookHeaders.verify(resultPut.response);
-    updatedBookData = resultPut.requestData;
-    VerifyBookResponseBody.verifyUpdateBook(resultPut.body, updatedBookData);
-  });
+        await test.step('Send POST request to create book', async () => {
 
-  test('Get Book After Put', async ({ request, token }) => {
-    const resultGetAfterPut = await BookService.get(request, token, createdBookId);
-    validateSchema(GetBookAfterPutSchema, resultGetAfterPut.body);
-    VerifyBookHeaders.verify(resultGetAfterPut.response);
-    VerifyBookResponseBody.verifyGetBook(resultGetAfterPut.body, updatedBookData);
-  });
+            const resultPost = await BookService.post(request, token);
 
-  test('Delete Book', async ({ request, token }) => {
-    const result = await BookService.delete(request, token, createdBookId);
-    validateSchema(DeleteBookSchema, result.body);
-    VerifyBookHeaders.verify(result.response);
-    VerifyBookResponseBody.verifyDeleteBook(result.body, updatedBookData);
-  });
+            await test.step('Validate response schema', async () => {
+                validateSchema(CreateBookSchema, resultPost.body);
+            });
 
-  test('Get Book After Delete', async ({ request, token }) => {
-    const result = await BookService.getAfterDelete(request, token, createdBookId);
-    validateSchema(GetBookAfterDeleteSchema, result.body);
-    VerifyBookHeaders.verify(result.response);
-    VerifyBookResponseBody.verifyGetAfterDeleteBook(result.body);
-  });
+            await test.step('Verify response headers', async () => {
+                VerifyBookHeaders.verify(resultPost.response);
+            });
+
+            await test.step('Verify create book response body', async () => {
+                VerifyBookResponseBody.verifyCreateBook(
+                    resultPost.body,
+                    resultPost.requestData
+                );
+            });
+
+            await test.step('Save created book information', async () => {
+                const created = resultPost.body.response;
+
+                expect(created.id).toBeGreaterThan(0);
+
+                createdBook = created;
+                createdBookId = created.id;
+            });
+        });
+
+    });
+
+
+    test('[BOOK_002] Get Book Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request to get book detail', async () => {
+
+            const resultGet = await BookService.get(
+                request,
+                token,
+                createdBookId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(GetBookSchema, resultGet.body);
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookHeaders.verify(resultGet.response);
+            });
+
+            await test.step('Verify get book response body', async () => {
+                VerifyBookResponseBody.verifyGetBook(
+                    resultGet.body,
+                    createdBook
+                );
+            });
+        });
+
+    });
+
+
+    test('[BOOK_003] Update Book Successfully', async ({ request, token }) => {
+
+        await test.step('Send PUT request to update book', async () => {
+
+            const resultPut = await BookService.put(
+                request,
+                token,
+                createdBookId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(UpdateBookSchema, resultPut.body);
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookHeaders.verify(resultPut.response);
+            });
+
+            await test.step('Verify update book response body', async () => {
+                updatedBookData = resultPut.requestData;
+
+                VerifyBookResponseBody.verifyUpdateBook(
+                    resultPut.body,
+                    updatedBookData
+                );
+            });
+        });
+
+    });
+
+
+    test('[BOOK_004] Get Book After Update Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request after updating book', async () => {
+
+            const resultGetAfterPut = await BookService.get(
+                request,
+                token,
+                createdBookId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    GetBookAfterPutSchema,
+                    resultGetAfterPut.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookHeaders.verify(resultGetAfterPut.response);
+            });
+
+            await test.step('Verify updated book response body', async () => {
+                VerifyBookResponseBody.verifyGetBook(
+                    resultGetAfterPut.body,
+                    updatedBookData
+                );
+            });
+        });
+
+    });
+
+
+    test('[BOOK_005] Delete Book Successfully', async ({ request, token }) => {
+
+        await test.step('Send DELETE request to remove book', async () => {
+
+            const result = await BookService.delete(
+                request,
+                token,
+                createdBookId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(DeleteBookSchema, result.body);
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookHeaders.verify(result.response);
+            });
+
+            await test.step('Verify delete book response body', async () => {
+                VerifyBookResponseBody.verifyDeleteBook(
+                    result.body,
+                    updatedBookData
+                );
+            });
+        });
+
+    });
+
+
+    test('[BOOK_006] Get Book After Delete Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request after deleting book', async () => {
+
+            const result = await BookService.getAfterDelete(
+                request,
+                token,
+                createdBookId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    GetBookAfterDeleteSchema,
+                    result.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyBookHeaders.verify(result.response);
+            });
+
+            await test.step('Verify deleted book response body', async () => {
+                VerifyBookResponseBody.verifyGetAfterDeleteBook(
+                    result.body
+                );
+            });
+        });
+
+    });
 
 });

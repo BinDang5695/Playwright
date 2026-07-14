@@ -1,158 +1,58 @@
 import { defineConfig } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'node:path';
+import { ENV_NAME } from './env/environment';
 
-const envName = process.env.env;
-const project = process.env.project;
+dotenv.config({
+    path: path.resolve(__dirname, `env/profiles/.env.${ENV_NAME}`),
+    override: true,
+});
 
-if (envName) {
-    dotenv.config({
-        path: path.resolve(__dirname, `env/profiles/.env.${envName}`),
-        override: true,
-    });
-}
-
-const needsAuth = project !== 'api';
+console.log(`Running ENV: ${ENV_NAME}`);
+console.log(`BASE_URL: ${process.env.BASE_URL}`);
 
 export default defineConfig({
 
-  globalSetup: needsAuth ? './env/global.setup.ts' : undefined,
-  fullyParallel: true,
-  workers: process.env.CI ? 1 : 1,
-  testDir: './tests/',
-  timeout: 90 * 1000, //timeout for each test
-  expect: {
-    timeout: 15 * 1000, //timeout for each expect condition
-  },
-  projects: [
-    {
-      name: 'api',
-      retries: 1,
-      use: {
-        baseURL: process.env.API_BASE_URL,
-        storageState: undefined,
-        headless: true
-      }
+    globalSetup: './env/global.setup.ts',
+    fullyParallel: true,
+    workers: 1,
+    testDir: './tests',
+    timeout: 90 * 1000,
+    expect: {
+        timeout: 15 * 1000,
     },
-    {
-      name: "saucedemo-chrome",
-      retries: 1,
-      use: {
+    use: {
+        baseURL: process.env.BASE_URL,
         browserName: 'chromium',
-        channel: 'chrome',
         headless: false,
         viewport: null,
         launchOptions: {
-          args: ['--start-maximized'],
+            args: ['--start-maximized'],
         },
-      },
+        actionTimeout: 20 * 1000,
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        trace: 'retain-on-failure',
     },
-{
-      name: "saucedemo-edge",
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'msedge',
-        headless: false,
-        viewport: null,
-        launchOptions: { args: ['--start-maximized'] },
-      },
-    },
-    {
-      name: "cms-chrome-admin",
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'chrome',
-        headless: false,
-        viewport: null,
-        launchOptions: {
-          args: ['--start-maximized'],
-        },
-        storageState: '.auth/cms-admin.json',
-      },
-    },
+
+    projects: [
         {
-      name: "cms-edge-admin",
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'msedge',
-        headless: false,
-        viewport: null,
-        launchOptions: { args: ['--start-maximized'] },
-        storageState: '.auth/cms-admin.json',
-      },
-    },
-    {
-      name: 'crm-chrome-admin',
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'chrome',
-        headless: false,
-        viewport: null,
-        launchOptions: {
-          args: ['--start-maximized'],
+            name: 'chrome',
+            use: {
+                channel: 'chrome',
+            },
         },
-        storageState: '.auth/crm-admin.json',
-      },
-    },
-    {
-      name: 'crm-edge-admin',
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'msedge',
-        headless: false,
-        viewport: null,
-        launchOptions: { args: ['--start-maximized'] },
-        storageState: '.auth/crm-admin.json',
-      },
-    },
-{
-      name: 'crm-chrome-pm',
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'chrome',
-        headless: false,
-        viewport: null,
-        launchOptions: {
-          args: ['--start-maximized'],
+        {
+            name: 'edge',
+            use: {
+                channel: 'msedge',
+            },
         },
-        storageState: '.auth/crm-pm.json',
-      },
-    },
-    {
-      name: 'crm-edge-pm',
-      retries: 1,
-      use: {
-        browserName: 'chromium',
-        channel: 'msedge',
-        headless: false,
-        viewport: null,
-        launchOptions: { args: ['--start-maximized'] },
-        storageState: '.auth/crm-pm.json',
-      },
-    },
-    
-  ],
-  
-  use: {
-    baseURL: process.env.BASE_URL,
-    actionTimeout: 20 * 1000, //timeout for each action like click, fill
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    trace: 'retain-on-failure',
-  },
+    ],
 
-  reporter: [
-    ['list'],
-    ['html', { open: 'never' }],
-    ['allure-playwright', {
-      outputFolder: 'allure-results'
-    }]
-  ]
-
+    reporter: [
+        ['list'],
+        ['html', { open: 'never' }],
+        ['allure-playwright', { outputFolder: 'allure-results' }],
+    ],
 });

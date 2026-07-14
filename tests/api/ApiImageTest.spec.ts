@@ -9,54 +9,212 @@ import { validateSchema } from '@api/common/ApiTestHelper';
 import { ImageService } from '@api/image/ImageService';
 import { VerifyImageHeaders } from '@api/image/VerifyImageHeaders';
 import { VerifyImageResponseBody } from '@api/image/VerifyImageResponseBody';
+
 let createdImage: any;
 let createdImageId: number;
+
 test.describe.serial('API Image Tests', () => {
 
-  test('Post Image', async ({ request, token }) => {
-    const resultPost = await ImageService.postCreate(request, token);
-    validateSchema(CreateImageSchema, resultPost.body);
-    VerifyImageHeaders.verify(resultPost.response);
-    VerifyImageResponseBody.verifyCreateImage( resultPost.body );
-    const created = resultPost.body.response;
-    expect(created.id).toBeGreaterThan(0);
-    createdImage = resultPost.body.response;
-    createdImageId = created.id;
-  });
 
-  test('Get Image', async ({ request, token }) => {
-    const resultGet = await ImageService.get(request, token, createdImageId);
-    validateSchema(GetImageSchema, resultGet.body);
-    VerifyImageHeaders.verify(resultGet.response);
-    VerifyImageResponseBody.verifyGetImage(resultGet.body);
-  });
+    test('[IMAGE_001] Create Image Successfully', async ({ request, token }) => {
 
-  test('Put Image', async ({ request, token }) => {
-    const resultPut = await ImageService.postUpdate(request, token, createdImageId);
-    validateSchema(UpdateImageSchema, resultPut.body);
-    VerifyImageHeaders.verify(resultPut.response);
-    VerifyImageResponseBody.verifyUpdateImage(resultPut.body);
-  });
+        await test.step('Send POST request to create image', async () => {
 
-  test('Get Image After Put', async ({ request, token }) => {
-    const resultGetAfterPut = await ImageService.get(request, token, createdImageId);
-    validateSchema(GetImageAfterPutSchema, resultGetAfterPut.body);
-    VerifyImageHeaders.verify(resultGetAfterPut.response);
-    VerifyImageResponseBody.verifyGetImage(resultGetAfterPut.body);
-  });
+            const resultPost = await ImageService.postCreate(
+                request,
+                token
+            );
 
-  test('Delete Image', async ({ request, token }) => {
-    const result = await ImageService.delete(request, token, createdImageId);
-    validateSchema(DeleteImageSchema, result.body);
-    VerifyImageHeaders.verify(result.response);
-    VerifyImageResponseBody.verifyDeleteImage(result.body);
-  });
+            await test.step('Validate response schema', async () => {
+                validateSchema(CreateImageSchema, resultPost.body);
+            });
 
-  test('Get Image After Delete', async ({ request, token }) => {
-    const result = await ImageService.getAfterDelete(request, token, createdImageId);
-    validateSchema(GetImageAfterDeleteSchema, result.body);
-    VerifyImageHeaders.verify(result.response);
-    VerifyImageResponseBody.verifyGetAfterDeleteImage(result.body);
-  });
+            await test.step('Verify response headers', async () => {
+                VerifyImageHeaders.verify(resultPost.response);
+            });
+
+            await test.step('Verify create image response body', async () => {
+                VerifyImageResponseBody.verifyCreateImage(
+                    resultPost.body
+                );
+            });
+
+            await test.step('Save created image information', async () => {
+                const created = resultPost.body.response;
+
+                expect(created.id).toBeGreaterThan(0);
+
+                createdImage = created;
+                createdImageId = created.id;
+            });
+        });
+
+    });
+
+
+    test('[IMAGE_002] Get Image Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request to get image detail', async () => {
+
+            const resultGet = await ImageService.get(
+                request,
+                token,
+                createdImageId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    GetImageSchema,
+                    resultGet.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyImageHeaders.verify(resultGet.response);
+            });
+
+            await test.step('Verify get image response body', async () => {
+                VerifyImageResponseBody.verifyGetImage(
+                    resultGet.body
+                );
+            });
+
+        });
+
+    });
+
+
+    test('[IMAGE_003] Update Image Successfully', async ({ request, token }) => {
+
+        await test.step('Send PUT request to update image', async () => {
+
+            const resultPut = await ImageService.postUpdate(
+                request,
+                token,
+                createdImageId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    UpdateImageSchema,
+                    resultPut.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyImageHeaders.verify(resultPut.response);
+            });
+
+            await test.step('Verify update image response body', async () => {
+                VerifyImageResponseBody.verifyUpdateImage(
+                    resultPut.body
+                );
+            });
+
+        });
+
+    });
+
+
+    test('[IMAGE_004] Get Image After Update Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request after updating image', async () => {
+
+            const resultGetAfterPut = await ImageService.get(
+                request,
+                token,
+                createdImageId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    GetImageAfterPutSchema,
+                    resultGetAfterPut.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyImageHeaders.verify(
+                    resultGetAfterPut.response
+                );
+            });
+
+            await test.step('Verify updated image response body', async () => {
+                VerifyImageResponseBody.verifyGetImage(
+                    resultGetAfterPut.body
+                );
+            });
+
+        });
+
+    });
+
+
+    test('[IMAGE_005] Delete Image Successfully', async ({ request, token }) => {
+
+        await test.step('Send DELETE request to remove image', async () => {
+
+            const result = await ImageService.delete(
+                request,
+                token,
+                createdImageId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    DeleteImageSchema,
+                    result.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyImageHeaders.verify(
+                    result.response
+                );
+            });
+
+            await test.step('Verify delete image response body', async () => {
+                VerifyImageResponseBody.verifyDeleteImage(
+                    result.body
+                );
+            });
+
+        });
+
+    });
+
+
+    test('[IMAGE_006] Get Image After Delete Successfully', async ({ request, token }) => {
+
+        await test.step('Send GET request after deleting image', async () => {
+
+            const result = await ImageService.getAfterDelete(
+                request,
+                token,
+                createdImageId
+            );
+
+            await test.step('Validate response schema', async () => {
+                validateSchema(
+                    GetImageAfterDeleteSchema,
+                    result.body
+                );
+            });
+
+            await test.step('Verify response headers', async () => {
+                VerifyImageHeaders.verify(
+                    result.response
+                );
+            });
+
+            await test.step('Verify deleted image response body', async () => {
+                VerifyImageResponseBody.verifyGetAfterDeleteImage(
+                    result.body
+                );
+            });
+
+        });
+
+    });
 
 });
