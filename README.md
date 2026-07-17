@@ -25,135 +25,159 @@ This is an automation framework using Playwright written in TypeScript.
 
 ```
 non-bdd
-├── .auth/                                            
-│   ├── cms-admin.json                                # CMS Admin session
-│   ├── crm-admin.json                                # CRM Admin session
-│   └── crm-pm.json                                   # CRM PM session
+├── .auth/                                            # Playwright authentication storageState files
+│   ├── crm-dev                                       # Authentication state for CRM Dev environment
+│   │   ├── admin.json                                # Admin user storageState
+│   │   └── projectmanager.json                       # Project Manager user storageState
+│   ├── crm-prod                                      # Authentication state for CRM Prod environment
+│   │   ├── admin.json                                # Admin user storageState
+│   │   └── projectmanager.json                       # Project Manager user storageState
+│   └── crm-uat                                       # Authentication state for CRM UAT environment
+│   │   ├── admin.json                                # Admin user storageState
+│   │   └── projectmanager.json                       # Project Manager user storageState
 ├── .github                                            
 │   └─ workflows                                       
-│   │   └─ playwright.yml                             # GitHub Actions file - auto run
+│   │   └─ playwright.yml                             # GitHub Actions CI workflow
 ├── .vscode/                                          
-│   └── settings.json                                 # Shared TypeScript & editor
-├── allure-results/                                   # Raw Allure result files generated after each test run
-├── allure-report/                                    # Generated Allure HTML report — served via allure open
+│   └── settings.json                                 # Shared VS Code workspace settings
+├── allure-results/                                   # Raw Allure execution results
+├── allure-report/                                    # Generated Allure HTML report
 ├── api/                                              
 │   ├── book/                                         
-│   │   ├── BookBuilder.ts                            # Generate random Book data using faker
-│   │   ├── BookCreateRequest.ts                      # Interface defining Book request payload
-│   │   ├── BookService.ts                            # HTTP methods for Book API
-│   │   ├── VerifyBookHeaders.ts                      # Assertions for Book response headers
-│   │   └── VerifyBookResponseBody.ts                 # Assertions for Book response body
-│   ├── booking/                                      
-│   │   ├── BookingBuilder.ts                         # Generate random Booking data using faker
-│   │   ├── BookingCreateRequest.ts                   # Interface defining Booking request payload
-│   │   ├── BookingService.ts                         # HTTP methods for Booking API
-│   │   ├── CreateBooking.ts                          # Interface defining Booking auth payload
-│   │   ├── CreateToken.ts                            # Generate token credentials from config
-│   │   ├── VerifyBookingHeaders.ts                   # Assertions for Booking response headers
-│   │   ├── VerifyBookingResponseBody.ts              # Assertions for Booking response body
-│   │   └── VerifyBookingResponseBody.ts              # Assertions for Booking response body
-│   ├── common/                                       
-│   │   ├── ApiLogger.ts                              # Log request & response details to console
-│   │   ├── ApiTestHelper.ts                          # Schema validation & response time assertion
-│   │   ├── BaseApiService.ts                         # Base class for sending HTTP requests
-│   │   ├── BaseTestApi.ts                            # Custom fixture — login & cache token for Book API
-│   │   ├── BaseTestApiBooking.ts                     # Custom fixture — login & cache token for Booking API
-│   │   ├── ConfigLoader.ts                           # Read & parse JSON config files from @data
-│   │   ├── ConfigsBooking.ts                         # Booking environment config
-│   │   ├── ConfigsGlobal.ts                          # Global environment config
-│   │   ├── EndpointGlobal.ts                         # All API endpoint constants in one place
-│   │   ├── LoginBuilder.ts                           # Generate login payload from global config
-│   │   └── LoginPOJO.ts                              # Interface defining login request payload
+│   │   ├── BookService.ts                            # Book API service methods
+│   │   └── VerifyBookResponseBody.ts                 # Book API response assertions
+│   ├── common/                                      
+│   │   ├── ApiClient.ts                              # Reusable Playwright API client
+│   │   ├── ApiLogger.ts                              # API request/response logging
+│   │   ├── Config.ts                                 # API configuration
+│   │   ├── EndpointGlobal.ts                         # API endpoint definitions
+│   │   ├── VerifyResponseBody.ts                     # Common response body assertions
+│   │   └── VerifyResponseHeaders.ts                  # Common response header assertions
 │   ├── image/                                        
-│   │   ├── ImagePath.ts                              # Resolve file paths for create & update image
-│   │   ├── ImageService.ts                           # HTTP methods for Image API
-│   │   ├── VerifyImageHeaders.ts                     # Assertions for Image response headers
-│   │   └── VerifyImageResponseBody.ts                # Assertions for Image response body
+│   │   ├── ImageService.ts                           # Image API service methods
+│   │   └── VerifyImageResponseBody.ts                # Image API response assertions
 │   └── user/                                         
-│   │   ├── UserBuilder.ts                            # Generate random User data using faker
-│   │   ├── UserCreateRequest.ts                      # Interface defining User request payload
-│   │   ├── UserService.ts                            # HTTP methods for User API
-│   │   ├── VerifyUserHeaders.ts                      # Assertions for User response headers
-│   │   └── VerifyUserResponseBody.ts                 # Assertions for User response body
+│   │   ├── UserService.ts                            # User API service methods
+│   │   └── VerifyUserResponseBody.ts                 # User API response assertions
 ├── constants/                                        
-│   └── crm.ts                                        # Static constants for CRM UI tests
+│   └── crm.ts                                        # Shared constants and menu definitions
 ├── downloads/                                        # Downloaded files during test runs
 ├── env/
 │   ├── profiles/
-│   │   ├── .env.cms-dev-admin                        # CMS Admin dev environment config
-│   │   ├── .env.crm-dev-admin                        # CRM Admin dev environment config
-│   │   └── .env.crm-dev-pm                           # CRM PM dev environment config
-│   └── global.setup.ts                               # Global auth setup — login & save storageState for each app
+│   │   ├── .env.crm-dev                              # Development environment variables
+│   │   ├── .env.crm-prod                             # Production environment variables
+│   │   └── .env.crm-uat                              # UAT environment variables
+│   ├── api.global.setup.ts                           # API global setup
+│   ├── environment.ts                                # Environment loader
+│   ├── ui.global.setup.ts                            # UI authentication setup (storageState)
+│   └── users.ts                                      # User credentials by role
 ├── fixtures/
-│   ├── cms.fixture.ts                                # Extends base test with CMS project object instances
-│   ├── crm.fixture.ts                                # Extends base test with CRM project object instances
-│   └── saucedemo.fixture.ts                          # Extends base test with Sauce demo project object instances
+│   ├── api.fixture.ts                                # Shared API fixtures
+│   └── ui.fixture.ts                                 # Shared UI fixtures
 ├── models/
-│   ├── helpers/
-│   │   ├── DateHelpers.ts                            # Utility methods for date formatting and offset calculation
-│   │   ├── FileHelpers.ts                            # Utility methods for reading and deleting PDF/CSV/Excel files
-│   │   └── SystemHelper.ts                           # Utility methods for resolving file system paths
-│   └── types/
-│   │   ├── cms/
-│   │   │   ├── category.model.ts                     # Type definition for Category test data
-│   │   │   └── product.model.ts                      # Type definition for Product test data
-│   │   ├── crm/
-│   │   │   ├── contact.model.ts                      # Type definition for Contact test data
-│   │   │   ├── contract.model.ts                     # Type definition for Contract test data
-│   │   │   ├── customer.model.ts                     # Type definition for Customer test data
-│   │   │   ├── customerdriven.model.ts               # Type definition for Customer driven test data
-│   │   │   ├── expenses.model.ts                     # Type definition for Expenses test data
-│   │   │   ├── file.model.ts                         # Type definition for File test data
-│   │   │   ├── item.model.ts                         # Type definition for Item test data
-│   │   │   ├── knowdledge.model.ts                   # Type definition for Knowdledge test data
-│   │   │   ├── lead.model.ts                         # Type definition for Lead test data
-│   │   │   ├── project.model.ts                      # Type definition for Project test data
-│   │   │   ├── proposal.model.ts                     # Type definition for Proposal test data
-│   │   │   └── task.model.ts                         # Type definition for Task test data
-│   │   └── saucedemo/
-│   │   │   └── login.model.ts                        # Type definition for Sauce demo test data
+│   ├── helpers/                                      # Shared helper utilities
+│   │   ├── ApiHelper.ts                              # Common API helper methods
+│   │   ├── DateHelpers.ts                            # Date and time utility methods
+│   │   └── FileHelpers.ts                            # File handling utility methods
+│   └── types/                                        # TypeScript models and interfaces
+│   │   ├── api/
+│   │   │   ├── book.model.ts                         # Book API request/response model
+│   │   │   ├── image.model.ts                        # Image API request/response model
+│   │   │   └── user.model.ts                         # User API request/response model
+│   │   └── ui/
+│   │   │   ├── contact.model.ts                      # Contact test data model
+│   │   │   ├── contract.model.ts                     # Contract test data model
+│   │   │   ├── customer.model.ts                     # Customer test data model
+│   │   │   ├── customerdriven.model.ts               # Data-driven customer model
+│   │   │   ├── expenses.model.ts                     # Expense test data model
+│   │   │   ├── file.model.ts                         # File upload/download model
+│   │   │   ├── item.model.ts                         # Item test data model
+│   │   │   ├── knowdledge.model.ts                   # Knowledge Base test data model
+│   │   │   ├── lead.model.ts                         # Lead test data model
+│   │   │   ├── project.model.ts                      # Project test data model
+│   │   │   ├── proposal.model.ts                     # Proposal test data model
+│   │   │   └── task.model.ts                         # Task test data model
+├── node_modules/                                     # Installed project dependencies
 ├── pages/
-│   ├── cms/
-│   │   ├── CategoryPage.ts                           # Category page actions
-│   │   ├── CMSBasePage.ts                            # CMS-specific base page
-│   │   ├── LoginPage.ts                              # Login page actions
-│   │   └── ProductsPage.ts                           # Products page actions
-│   ├── crm/
-│   │   ├── BasePage.ts                               # Root base page — core Playwright wrappers shared across all page objects
-│   │   ├── ContactsPage.ts                           # Contacts page actions
-│   │   ├── ContractsPage.ts                          # Contracts page actions
-│   │   ├── CRMBasePage.ts                            # CRM-specific base page
-│   │   ├── CustomerPage.ts                           # Customer page actions
-│   │   ├── ExpensesPage.ts                           # Expenses page actions
-│   │   ├── ItemsPage.ts                              # Items page actions
-│   │   ├── KnowledgeBasePage.ts                      # KnowledgeBase page actions
-│   │   ├── LeadsPage.ts                              # Leads page actions
-│   │   ├── LoginPage.ts                              # Login page actions
-│   │   ├── ProjectsPage.ts                           # Projects page actions
-│   │   ├── ProposalsPage.ts                          # Proposals page actions
-│   │   └── TasksPage.ts                              # Tasks page actions
-│   └── saucedemo/
-│   │   ├── BasePage.ts                               # Sauce demo-specific base page
-│   │   └── LoginPage.ts                              # Login page actions
+│   ├── BasePage.ts                                   # Base page with common Playwright actions
+│   ├── ContactsPage.ts                               # Contacts page object
+│   ├── ContractsPage.ts                              # Contracts page object
+│   ├── CustomerPage.ts                               # Customer page object
+│   ├── ExpensesPage.ts                               # Expenses page object
+│   ├── ItemsPage.ts                                  # Items page object
+│   ├── KnowledgeBasePage.ts                          # KnowledgeBase page object
+│   ├── LeadsPage.ts                                  # Leads page object
+│   ├── LoginPage.ts                                  # Login page object
+│   ├── ProjectsPage.ts                               # Projects page object
+│   ├── ProposalsPage.ts                              # Proposals page object
+│   └── TasksPage.ts                                  # Tasks page object
 ├── playwright-report/
-│   └── index.html                                    # Auto-generated HTML test report (gitignored)
+│   └── index.html                                    # Generated Playwright HTML report
 ├── test_data/
-│   ├── api/                                          # Static JSON files for API tests — request payloads,response schemas, and environment configs
-│   ├── cms/                                          # Typed test data objects for CMS UI tests — category, product,...
-│   ├── crm/                                          # Typed test data objects for CRM UI tests — leads, customers,...
-│   └── saucedemo/                                    # Typed test data objects for Sauce demo UI tests
+│   ├── api/                                          # API test data, payloads and JSON schemas
+│   │   ├── book.data.ts/                             # Book API test data
+│   │   ├── config.json/                              # API configuration data
+│   │   ├── CreateBookSchema.json/                    # JSON schema for Create Book response
+│   │   ├── CreateImageSchema.json/
+│   │   ├── CreateTokenSchema.json/
+│   │   ├── CreateUserSchema.json/
+│   │   ├── DeleteBookSchema.json/
+│   │   ├── DeleteUserSchema.json/
+│   │   ├── GetBookAfterDeleteSchema.json/
+│   │   ├── GetBookAfterPutSchema.json/
+│   │   ├── GetBookSchema.json/
+│   │   ├── GetImageAfterDeleteSchema.json/
+│   │   ├── GetImageAfterPutSchema.json/
+│   │   ├── GetImageSchema.json/
+│   │   ├── GetUserAfterDeleteSchema.json/
+│   │   ├── GetUserAfterPutSchema.json/
+│   │   ├── GetUserSchema.json/
+│   │   ├── image.data.ts/
+│   │   ├── LoginSchema.json/
+│   │   ├── UpdateBookSchema.json/
+│   │   ├── UpdateImageSchema.json/
+│   │   ├── UpdateUserSchema.json/
+│   │   └── user.data.ts/
+│   ├── ui/                                             # 
+│   │   ├── Binitems.csv/
+│   │   ├── contact.data.ts/
+│   │   ├── contract.data.ts/
+│   │   ├── customer.data.ts/
+│   │   ├── CustomerData.json/
+│   │   ├── expenses.data.ts/
+│   │   ├── item.data.ts/
+│   │   ├── knowledge.data.ts/
+│   │   ├── lead.data.ts/
+│   │   ├── login.data.ts/
+│   │   ├── project.data.ts/
+│   │   ├── proposal.data.ts/
+│   │   └── task.data.ts/
+│   ├── sample_image.jpg/
+│   └── UK.jpg/
+├── test-results/
 ├── tests/
-│   ├── api/                                          # API test suites — serial flows covering CRUD operations with schema validation and response body verification
-│   ├── cms/                                          # CMS UI test suites — feature-based test files
-│   ├── crm/                                          # CRM UI test suites — feature-based test files
-│   └── saucedemo/                                    # Sauce demo UI test suites — feature-based test files
-├── utils/
-│   └── env.ts                                        # Typed accessors for runtime environment variables
-├─ package-lock.json                                  # Provide an immutable version of package.json
-├─ package.json                                       # Contains basic information about the project,registered dependencies and running script
+│   ├── api/                                          # 
+│   │   ├── ApiBookTest.spec.ts/
+│   │   ├── ApiImageTest.spec.ts/
+│   │   └── ApiUserTest.spec.ts/
+│   ├── ui/                                          # 
+│   │   ├── ContractTest.spec.ts/
+│   │   ├── CustomerDataDrivenTest.spec.ts/
+│   │   ├── CustomerTest.spec.ts/
+│   │   ├── ExpensesTest.spec.ts/
+│   │   ├── ItemTest.spec.ts/
+│   │   ├── KnowledgeBaseTest.spec.ts/
+│   │   ├── LeadTest.spec.ts/
+│   │   ├── LoginTest.spec.ts/
+│   │   ├── ProjectTest.spec.ts/
+│   │   ├── ProposalTest.spec.ts/
+│   │   └── TaskTest.spec.ts/
+├─ .gitignore                                         # Git ignored files
+├─ package-lock.json                                  # Locked dependency versions
+├─ package.json                                       # Project metadata and npm scripts
 ├─ playwright.config.ts                               # PlayWright configuration file
-├─ README.md                                          # Starting guideline
-└─ tsconfig.json                                      # The tsconfig.json file specifies the root files and the compiler options required to compile the project.
+├─ README.md                                          # Project documentation
+└─ tsconfig.json                                      # TypeScript compiler configuration
 
 ```
 
