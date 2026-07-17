@@ -7,7 +7,9 @@ import { ENV_NAME } from './environment';
 
 export default async function globalSetup() {
 
-    const browser = await chromium.launch();
+    const browser = await chromium.launch({
+        headless: false
+    });
 
     const baseURL = process.env.BASE_URL!;
 
@@ -62,10 +64,7 @@ async function isStorageValid(
     authFile: string
 ): Promise<boolean> {
 
-    console.log(`Checking storage: ${authFile}`);
-
     if (!fs.existsSync(authFile)) {
-        console.log('Auth file missing');
         return false;
     }
 
@@ -88,29 +87,26 @@ async function isStorageValid(
         );
 
         if (page.url().includes('/authentication')) {
-
-            console.log('Session expired');
-
             return false;
         }
 
-        await page.getByText('Dashboard')
+        await page.locator('body')
             .waitFor({
-                timeout: 5000
+                state: 'visible'
             });
 
         console.log('Storage valid');
 
         return true;
 
-    } catch {
+    } catch (e) {
 
         console.log('Storage invalid');
+
         return false;
 
     } finally {
 
         await context.close();
-
     }
 }
