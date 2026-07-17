@@ -174,7 +174,7 @@ non-bdd
 │   │   └── TaskTest.spec.ts                          # Task feature tests
 ├── .gitignore                                        # Git ignored files
 ├── package-lock.json                                 # Locked dependency versions
-├── package.json                                      # Project metadata and npm scripts
+├── package.json                                      # Project npm scripts
 ├── playwright.config.ts                              # Playwright configuration
 ├── README.md                                         # Project documentation
 └── tsconfig.json                                     # TypeScript compiler configuration
