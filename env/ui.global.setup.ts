@@ -62,8 +62,12 @@ async function isStorageValid(
     authFile: string
 ): Promise<boolean> {
 
-    if (!fs.existsSync(authFile))
+    console.log(`Checking storage: ${authFile}`);
+
+    if (!fs.existsSync(authFile)) {
+        console.log('Auth file missing');
         return false;
+    }
 
     const context = await browser.newContext({
         baseURL,
@@ -74,21 +78,34 @@ async function isStorageValid(
 
     try {
 
-        await page.goto('/');
+        await page.goto('/admin/dashboard');
+
         await page.waitForLoadState('networkidle');
 
+        console.log(
+            'Current URL:',
+            page.url()
+        );
+
         if (page.url().includes('/authentication')) {
+
+            console.log('Session expired');
+
             return false;
         }
 
-        await page.getByText('Dashboard').waitFor({
-            timeout: 5000
-        });
+        await page.getByText('Dashboard')
+            .waitFor({
+                timeout: 5000
+            });
+
+        console.log('Storage valid');
 
         return true;
 
     } catch {
 
+        console.log('Storage invalid');
         return false;
 
     } finally {
