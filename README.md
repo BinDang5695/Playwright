@@ -152,8 +152,8 @@ non-bdd
 │   │   ├── project.data.ts                           # Project test data
 │   │   ├── proposal.data.ts                          # Proposal test data
 │   │   └── task.data.ts                              # Task test data
-│   ├── sample_image.jpg                              # Sample image for upload testing
-│   └── UK.jpg                                        # Sample image for upload testing
+│   ├── sample_image.jpg                              # Image upload testing for UI and API
+│   └── UK.jpg                                        # Image upload testing for UI and API
 ├── test-results/                                     # Playwright execution artifacts
 ├── tests/
 │   ├── api/                                          # API test suites
