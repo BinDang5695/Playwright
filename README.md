@@ -80,23 +80,23 @@ non-bdd
 │   │   ├── DateHelpers.ts                            # Date and time utility methods
 │   │   └── FileHelpers.ts                            # File handling utility methods
 │   └── types/                                        # TypeScript models and interfaces
-│   │   ├── api/
-│   │   │   ├── book.model.ts                         # Book API request/response model
-│   │   │   ├── image.model.ts                        # Image API request/response model
-│   │   │   └── user.model.ts                         # User API request/response model
-│   │   └── ui/
-│   │   │   ├── contact.model.ts                      # Contact test data model
-│   │   │   ├── contract.model.ts                     # Contract test data model
-│   │   │   ├── customer.model.ts                     # Customer test data model
-│   │   │   ├── customerdriven.model.ts               # Data-driven customer model
-│   │   │   ├── expenses.model.ts                     # Expense test data model
-│   │   │   ├── file.model.ts                         # File upload/download model
-│   │   │   ├── item.model.ts                         # Item test data model
-│   │   │   ├── knowdledge.model.ts                   # Knowledge Base test data model
-│   │   │   ├── lead.model.ts                         # Lead test data model
-│   │   │   ├── project.model.ts                      # Project test data model
-│   │   │   ├── proposal.model.ts                     # Proposal test data model
-│   │   │   └── task.model.ts                         # Task test data model
+│       ├── api/
+│       │   ├── book.model.ts                         # Book API request/response model
+│       │   ├── image.model.ts                        # Image API request/response model
+│       │   └── user.model.ts                         # User API request/response model
+│       └── ui/
+│           ├── contact.model.ts                      # Contact test data model
+│           ├── contract.model.ts                     # Contract test data model
+│           ├── customer.model.ts                     # Customer test data model
+│           ├── customerdriven.model.ts               # Data-driven customer model
+│           ├── expenses.model.ts                     # Expense test data model
+│           ├── file.model.ts                         # File upload/download model
+│           ├── item.model.ts                         # Item test data model
+│           ├── knowledge.model.ts                    # Knowledge Base test data model
+│           ├── lead.model.ts                         # Lead test data model
+│           ├── project.model.ts                      # Project test data model
+│           ├── proposal.model.ts                     # Proposal test data model
+│           └── task.model.ts                         # Task test data model
 ├── node_modules/                                     # Installed project dependencies
 ├── pages/
 │   ├── BasePage.ts                                   # Base page with common Playwright actions
@@ -105,7 +105,7 @@ non-bdd
 │   ├── CustomerPage.ts                               # Customer page object
 │   ├── ExpensesPage.ts                               # Expenses page object
 │   ├── ItemsPage.ts                                  # Items page object
-│   ├── KnowledgeBasePage.ts                          # KnowledgeBase page object
+│   ├── KnowledgeBasePage.ts                          # Knowledge Base page object
 │   ├── LeadsPage.ts                                  # Leads page object
 │   ├── LoginPage.ts                                  # Login page object
 │   ├── ProjectsPage.ts                               # Projects page object
@@ -114,22 +114,64 @@ non-bdd
 ├── playwright-report/
 │   └── index.html                                    # Generated Playwright HTML report
 ├── test_data/
-│   ├── api/                                          # Static JSON files for API tests — request payloads,response schemas, and environment configs
-│   ├── cms/                                          # Typed test data objects for CMS UI tests — category, product,...
-│   ├── crm/                                          # Typed test data objects for CRM UI tests — leads, customers,...
-│   └── saucedemo/                                    # Typed test data objects for Sauce demo UI tests
+│   ├── api/                                          # API test data, payloads and JSON schemas
+│   │   ├── book.data.ts                              # Book API test data
+│   │   ├── config.json                               # API configuration data
+│   │   ├── CreateBookSchema.json                     # JSON schema for Create Book response
+│   │   ├── CreateImageSchema.json                    # JSON schema for Create Image response
+│   │   ├── CreateTokenSchema.json                    # JSON schema for Login response
+│   │   ├── CreateUserSchema.json                     # JSON schema for Create User response
+│   │   ├── DeleteBookSchema.json                     # JSON schema for Delete Book response
+│   │   ├── DeleteUserSchema.json                     # JSON schema for Delete User response
+│   │   ├── GetBookAfterDeleteSchema.json             # JSON schema after deleting a Book
+│   │   ├── GetBookAfterPutSchema.json                # JSON schema after updating a Book
+│   │   ├── GetBookSchema.json                        # JSON schema for Get Book response
+│   │   ├── GetImageAfterDeleteSchema.json            # JSON schema after deleting an Image
+│   │   ├── GetImageAfterPutSchema.json               # JSON schema after updating an Image
+│   │   ├── GetImageSchema.json                       # JSON schema for Get Image response
+│   │   ├── GetUserAfterDeleteSchema.json             # JSON schema after deleting a User
+│   │   ├── GetUserAfterPutSchema.json                # JSON schema after updating a User
+│   │   ├── GetUserSchema.json                        # JSON schema for Get User response
+│   │   ├── image.data.ts                             # Image API test data
+│   │   ├── LoginSchema.json                          # JSON schema for authentication response
+│   │   ├── UpdateBookSchema.json                     # JSON schema for Update Book response
+│   │   ├── UpdateImageSchema.json                    # JSON schema for Update Image response
+│   │   ├── UpdateUserSchema.json                     # JSON schema for Update User response
+│   │   └── user.data.ts                              # User API test data
+│   ├── ui/                                           # UI test data files
+│   │   ├── Binitems.csv                              # CSV file for data-driven testing
+│   │   ├── contact.data.ts                           # Contact test data
+│   │   ├── contract.data.ts                          # Contract test data
+│   │   ├── customer.data.ts                          # Customer test data
+│   │   ├── CustomerData.json                         # Customer data-driven dataset
+│   │   ├── expenses.data.ts                          # Expenses test data
+│   │   ├── item.data.ts                              # Item test data
+│   │   ├── knowledge.data.ts                         # Knowledge Base test data
+│   │   ├── lead.data.ts                              # Lead test data
+│   │   ├── login.data.ts                             # Login credentials and test data
+│   │   ├── project.data.ts                           # Project test data
+│   │   ├── proposal.data.ts                          # Proposal test data
+│   │   └── task.data.ts                              # Task test data
+│   ├── sample_image.jpg                              # Sample image for upload testing
+│   └── UK.jpg                                        # Sample image for upload testing
+├── test-results/                                     # Playwright execution artifacts
 ├── tests/
-│   ├── api/                                          # API test suites — serial flows covering CRUD operations with schema validation and response body verification
-│   ├── cms/                                          # CMS UI test suites — feature-based test files
-│   ├── crm/                                          # CRM UI test suites — feature-based test files
-│   └── saucedemo/                                    # Sauce demo UI test suites — feature-based test files
-├── utils/
-│   └── env.ts                                        # Typed accessors for runtime environment variables
-├─ package-lock.json                                  # Provide an immutable version of package.json
-├─ package.json                                       # Contains basic information about the project,registered dependencies and running script
-├─ playwright.config.ts                               # PlayWright configuration file
-├─ README.md                                          # Project documentation
-└─ tsconfig.json                                      # TypeScript compiler configuration
+│   ├── api/                                          # API test suites
+│   │   ├── ApiBookTest.spec.ts                       # Book API CRUD tests
+│   │   ├── ApiImageTest.spec.ts                      # Image API CRUD tests
+│   │   └── ApiUserTest.spec.ts                       # User API CRUD tests
+│   ├── ui/                                           # UI feature test suites
+│   │   ├── ContractTest.spec.ts                      # Contract feature tests
+│   │   ├── CustomerDataDrivenTest.spec.ts            # Customer data-driven tests
+│   │   ├── CustomerTest.spec.ts                      # Customer feature tests
+│   │   ├── ExpensesTest.spec.ts                      # Expenses feature tests
+│   │   ├── ItemTest.spec.ts                          # Item feature tests
+│   │   ├── KnowledgeBaseTest.spec.ts                 # Knowledge Base feature tests
+│   │   ├── LeadTest.spec.ts                          # Lead feature tests
+│   │   ├── LoginTest.spec.ts                         # Login feature tests
+│   │   ├── ProjectTest.spec.ts                       # Project feature tests
+│   │   ├── ProposalTest.spec.ts                      # Proposal feature tests
+│   │   └── TaskTest.spec.ts                          # Task feature tests
 
 ```
 
