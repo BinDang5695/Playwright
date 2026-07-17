@@ -160,7 +160,7 @@ non-bdd
 │   │   ├── ApiBookTest.spec.ts                       # Book API CRUD tests
 │   │   ├── ApiImageTest.spec.ts                      # Image API CRUD tests
 │   │   └── ApiUserTest.spec.ts                       # User API CRUD tests
-│   ├── ui/                                           # UI feature test suites
+│   └── ui/                                           # UI feature test suites
 │   │   ├── ContractTest.spec.ts                      # Contract feature tests
 │   │   ├── CustomerDataDrivenTest.spec.ts            # Customer data-driven tests
 │   │   ├── CustomerTest.spec.ts                      # Customer feature tests
@@ -172,7 +172,12 @@ non-bdd
 │   │   ├── ProjectTest.spec.ts                       # Project feature tests
 │   │   ├── ProposalTest.spec.ts                      # Proposal feature tests
 │   │   └── TaskTest.spec.ts                          # Task feature tests
-
+├── .gitignore                                        # Git ignored files
+├── package-lock.json                                 # Locked dependency versions
+├── package.json                                      # Project metadata and npm scripts
+├── playwright.config.ts                              # Playwright configuration
+├── README.md                                         # Project documentation
+└── tsconfig.json                                     # TypeScript compiler configuration
 ```
 
 ## Requirements
