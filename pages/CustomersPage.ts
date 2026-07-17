@@ -1,7 +1,7 @@
 import { BasePage } from '@pages/BasePage';
 import { Dropdown } from '@constants/crm';
-import { Customer } from '@models/types/customer.model'
-import { CustomerDataDriven } from '@models/types/customerdriven.model'
+import { Customer } from '@models/types/ui/customer.model'
+import { CustomerDataDriven } from '@models/types/ui/customerdriven.model'
 import { expect } from '@playwright/test';
 
 export class CustomersPage extends BasePage {

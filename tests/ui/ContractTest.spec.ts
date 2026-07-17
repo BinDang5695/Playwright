@@ -2,6 +2,7 @@ import { test } from '@fixtures/ui.fixture';
 import { contractData, updatedContractData } from '@data/ui/contract.data';
 import { Menu, Message } from '@constants/crm';
 import { ROLES } from '@constants/crm';
+import { customerData } from '@data/ui/customer.data';
 
 for (const role of ROLES) {
 
@@ -11,9 +12,17 @@ for (const role of ROLES) {
             role,
         });
 
+        test.beforeAll(async ({ BasePage, customersPage }) => {
+            await test.step('Create Customer', async () => {
+                await BasePage.clickByMenuName(Menu.CUSTOMERS);
+                await customersPage.clickButtonAddNewCustomer();
+                await customersPage.addNewCustomer(customerData);
+            });
+        });
+
         test.beforeEach(async ({ BasePage }) => {
 
-            await test.step('Navigate to Contracts', async () => {
+            await test.step('Navigate to Contracts page', async () => {
                 await BasePage.clickByMenuName(Menu.CONTRACTS);
             });
 
@@ -59,7 +68,7 @@ for (const role of ROLES) {
         });
 
 
-        test('[CONTRACT_003] Delete contract successfully', async ({ BasePage, contractsPage }) => {
+        test('[CONTRACT_003] Delete contract successfully', async ({ BasePage, contractsPage, customersPage }) => {
 
             await test.step('Search for the existing contract', async () => {
                 await contractsPage.searchContract(updatedContractData);
@@ -73,6 +82,13 @@ for (const role of ROLES) {
             await test.step('Verify the contract is deleted successfully', async () => {
                 await contractsPage.searchContract(updatedContractData);
                 await BasePage.verifyNoItem(Message.NO_MATCHING_RECORDS_FOUND);
+            });
+
+            await test.step('Delete create Customer', async () => {
+                await BasePage.clickByMenuName(Menu.CUSTOMERS);
+                await customersPage.searchCustomer(customerData);
+                await customersPage.hoverToCustomer(customerData);
+                await BasePage.deleteRecord();
             });
 
         });

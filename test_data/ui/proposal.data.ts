@@ -1,4 +1,4 @@
-import { Proposal } from '@models/types/proposal.model'
+import { Proposal } from '@models/types/ui/proposal.model'
 
 export const proposalData: Proposal = {
   customer: 'Bin Customer',

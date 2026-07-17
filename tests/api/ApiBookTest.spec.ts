@@ -1,13 +1,13 @@
-import { test, expect } from '@api/common/BaseTestApi';
+import { test, expect } from '../../fixtures/api.fixture';
 import CreateBookSchema from '@data/api/CreateBookSchema.json';
 import GetBookSchema from '@data/api/GetBookSchema.json';
 import UpdateBookSchema from '@data/api/UpdateBookSchema.json';
 import GetBookAfterPutSchema from '@data/api/GetBookAfterPutSchema.json';
 import DeleteBookSchema from '@data/api/DeleteBookSchema.json';
 import GetBookAfterDeleteSchema from '@data/api/GetBookAfterDeleteSchema.json';
-import { validateSchema } from '@api/common/ApiTestHelper';
+import { validateSchema } from '@models/helpers/ApiHelper';
 import { BookService } from '@api/book/BookService';
-import { VerifyBookHeaders } from '@api/book/VerifyBookHeaders';
+import { VerifyResponseHeaders } from '@api/common/VerifyResponseHeaders';
 import { VerifyBookResponseBody } from '@api/book/VerifyBookResponseBody';
 
 let createdBook: any;
@@ -28,7 +28,7 @@ test.describe.serial('API Book Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyBookHeaders.verify(resultPost.response);
+                VerifyResponseHeaders.verify(resultPost.response);
             });
 
             await test.step('Verify create book response body', async () => {
@@ -66,7 +66,7 @@ test.describe.serial('API Book Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyBookHeaders.verify(resultGet.response);
+                VerifyResponseHeaders.verify(resultGet.response);
             });
 
             await test.step('Verify get book response body', async () => {
@@ -95,7 +95,7 @@ test.describe.serial('API Book Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyBookHeaders.verify(resultPut.response);
+                VerifyResponseHeaders.verify(resultPut.response);
             });
 
             await test.step('Verify update book response body', async () => {
@@ -129,7 +129,7 @@ test.describe.serial('API Book Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyBookHeaders.verify(resultGetAfterPut.response);
+                VerifyResponseHeaders.verify(resultGetAfterPut.response);
             });
 
             await test.step('Verify updated book response body', async () => {
@@ -158,13 +158,12 @@ test.describe.serial('API Book Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyBookHeaders.verify(result.response);
+                VerifyResponseHeaders.verify(result.response);
             });
 
             await test.step('Verify delete book response body', async () => {
                 VerifyBookResponseBody.verifyDeleteBook(
-                    result.body,
-                    updatedBookData
+                    result.body
                 );
             });
         });
@@ -190,7 +189,7 @@ test.describe.serial('API Book Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyBookHeaders.verify(result.response);
+                VerifyResponseHeaders.verify(result.response);
             });
 
             await test.step('Verify deleted book response body', async () => {

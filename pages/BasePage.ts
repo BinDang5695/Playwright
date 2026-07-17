@@ -181,5 +181,45 @@ export class BasePage {
     await expect(this.getNoData).toHaveText(expectedMessage);
   }
 
+  async reloadPage() {
+    await this.page.reload({ waitUntil: 'networkidle' });
+  }
+
+  async selectAllAndEnsureChecked(maxRetry = 3) {
+
+    for (let attempt = 1; attempt <= maxRetry; attempt++) {
+
+        console.log(`🔁 Select All attempt ${attempt}`);
+
+        await this.checkboxSelectAll.scrollIntoViewIfNeeded();
+        await this.checkboxSelectAll.click();
+
+        const total = await this.checkboxSelectEach.count();
+
+        let checked = 0;
+
+        for (let i = 0; i < total; i++) {
+
+            if (await this.checkboxSelectEach.nth(i).isChecked()) {
+                checked++;
+            }
+        }
+
+        console.log(
+            `☑ Select All attempt ${attempt}: ${checked}/${total} checked`
+        );
+
+
+        if (checked === total && total > 0) {
+
+            console.log('✅ Select All SUCCESS');
+
+            return;
+        }
+    }
+
+    throw new Error('❌ Select All FAILED after retries');
+}
+
 }
 

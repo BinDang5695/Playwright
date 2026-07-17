@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { Article } from '@models/types/knowledge.model'
+import { Article } from '@models/types/ui/knowledge.model'
 import { Dropdown, Message } from '@constants/crm';
 import { BasePage } from '@pages/BasePage';
 

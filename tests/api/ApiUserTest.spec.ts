@@ -1,13 +1,13 @@
-import { test, expect } from '@api/common/BaseTestApi';
+import { test, expect } from '../../fixtures/api.fixture';
 import CreateUserSchema from '@data/api/CreateUserSchema.json';
 import GetUserSchema from '@data/api/GetUserSchema.json';
 import UpdateUserSchema from '@data/api/UpdateUserSchema.json';
 import GetUserAfterPutSchema from '@data/api/GetUserAfterPutSchema.json';
 import DeleteUserSchema from '@data/api/DeleteUserSchema.json';
 import GetUserAfterDeleteSchema from '@data/api/GetUserAfterDeleteSchema.json';
-import { validateSchema } from '@api/common/ApiTestHelper';
+import { validateSchema } from '@models/helpers/ApiHelper';
 import { UserService } from '@api/user/UserService';
-import { VerifyUserHeaders } from '@api/user/VerifyUserHeaders';
+import { VerifyResponseHeaders } from '@api/common/VerifyResponseHeaders';
 import { VerifyUserResponseBody } from '@api/user/VerifyUserResponseBody';
 
 let createdUser: any;
@@ -35,7 +35,7 @@ test.describe.serial('API User Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyUserHeaders.verify(
+                VerifyResponseHeaders.verify(
                     resultPost.response
                 );
             });
@@ -80,7 +80,7 @@ test.describe.serial('API User Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyUserHeaders.verify(
+                VerifyResponseHeaders.verify(
                     resultGet.response
                 );
             });
@@ -115,7 +115,7 @@ test.describe.serial('API User Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyUserHeaders.verify(
+                VerifyResponseHeaders.verify(
                     resultPut.response
                 );
             });
@@ -155,7 +155,7 @@ test.describe.serial('API User Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyUserHeaders.verify(
+                VerifyResponseHeaders.verify(
                     resultGetAfterPut.response
                 );
             });
@@ -190,7 +190,7 @@ test.describe.serial('API User Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyUserHeaders.verify(
+                VerifyResponseHeaders.verify(
                     resultAfterDelete.response
                 );
             });
@@ -225,7 +225,7 @@ test.describe.serial('API User Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyUserHeaders.verify(
+                VerifyResponseHeaders.verify(
                     resultGetAfterDelete.response
                 );
             });

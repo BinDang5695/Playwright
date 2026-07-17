@@ -1,13 +1,13 @@
-import { test, expect } from '@api/common/BaseTestApi';
+import { test, expect } from '../../fixtures/api.fixture';
 import CreateImageSchema from '@data/api/CreateImageSchema.json';
 import GetImageSchema from '@data/api/GetImageSchema.json';
 import UpdateImageSchema from '@data/api/UpdateImageSchema.json';
 import GetImageAfterPutSchema from '@data/api/GetImageAfterPutSchema.json';
 import DeleteImageSchema from '@data/api/DeleteImageSchema.json';
 import GetImageAfterDeleteSchema from '@data/api/GetImageAfterDeleteSchema.json';
-import { validateSchema } from '@api/common/ApiTestHelper';
+import { validateSchema } from '@models/helpers/ApiHelper';
 import { ImageService } from '@api/image/ImageService';
-import { VerifyImageHeaders } from '@api/image/VerifyImageHeaders';
+import { VerifyResponseHeaders } from '@api/common/VerifyResponseHeaders';
 import { VerifyImageResponseBody } from '@api/image/VerifyImageResponseBody';
 
 let createdImage: any;
@@ -20,7 +20,7 @@ test.describe.serial('API Image Tests', () => {
 
         await test.step('Send POST request to create image', async () => {
 
-            const resultPost = await ImageService.postCreate(
+            const resultPost = await ImageService.post(
                 request,
                 token
             );
@@ -30,7 +30,7 @@ test.describe.serial('API Image Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyImageHeaders.verify(resultPost.response);
+                VerifyResponseHeaders.verify(resultPost.response);
             });
 
             await test.step('Verify create image response body', async () => {
@@ -70,7 +70,7 @@ test.describe.serial('API Image Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyImageHeaders.verify(resultGet.response);
+                VerifyResponseHeaders.verify(resultGet.response);
             });
 
             await test.step('Verify get image response body', async () => {
@@ -102,7 +102,7 @@ test.describe.serial('API Image Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyImageHeaders.verify(resultPut.response);
+                VerifyResponseHeaders.verify(resultPut.response);
             });
 
             await test.step('Verify update image response body', async () => {
@@ -134,7 +134,7 @@ test.describe.serial('API Image Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyImageHeaders.verify(
+                VerifyResponseHeaders.verify(
                     resultGetAfterPut.response
                 );
             });
@@ -168,7 +168,7 @@ test.describe.serial('API Image Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyImageHeaders.verify(
+                VerifyResponseHeaders.verify(
                     result.response
                 );
             });
@@ -202,7 +202,7 @@ test.describe.serial('API Image Tests', () => {
             });
 
             await test.step('Verify response headers', async () => {
-                VerifyImageHeaders.verify(
+                VerifyResponseHeaders.verify(
                     result.response
                 );
             });

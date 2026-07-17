@@ -1,4 +1,4 @@
-import { Expense } from '@models/types/expenses.model';
+import { Expense } from '@models/types/ui/expenses.model';
 
 export const expenseData: Expense = {
   receipt: 'test_data/UK.jpg',

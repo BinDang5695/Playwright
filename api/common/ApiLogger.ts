@@ -1,3 +1,4 @@
+// api/common/ApiLogger
 import { APIResponse } from '@playwright/test';
 
 export class ApiLogger {

@@ -1,4 +1,4 @@
-import { Lead } from '@models/types/lead.model';
+import { Lead } from '@models/types/ui/lead.model';
 
 export const leadData: Lead = {
   name: 'Bin Lead',

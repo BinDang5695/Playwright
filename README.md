@@ -114,67 +114,19 @@ non-bdd
 ├── playwright-report/
 │   └── index.html                                    # Generated Playwright HTML report
 ├── test_data/
-│   ├── api/                                          # API test data, payloads and JSON schemas
-│   │   ├── book.data.ts/                             # Book API test data
-│   │   ├── config.json/                              # API configuration data
-│   │   ├── CreateBookSchema.json/                    # JSON schema for Create Book response
-│   │   ├── CreateImageSchema.json/
-│   │   ├── CreateTokenSchema.json/
-│   │   ├── CreateUserSchema.json/
-│   │   ├── DeleteBookSchema.json/
-│   │   ├── DeleteUserSchema.json/
-│   │   ├── GetBookAfterDeleteSchema.json/
-│   │   ├── GetBookAfterPutSchema.json/
-│   │   ├── GetBookSchema.json/
-│   │   ├── GetImageAfterDeleteSchema.json/
-│   │   ├── GetImageAfterPutSchema.json/
-│   │   ├── GetImageSchema.json/
-│   │   ├── GetUserAfterDeleteSchema.json/
-│   │   ├── GetUserAfterPutSchema.json/
-│   │   ├── GetUserSchema.json/
-│   │   ├── image.data.ts/
-│   │   ├── LoginSchema.json/
-│   │   ├── UpdateBookSchema.json/
-│   │   ├── UpdateImageSchema.json/
-│   │   ├── UpdateUserSchema.json/
-│   │   └── user.data.ts/
-│   ├── ui/                                             # 
-│   │   ├── Binitems.csv/
-│   │   ├── contact.data.ts/
-│   │   ├── contract.data.ts/
-│   │   ├── customer.data.ts/
-│   │   ├── CustomerData.json/
-│   │   ├── expenses.data.ts/
-│   │   ├── item.data.ts/
-│   │   ├── knowledge.data.ts/
-│   │   ├── lead.data.ts/
-│   │   ├── login.data.ts/
-│   │   ├── project.data.ts/
-│   │   ├── proposal.data.ts/
-│   │   └── task.data.ts/
-│   ├── sample_image.jpg/
-│   └── UK.jpg/
-├── test-results/
+│   ├── api/                                          # Static JSON files for API tests — request payloads,response schemas, and environment configs
+│   ├── cms/                                          # Typed test data objects for CMS UI tests — category, product,...
+│   ├── crm/                                          # Typed test data objects for CRM UI tests — leads, customers,...
+│   └── saucedemo/                                    # Typed test data objects for Sauce demo UI tests
 ├── tests/
-│   ├── api/                                          # 
-│   │   ├── ApiBookTest.spec.ts/
-│   │   ├── ApiImageTest.spec.ts/
-│   │   └── ApiUserTest.spec.ts/
-│   ├── ui/                                          # 
-│   │   ├── ContractTest.spec.ts/
-│   │   ├── CustomerDataDrivenTest.spec.ts/
-│   │   ├── CustomerTest.spec.ts/
-│   │   ├── ExpensesTest.spec.ts/
-│   │   ├── ItemTest.spec.ts/
-│   │   ├── KnowledgeBaseTest.spec.ts/
-│   │   ├── LeadTest.spec.ts/
-│   │   ├── LoginTest.spec.ts/
-│   │   ├── ProjectTest.spec.ts/
-│   │   ├── ProposalTest.spec.ts/
-│   │   └── TaskTest.spec.ts/
-├─ .gitignore                                         # Git ignored files
-├─ package-lock.json                                  # Locked dependency versions
-├─ package.json                                       # Project metadata and npm scripts
+│   ├── api/                                          # API test suites — serial flows covering CRUD operations with schema validation and response body verification
+│   ├── cms/                                          # CMS UI test suites — feature-based test files
+│   ├── crm/                                          # CRM UI test suites — feature-based test files
+│   └── saucedemo/                                    # Sauce demo UI test suites — feature-based test files
+├── utils/
+│   └── env.ts                                        # Typed accessors for runtime environment variables
+├─ package-lock.json                                  # Provide an immutable version of package.json
+├─ package.json                                       # Contains basic information about the project,registered dependencies and running script
 ├─ playwright.config.ts                               # PlayWright configuration file
 ├─ README.md                                          # Project documentation
 └─ tsconfig.json                                      # TypeScript compiler configuration

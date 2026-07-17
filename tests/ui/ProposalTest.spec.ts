@@ -1,7 +1,8 @@
 import { test } from '@fixtures/ui.fixture';
 import { proposalData } from '@data/ui/proposal.data';
 import { Menu } from '@constants/crm';
-import { ExportFileType } from '@models/types/file.model';
+import { ExportFileType } from '@models/types/ui/file.model';
+import { customerData } from '@data/ui/customer.data';
 
 const fileTypes: { type: ExportFileType; tag: string }[] = [
     { type: 'pdf', tag: '@P1' },
@@ -15,18 +16,26 @@ test.describe.serial('Admin - Proposal Test Suite', () => {
         role: 'admin',
     });
 
-    test.beforeEach(async ({ BasePage }) => {
+    test.beforeEach(async ({ BasePage, customersPage }) => {
+        await test.step('Create Customer', async () => {
+            await BasePage.clickByMenuName(Menu.CUSTOMERS);
+            await customersPage.clickButtonAddNewCustomer();
+            await customersPage.addNewCustomer(customerData);
+        });
 
         await test.step('Navigate to Sales > Proposals', async () => {
-            await BasePage.clickByMenuText(Menu.SALES);
-            await BasePage.clickByMenuName(Menu.PROPOSALS);
-        });
-    });
 
+            await BasePage.clickByMenuText(Menu.SALES);
+
+            await BasePage.clickByMenuName(Menu.PROPOSALS);
+
+        });
+
+    });
 
     fileTypes.forEach(({ type, tag }) => {
 
-        test(`[PROPOSAL] Manage Proposal Export ${type.toUpperCase()} File ${tag}`, async ({ proposalsPage }) => {
+        test(`[PROPOSAL] Manage Proposal Export ${type.toUpperCase()} File ${tag}`, async ({ BasePage, customersPage, proposalsPage }) => {
 
             await test.step('Open the New Proposal form', async () => {
                 await proposalsPage.clickButtonNewProposal();
@@ -54,6 +63,13 @@ test.describe.serial('Admin - Proposal Test Suite', () => {
 
             await test.step('Delete the created proposal', async () => {
                 await proposalsPage.deleteCreatedProposal(proposalData);
+            });
+
+            await test.step('Delete create Customer', async () => {
+                await BasePage.clickByMenuName(Menu.CUSTOMERS);
+                await customersPage.searchCustomer(customerData);
+                await customersPage.hoverToCustomer(customerData);
+                await BasePage.deleteRecord();
             });
 
         });

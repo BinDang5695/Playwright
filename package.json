@@ -6,7 +6,6 @@
     "test:all:chrome": "set env=crm-dev&& playwright test --project=chrome",
     "test:all:edge": "set env=crm-dev&& playwright test --project=edge",
     "test:api": "playwright test tests/api/ --project=api",
-    "test:api:booking": "playwright test tests/api/ApiBookingTest.spec.ts --project=api",
     "test:api:book": "playwright test tests/api/ApiBookTest.spec.ts --project=api",
     "test:api:image": "playwright test tests/api/ApiImageTest.spec.ts --project=api",
     "test:api:user": "playwright test tests/api/ApiUserTest.spec.ts --project=api",

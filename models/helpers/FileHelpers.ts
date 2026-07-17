@@ -1,8 +1,6 @@
 import fs from 'fs';
 import * as XLSX from 'xlsx';
-
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.js';
-
 
 export async function extractTextFromPDF(filePath: string): Promise<string> {
     const data = new Uint8Array(fs.readFileSync(filePath));

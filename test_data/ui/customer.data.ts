@@ -1,10 +1,10 @@
-import { Customer } from '@models/types/customer.model'
+import { Customer } from '@models/types/ui/customer.model'
 
 export const customerData: Customer = {
-  company: 'Nashtech Company',
+  company: 'Bin Customer',
   vat: '123456789',
   phone: '0123456789',
-  website: 'https://nashtech.com.vn',
+  website: 'https://www.google.com/',
   group: 'VIP',
   currency: 'EUR',
   language: 'Vietnamese',

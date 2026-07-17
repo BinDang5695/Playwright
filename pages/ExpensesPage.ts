@@ -1,6 +1,6 @@
 import { BasePage } from '@pages/BasePage';
 import { Dropdown, Message, Toogle } from '@constants/crm';
-import { Expense } from '@models/types/expenses.model'
+import { Expense } from '@models/types/ui/expenses.model'
 import { expect } from '@playwright/test';
 
 export class ExpensesPage extends BasePage {

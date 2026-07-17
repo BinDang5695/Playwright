@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { BasePage } from '@pages/BasePage';
 import { Button, Message } from '@constants/crm';
-import { Lead } from '@models/types/lead.model'
+import { Lead } from '@models/types/ui/lead.model'
 
 export class LeadsPage extends BasePage {
 
@@ -43,7 +43,7 @@ export class LeadsPage extends BasePage {
     await this.selectDropdownBySpanText(Button.SOURCE, data.source);
     await this.inputName.fill(data.name);
     await this.buttonSave.click();
-    await this.page.reload();
+    await this.reloadPage();
     await expect(this.buttonNewLead).toBeVisible();
   }
 
@@ -65,7 +65,7 @@ export class LeadsPage extends BasePage {
 
         } catch (err) {
           console.log(`⚠️ Form didn't open on attempt ${attempt}, refreshing page`);
-          await this.page.reload();
+          await this.reloadPage();
         }
       }
 
@@ -95,36 +95,6 @@ export class LeadsPage extends BasePage {
     await this.checkLeadNameContains(data);
   }
 
-  async selectAllAndEnsureChecked(maxRetry = 3) {
-
-    for (let attempt = 1; attempt <= maxRetry; attempt++) {
-      console.log(`🔁 Select All attempt ${attempt}`);
-
-      await this.checkboxSelectAll.scrollIntoViewIfNeeded();
-      await this.checkboxSelectAll.click();
-
-      const total = await this.checkboxSelectEach.count();
-      let checked = 0;
-
-      for (let i = 0; i < total; i++) {
-        if (await this.checkboxSelectEach.nth(i).isChecked()) {
-          checked++;
-        }
-      }
-
-      console.log(
-        `☑ Select All attempt ${attempt}: ${checked}/${total} checked`
-      );
-
-      if (checked === total && total > 0) {
-        console.log('✅ Select All SUCCESS');
-        return;
-      }
-    }
-
-    throw new Error('❌ Select All FAILED after retries');
-  }
-
   async deleteDataAfterSearched() {
     await this.acceptAlert();
     await this.dropdownPagination.selectOption('25');
@@ -140,4 +110,5 @@ export class LeadsPage extends BasePage {
     await this.inputSearchLead.fill(data.search);
     await expect(this.getNoData).toBeVisible();
   }
+  
 }

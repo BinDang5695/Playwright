@@ -1,4 +1,4 @@
-export interface BookCreateRequest {
+export interface Book {
   name: string;
   category_id: number;
   price: number;

@@ -1,4 +1,4 @@
-import { Contract } from '@models/types/contract.model'
+import { Contract } from '@models/types/ui/contract.model'
 
 export const contractData: Contract = {
   customer: 'Bin Customer',

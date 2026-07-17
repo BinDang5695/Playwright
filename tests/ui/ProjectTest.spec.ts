@@ -1,6 +1,7 @@
 import { test } from '@fixtures/ui.fixture';
 import { Menu } from '@constants/crm';
 import { projectData } from '@data/ui/project.data';
+import { customerData } from '@data/ui/customer.data';
 
 test.describe.serial('Admin - Project Test Suite', () => {
 
@@ -8,9 +9,17 @@ test.describe.serial('Admin - Project Test Suite', () => {
         role: 'admin',
     });
 
+    test.beforeAll(async ({ BasePage, customersPage }) => {
+        await test.step('Create Customer', async () => {
+            await BasePage.clickByMenuName(Menu.CUSTOMERS);
+            await customersPage.clickButtonAddNewCustomer();
+            await customersPage.addNewCustomer(customerData);
+        });
+    });
+
     test.beforeEach(async ({ BasePage }) => {
 
-        await test.step('Navigate to Projects', async () => {
+        await test.step('Navigate to Projects page', async () => {
             await BasePage.clickByMenuName(Menu.PROJECTS);
         });
     });
@@ -40,7 +49,7 @@ test.describe.serial('Admin - Project Test Suite', () => {
     });
 
 
-    test('[PROJECT_002] Delete Project Successfully', async ({ BasePage, projectsPage }) => {
+    test('[PROJECT_002] Delete Project Successfully', async ({ BasePage, projectsPage, customersPage }) => {
 
         await test.step('Navigate to Projects page', async () => {
             await BasePage.clickByMenuName(Menu.PROJECTS);
@@ -58,6 +67,13 @@ test.describe.serial('Admin - Project Test Suite', () => {
         await test.step('Verify the project is deleted successfully', async () => {
             await BasePage.clickByMenuName(Menu.PROJECTS);
             await projectsPage.searchAndverifyNoData(projectData);
+        });
+
+        await test.step('Delete create Customer', async () => {
+            await BasePage.clickByMenuName(Menu.CUSTOMERS);
+            await customersPage.searchCustomer(customerData);
+            await customersPage.hoverToCustomer(customerData);
+            await BasePage.deleteRecord();
         });
     });
 

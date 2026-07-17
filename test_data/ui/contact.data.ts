@@ -1,4 +1,4 @@
-import { Contact } from '@models/types/contact.model'
+import { Contact } from '@models/types/ui/contact.model'
 
 export const contactData: Contact = {
   firstName: 'Bin',

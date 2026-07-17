@@ -2,7 +2,7 @@ import { expect } from '@playwright/test';
 import { BasePage } from '@pages/BasePage';
 import { Header, Message } from '@constants/crm';
 import { DateHelpers } from '@models/helpers/DateHelpers';
-import { Task } from '@models/types/task.model'
+import { Task } from '@models/types/ui/task.model'
 
 export class TasksPage extends BasePage {
 
@@ -154,7 +154,7 @@ export class TasksPage extends BasePage {
     async markCompletedAndRefreshPage(data: Task) {
         await this.markComplete.click();
         await this.closePopUp.click();
-        await this.page.reload();
+        await this.reloadPage();
         await expect(this.binTask(data.subject)).toBeVisible();
     }
 

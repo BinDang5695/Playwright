@@ -1,4 +1,4 @@
-import { Contract } from '@models/types/contract.model'
+import { Contract } from '@models/types/ui/contract.model'
 import { BasePage } from '@pages/BasePage';
 import { expect } from '@playwright/test';
 import { Message } from '@constants/crm';

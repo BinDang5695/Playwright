@@ -2,10 +2,10 @@ import { expect } from '@playwright/test';
 import fs from 'fs';
 import { extractTextFromPDF, readExcelAsText, deleteFile } from '@models/helpers/FileHelpers';
 import path from 'path';
-import { ExportFileType } from '@models/types/file.model';
+import { ExportFileType } from '@models/types/ui/file.model';
 import { BasePage } from '@pages/BasePage';
 import { Message, Dropdown, Toogle, Attribute } from '@constants/crm';
-import { Proposal } from '@models/types/proposal.model'
+import { Proposal } from '@models/types/ui/proposal.model'
 
 export class ProposalsPage extends BasePage {
 
@@ -202,7 +202,7 @@ export class ProposalsPage extends BasePage {
         await this.page.keyboard.press('Escape');
         await this.page.waitForLoadState('networkidle');
         await this.verifySubject(data.subject).click();
-        await this.page.reload();
+        await this.reloadPage();
         await this.clickButtonMore.click();
         await this.clickButtonDelete.click();
     }

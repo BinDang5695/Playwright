@@ -1,37 +1,37 @@
 // api/user/UserService.ts
 import type { APIRequestContext } from '@playwright/test';
-import { ConfigsGlobal } from '../common/ConfigsGlobal';
+import { ConfigGlobal } from '../common/Config';
 import { EndPointGlobal } from '../common/EndpointGlobal';
-import { UserBuilder } from './UserBuilder';
-import { BaseApiService } from '../common/BaseApiService';
+import { userData } from '@data/api/user.data';
+import { ApiClient } from '../common/ApiClient';
 
-export class UserService extends BaseApiService {
+export class UserService {
 
   private static url(path = '') {
-    return `${ConfigsGlobal.BASE_URL}${EndPointGlobal.EP_USER}${path}`;
+    return `${ConfigGlobal.BASE_URL}${EndPointGlobal.EP_USER}${path}`;
   }
 
   static async post(request: APIRequestContext, token: string) {
-    const userData = UserBuilder.getDataToCreateUser();
-    const { response, body } = await this.sendRequest('POST', request, this.url(), token, userData);
-    return { response, body, requestData: userData };
+    const requestData = userData.create;
+    const { response, body } = await ApiClient.sendRequest('POST', request, this.url(), token, requestData);
+    return { response, body, requestData: requestData };
   }
 
   static async get(request: APIRequestContext, token: string, username: string) {
-    return await this.sendRequest('GET', request, this.url(`/?username=${username}`), token);
+    return await ApiClient.sendRequest('GET', request, this.url(`/?username=${username}`), token);
   }
 
   static async put(request: APIRequestContext, token: string, userId: number) {
-    const updateData = UserBuilder.getDataToUpdateUser();
-    const { response, body } = await this.sendRequest('PUT', request, this.url(`/${userId}`), token, updateData);
+    const updateData = userData.update;
+    const { response, body } = await ApiClient.sendRequest('PUT', request, this.url(`/${userId}`), token, updateData);
     return { response, body, requestData: updateData };
   }
 
   static async delete(request: APIRequestContext, token: string, username: string) {
-    return await this.sendRequest('DELETE', request, this.url(`/?username=${username}`), token);
+    return await ApiClient.sendRequest('DELETE', request, this.url(`/?username=${username}`), token);
   }
 
   static async getAfterDelete(request: APIRequestContext, token: string, username: string) {
-    return await this.sendRequest('GET', request, this.url(`/?username=${username}`), token, undefined, 400);
+    return await ApiClient.sendRequest('GET', request, this.url(`/?username=${username}`), token, undefined, 400);
   }
 }

@@ -1,5 +1,5 @@
 import { Message } from '@constants/crm';
-import { Contact } from '@models/types/contact.model';
+import { Contact } from '@models/types/ui/contact.model';
 import { BasePage } from '@pages/BasePage';
 import { expect } from '@playwright/test';
 

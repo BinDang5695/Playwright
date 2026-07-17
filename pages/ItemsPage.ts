@@ -1,5 +1,5 @@
 import { BasePage } from '@pages/BasePage';
-import { Item } from '@models/types/item.model'
+import { Item } from '@models/types/ui/item.model'
 import { expect } from '@playwright/test';
 
 export class ItemsPage extends BasePage {

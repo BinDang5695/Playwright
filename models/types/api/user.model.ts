@@ -1,4 +1,4 @@
-export interface UserCreateRequest {
+export interface User {
   username: string;
   firstName: string;
   lastName: string;

@@ -1,23 +1,23 @@
-// api/common/BaseApiService.ts
+// api/common/BaseApiService
 import type { APIRequestContext } from '@playwright/test';
-import { measureRequest } from './ApiTestHelper';
+import { expect } from '@playwright/test';
+import { measureRequest } from '../../models/helpers/ApiHelper';
 import { ApiLogger } from './ApiLogger';
-import { expect } from './BaseTestApi';
 
-export class BaseApiService {
+export class ApiClient {
 
-  protected static buildHeaders(token: string) {
+  static buildHeaders(token?: string) {
     return {
-      Authorization: `Bearer ${token}`,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       Accept: 'application/json',
     };
   }
 
-  protected static async sendRequest(
+  static async sendRequest(
     method: 'POST' | 'GET' | 'PUT' | 'PATCH' | 'DELETE',
     request: APIRequestContext,
     url: string,
-    token: string,
+    token?: string,
     data?: any,
     expectedStatus = 200,
     multipart?: Record<string, any>,
@@ -35,10 +35,12 @@ export class BaseApiService {
         case 'DELETE': return request.delete(url, { headers });
       }
     });
+
     const contentType = response.headers()['content-type'] ?? '';
     const body = contentType.includes('application/json')
       ? await response.json()
       : await response.text();
+
     expect(response.status()).toBe(expectedStatus);
     ApiLogger.logResponse(response, duration);
 

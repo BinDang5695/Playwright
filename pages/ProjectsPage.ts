@@ -1,6 +1,6 @@
 import { Option, Dropdown, Message } from '@constants/crm';
 import { BasePage } from '@pages/BasePage';
-import { Project } from '@models/types/project.model'
+import { Project } from '@models/types/ui/project.model'
 import { expect } from '@playwright/test';
 
 export class ProjectsPage extends BasePage {

@@ -1,7 +1,7 @@
 import { test } from '@fixtures/ui.fixture';
 import customerCases from '@data/ui/CustomerData.json';
 import { Menu } from '@constants/crm';
-import { CustomerDataDriven } from '@models/types/customerdriven.model';
+import { CustomerDataDriven } from '@models/types/ui/customerdriven.model';
 import { ROLES } from '@constants/crm';
 
 type CustomerCase = {

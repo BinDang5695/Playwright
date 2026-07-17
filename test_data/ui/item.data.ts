@@ -1,4 +1,4 @@
-import { Item } from '@models/types/item.model';
+import { Item } from '@models/types/ui/item.model';
 
 export const itemData: Item = {
   file: 'test_data/ui/BinItems.csv',

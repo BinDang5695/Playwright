@@ -1,3 +1,4 @@
+// api/common/EndPointGlobal.ts
 export const EndPointGlobal = {
   EP_LOGIN: '/login',
   EP_REGISTER: '/register',
@@ -6,6 +7,5 @@ export const EndPointGlobal = {
   EP_BOOK: '/book',
   EP_IMAGE: '/image',
   EP_USER: '/user',
-  EP_BOOKING: '/booking',
   EP_AUTH: '/auth',
 } as const;
