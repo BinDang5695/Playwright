@@ -281,23 +281,6 @@ npm run test:crm:login:edge -- --workers=<number-of-workers>
 For more details, please refer to Playwright document
 [Playwright Parallelism and sharding](https://playwright.dev/docs/test-parallel)
 
-
-### Generate Report
-
-```
-After running test complete, we can execute the following command in Visual Code Terminal window or CMD window:
-npm run create:report
-
-The HTML report will be generated in folder TestReport in root folder
-
-We can change the type of reporter (JUnit, customized, 3rd party reporter - Allure, etc) in the playwright.config.ts file
-
-Execute this command for generating Playwright report:
-npm run create:playwright:report
-```
-
-<img width="1095" height="948" alt="image" src="https://github.com/user-attachments/assets/189a2778-5623-4da4-a167-316c7715cec3" />
-
 ### Run Linting to check coding convention of all projects (by ESLint)
 
 ```sh
@@ -321,6 +304,22 @@ npm run test:all:chrome
 npm run test:all:edge
 ```
 <img width="1457" height="398" alt="image" src="https://github.com/user-attachments/assets/138b9a4d-6b29-442d-91b8-46acc9d7ba95" />
+
+### Generate Report
+
+```
+After running test complete, we can execute the following command in Visual Code Terminal window or CMD window:
+npm run create:report
+
+The HTML report will be generated in folder TestReport in root folder
+
+We can change the type of reporter (JUnit, customized, 3rd party reporter - Allure, etc) in the playwright.config.ts file
+
+Execute this command for generating Playwright report:
+npm run create:playwright:report
+```
+
+<img width="1095" height="948" alt="image" src="https://github.com/user-attachments/assets/189a2778-5623-4da4-a167-316c7715cec3" />
 
 For more details, please refer to Playwright document
 [Playwright Test Configuration](https://playwright.dev/docs/test-configuration)
