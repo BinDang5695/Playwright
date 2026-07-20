@@ -43,9 +43,6 @@ non-bdd
 ├── allure-results/                                   # Raw Allure execution results
 ├── allure-report/                                    # Generated Allure HTML report
 ├── api/                                              
-│   ├── book/                                         
-│   │   ├── BookService.ts                            # Book API service methods
-│   │   └── VerifyBookResponseBody.ts                 # Book API response assertions
 │   ├── common/                                      
 │   │   ├── ApiClient.ts                              # Reusable Playwright API client
 │   │   ├── ApiLogger.ts                              # API request/response logging
@@ -53,11 +50,14 @@ non-bdd
 │   │   ├── EndpointGlobal.ts                         # API endpoint definitions
 │   │   ├── VerifyResponseBody.ts                     # Common response body assertions
 │   │   └── VerifyResponseHeaders.ts                  # Common response header assertions
-│   ├── image/                                        
+│   ├── services/
+│   │   ├── AuthService.ts                            # Authentication API service methods
+│   │   ├── BookService.ts                            # Book API service methods                                        
 │   │   ├── ImageService.ts                           # Image API service methods
-│   │   └── VerifyImageResponseBody.ts                # Image API response assertions
-│   └── user/                                         
-│   │   ├── UserService.ts                            # User API service methods
+│   │   └── UserService.ts                            # User API service methods
+│   └── verify/                                         
+│   │   ├── VerifyBookResponseBody.ts                 # Book API response assertions
+│   │   ├── VerifyImageResponseBody.ts                # Image API response assertions
 │   │   └── VerifyUserResponseBody.ts                 # User API response assertions
 ├── constants/                                        
 │   └── crm.ts                                        # Shared constants and menu definitions
@@ -67,9 +67,8 @@ non-bdd
 │   │   ├── .env.crm-dev                              # Development environment variables
 │   │   ├── .env.crm-prod                             # Production environment variables
 │   │   └── .env.crm-uat                              # UAT environment variables
-│   ├── api.global.setup.ts                           # API global setup
 │   ├── environment.ts                                # Environment loader
-│   ├── ui.global.setup.ts                            # UI authentication setup (storageState)
+│   ├── global.setup.ts                               # UI authentication setup (storageState)
 │   └── users.ts                                      # User credentials by role
 ├── fixtures/
 │   ├── api.fixture.ts                                # Shared API fixtures
@@ -90,6 +89,7 @@ non-bdd
 │           ├── customer.model.ts                     # Customer test data model
 │           ├── customerdriven.model.ts               # Data-driven customer model
 │           ├── expenses.model.ts                     # Expense test data model
+│           ├── export-data.model.ts                  # Export data model
 │           ├── file.model.ts                         # File upload/download model
 │           ├── item.model.ts                         # Item test data model
 │           ├── knowledge.model.ts                    # Knowledge Base test data model
@@ -305,7 +305,7 @@ npm run lint
 ### How to configure and run tests on different environment or browser
 Playwright has many options to configure how your tests are run. You can specify these options in the configuration file. Therefore, we can configure the enviroment which we use to run test in Project section of configuration file like below:
 
-<img width="589" height="965" alt="image" src="https://github.com/user-attachments/assets/43c69b5d-56a0-4c3f-b1dd-973dde41fa04" />
+<img width="611" height="960" alt="image" src="https://github.com/user-attachments/assets/1dd26cee-5678-4114-a3b3-62cd6d12af91" />
 
 In this sample, we configure 2 projects (1 for Chrome and 1 for Edge) in order to run all tests on different browsers. We can also configure different baseURl for different Environments here.
 Then, we can specify the scripts to run on multi environments on package.json file like below:
