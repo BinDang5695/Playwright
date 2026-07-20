@@ -296,6 +296,8 @@ Execute this command for generating Playwright report:
 npm run create:playwright:report
 ```
 
+<img width="1095" height="948" alt="image" src="https://github.com/user-attachments/assets/189a2778-5623-4da4-a167-316c7715cec3" />
+
 ### Run Linting to check coding convention of all projects (by ESLint)
 
 ```sh
@@ -318,8 +320,7 @@ npm run test:all
 npm run test:all:chrome
 npm run test:all:edge
 ```
-<img width="1474" height="398" alt="image" src="https://github.com/user-attachments/assets/ee24fdfd-f153-46f6-960c-f1c4d3842169" />
-<img width="1474" height="397" alt="image" src="https://github.com/user-attachments/assets/f3cee70a-652e-429d-9fc7-96f55472010a" />
+<img width="1457" height="398" alt="image" src="https://github.com/user-attachments/assets/138b9a4d-6b29-442d-91b8-46acc9d7ba95" />
 
 For more details, please refer to Playwright document
 [Playwright Test Configuration](https://playwright.dev/docs/test-configuration)
