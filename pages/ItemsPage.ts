@@ -69,7 +69,6 @@ export class ItemsPage extends BasePage {
     }
 
     async verifyItems(data: Item) {
-        await this.searchItems;
         await expect(this.tableDescription(data.description)).toHaveText(data.description);
         await expect(this.tableLongDescription(data.longDescription)).toHaveText(data.longDescription);
         await expect(this.tableRate(data.rate)).toHaveText(data.rate);

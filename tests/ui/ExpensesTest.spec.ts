@@ -22,8 +22,12 @@ test.describe.serial('Admin - Expenses Test Suite', () => {
             await expensesPage.clickButtonRecordExpense();
         });
 
-        await test.step('Create a new expense', async () => {
-            await expensesPage.addNewExpense(expenseData);
+        await test.step('Input to create a new expense', async () => {
+            await expensesPage.inputToCreateNewExpense(expenseData);
+        });
+
+        await test.step('Click button save', async () => {
+            await expensesPage.clickButtonSave();
         });
 
         await test.step('Verify the expense is created successfully', async () => {
@@ -37,13 +41,20 @@ test.describe.serial('Admin - Expenses Test Suite', () => {
             await expensesPage.searchExpense(expenseData);
         });
 
-        await test.step('Open the Edit Expense form', async () => {
+        await test.step('Hover to expense', async () => {
             await expensesPage.hoverToExpense(expenseData);
+        });
+
+        await test.step('Open the Edit Expense form', async () => {
             await expensesPage.clickButtonEdit();
         });
 
-        await test.step('Update the expense information', async () => {
-            await expensesPage.updateExpense(updatedExpenseData);
+        await test.step('Input to update the expense information', async () => {
+            await expensesPage.inputToUpdateExpense(updatedExpenseData);
+        });
+
+        await test.step('Click button save', async () => {
+            await expensesPage.clickButtonSave();
         });
 
         await test.step('Verify the expense is updated successfully', async () => {
@@ -57,9 +68,16 @@ test.describe.serial('Admin - Expenses Test Suite', () => {
             await expensesPage.searchExpense(updatedExpenseData);
         });
 
-        await test.step('Open the Expense details', async () => {
+        await test.step('Hover to expense', async () => {
             await expensesPage.hoverToExpense(updatedExpenseData);
+        });
+
+        await test.step('Open the Expense details', async () => {
             await BasePage.clickButtonView();
+        });
+
+        await test.step('Open the Expense details', async () => {
+            await expensesPage.hoverToTooltip();
         });
 
         await test.step('Verify the tooltip content', async () => {
@@ -73,13 +91,19 @@ test.describe.serial('Admin - Expenses Test Suite', () => {
             await expensesPage.searchExpense(updatedExpenseData);
         });
 
-        await test.step('Delete the expense', async () => {
+        await test.step('Hover to expense', async () => {
             await expensesPage.hoverToExpense(updatedExpenseData);
-            await expensesPage.deleteRecord();
+        });
+
+        await test.step('Delete the expense', async () => {
+            await expensesPage.deleteRecordAfterHover();
+        });
+
+        await test.step('Search for the deleted expense', async () => {
+            await expensesPage.searchExpense(updatedExpenseData);
         });
 
         await test.step('Verify the expense is deleted successfully', async () => {
-            await expensesPage.searchExpense(updatedExpenseData);
             await BasePage.verifyNoItem(Message.NO_ENTRIES_FOUND);
         });
     });

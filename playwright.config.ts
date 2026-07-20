@@ -13,7 +13,7 @@ console.log(`BASE_URL: ${process.env.BASE_URL}`);
 
 export default defineConfig({
 
-    globalSetup: './env/ui.global.setup.ts',
+    globalSetup: './env/global.setup.ts',
     fullyParallel: true,
     workers: 1,
     testDir: './tests',

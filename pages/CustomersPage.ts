@@ -6,10 +6,6 @@ import { expect } from '@playwright/test';
 
 export class CustomersPage extends BasePage {
 
-    private get menuCustomer() {
-        return this.page.locator("//span[normalize-space()='Customers']");
-    }
-
     private get buttonAddNewCustomer() {
         return this.page.getByRole('link', { name: 'New Customer' });
     }
@@ -86,15 +82,11 @@ export class CustomersPage extends BasePage {
         return this.page.locator("#company-error");
     }
 
-    private customerInTable(name: string) {
-        return this.page.locator(`//a[normalize-space()='${name}']`);
-    }
-
     async clickButtonAddNewCustomer() {
         await this.buttonAddNewCustomer.click();
     }
     
-    async addNewCustomer(data: Customer) {
+    async inputToAddNewCustomer(data: Customer) {
         await this.inputCompany.fill(data.company);
         await this.inputVATNumber.fill(data.vat);
         await this.inputPhoneNumber.fill(data.phone);
@@ -109,10 +101,17 @@ export class CustomersPage extends BasePage {
         await this.inputState.fill(data.state);
         await this.inputZipCode.fill(data.zip);
         await this.selectDropdownWithSearch(Dropdown.COUNTRY, 4, data.country);
+    }
+
+    async clickButtonSave() {
         await this.buttonSave.click();
     }
 
-    async addNewCustomerDataDriven(data: CustomerDataDriven) {
+    async scrollToButtonSave() {
+        await this.buttonSave.scrollIntoViewIfNeeded();
+    }
+
+    async inputToCreateCustomer(data: CustomerDataDriven) {
 
         if (data.company)
             await this.inputCompany.fill(data.company);
@@ -156,12 +155,9 @@ export class CustomersPage extends BasePage {
             await this.selectDropdownWithSearch(Dropdown.COUNTRY, 4, data.country);
         }
 
-        await this.buttonSave.scrollIntoViewIfNeeded();
-        await this.buttonSave.click();
     }
 
     async verifyCreateFail(message: string) {
-        await expect(this.errorMessage).toBeVisible();
         await expect(this.errorMessage).toHaveText(message);
     }
 
@@ -208,8 +204,8 @@ export class CustomersPage extends BasePage {
         await expect(this.countryDropdown).toHaveText(data.country);
     }
 
-    async hoverToCustomer(data: Customer) {
-        await this.createdCustomer(data.company).hover();
+    async hoverToCustomer(company: string) {
+        await this.createdCustomer(company).hover();
     }
 
     async getTotalCustomers() {
@@ -217,19 +213,8 @@ export class CustomersPage extends BasePage {
         return Number(totalText);
     }
 
-    async searchCustomer(data: Customer) {
-        await this.searchInput.fill(data.company);
-    }
-
-    async deleteCustomerIfExist(data: CustomerDataDriven){
-        if (!data.company) {
-            console.log('⚠️ No company name provided, cannot delete');
-            return;
-        }
-        await this.searchInput.fill(data.company);
-        await this.customerInTable(data.company).hover();
-        await this.deleteRecord();
-        await this.searchInput.fill(data.company);
+    async searchCustomer(company: string) {
+        await this.searchInput.fill(company);
     }
 
 }

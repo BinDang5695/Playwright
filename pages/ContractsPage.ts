@@ -5,10 +5,6 @@ import { Message } from '@constants/crm';
 
 export class ContractsPage extends BasePage {
 
-    private get menuContract() {
-        return this.page.locator("//span[normalize-space()='Contracts']")
-    }
-
     private get buttonNewContract() {
         return this.page.locator("//a[normalize-space()='New Contract']")
     }
@@ -77,15 +73,11 @@ export class ContractsPage extends BasePage {
         return this.page.locator("//input[@aria-controls='contracts']")
     }
 
-    async clickMenuContract() {
-        await this.menuContract.click();
-    }
-
     async clickButtonNewContract() {
         await this.buttonNewContract.click();
     }
 
-    async addNewContract(data: Contract) {
+    async inputToCreateNewContract(data: Contract) {
         await this.inputCustomer.click();
         await this.searchCustomer.pressSequentially(data.customer, { delay: 100 });
         await this.customerOption(data.customer).click();
@@ -98,6 +90,9 @@ export class ContractsPage extends BasePage {
         await this.inputStartDate.fill(data.startDate);
         await this.inputEndDate.fill(data.endDate);
         await this.inputDescription.fill(data.description);
+    }
+
+    async clickButtonSave() {
         await this.buttonSave.click();
     }
 
@@ -112,13 +107,12 @@ export class ContractsPage extends BasePage {
         await expect(this.inputDescription).toHaveValue(data.description);
     }
 
-    async updateContract(data: Contract) {
+    async inputToUpdateContract(data: Contract) {
         await this.inputSubject.fill(data.subject);
         await this.inputContractValue.fill(data.value);
         await this.inputStartDate.fill(data.startDate);
         await this.inputEndDate.fill(data.endDate);
         await this.inputDescription.fill(data.description);
-        await this.buttonSave.click();
     }
 
     async verifyUpdatedContract(data: Contract) {

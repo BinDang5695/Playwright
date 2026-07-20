@@ -6,16 +6,15 @@ import GetBookAfterPutSchema from '@data/api/GetBookAfterPutSchema.json';
 import DeleteBookSchema from '@data/api/DeleteBookSchema.json';
 import GetBookAfterDeleteSchema from '@data/api/GetBookAfterDeleteSchema.json';
 import { validateSchema } from '@models/helpers/ApiHelper';
-import { BookService } from '@api/book/BookService';
+import { BookService } from '@api/services/BookService';
 import { VerifyResponseHeaders } from '@api/common/VerifyResponseHeaders';
-import { VerifyBookResponseBody } from '@api/book/VerifyBookResponseBody';
+import { VerifyBookResponseBody } from '@api/verify/VerifyBookResponseBody';
 
 let createdBook: any;
 let createdBookId: number;
 let updatedBookData: any;
 
 test.describe.serial('API Book Tests', () => {
-
 
     test('[BOOK_001] Create Book Successfully', async ({ request, token }) => {
 
@@ -50,7 +49,6 @@ test.describe.serial('API Book Tests', () => {
 
     });
 
-
     test('[BOOK_002] Get Book Successfully', async ({ request, token }) => {
 
         await test.step('Send GET request to get book detail', async () => {
@@ -78,7 +76,6 @@ test.describe.serial('API Book Tests', () => {
         });
 
     });
-
 
     test('[BOOK_003] Update Book Successfully', async ({ request, token }) => {
 
@@ -109,7 +106,6 @@ test.describe.serial('API Book Tests', () => {
         });
 
     });
-
 
     test('[BOOK_004] Get Book After Update Successfully', async ({ request, token }) => {
 
@@ -142,7 +138,6 @@ test.describe.serial('API Book Tests', () => {
 
     });
 
-
     test('[BOOK_005] Delete Book Successfully', async ({ request, token }) => {
 
         await test.step('Send DELETE request to remove book', async () => {
@@ -169,7 +164,6 @@ test.describe.serial('API Book Tests', () => {
         });
 
     });
-
 
     test('[BOOK_006] Get Book After Delete Successfully', async ({ request, token }) => {
 

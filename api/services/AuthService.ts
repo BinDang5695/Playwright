@@ -1,13 +1,13 @@
 // api/GlobalService.ts
 import type { APIRequestContext } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { ApiClient } from '../api/common/ApiClient';
-import { EndPointGlobal } from '../api/common/EndpointGlobal';
-import { ConfigGlobal } from '../api/common/Config';
-import { validateSchema } from '../models/helpers/ApiHelper';
+import { ApiClient } from '../common/ApiClient';
+import { EndPointGlobal } from '../common/EndpointGlobal';
+import { ConfigGlobal } from '../common/Config';
+import { validateSchema } from '../../models/helpers/ApiHelper';
 import loginSchema from '@data/api/LoginSchema.json';
 
-export class GlobalSetup {
+export class AuthService {
 
   static async login(
     request: APIRequestContext

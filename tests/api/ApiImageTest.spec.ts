@@ -6,15 +6,14 @@ import GetImageAfterPutSchema from '@data/api/GetImageAfterPutSchema.json';
 import DeleteImageSchema from '@data/api/DeleteImageSchema.json';
 import GetImageAfterDeleteSchema from '@data/api/GetImageAfterDeleteSchema.json';
 import { validateSchema } from '@models/helpers/ApiHelper';
-import { ImageService } from '@api/image/ImageService';
+import { ImageService } from '@api/services/ImageService';
 import { VerifyResponseHeaders } from '@api/common/VerifyResponseHeaders';
-import { VerifyImageResponseBody } from '@api/image/VerifyImageResponseBody';
+import { VerifyImageResponseBody } from '@api/verify/VerifyImageResponseBody';
 
 let createdImage: any;
 let createdImageId: number;
 
 test.describe.serial('API Image Tests', () => {
-
 
     test('[IMAGE_001] Create Image Successfully', async ({ request, token }) => {
 
@@ -51,7 +50,6 @@ test.describe.serial('API Image Tests', () => {
 
     });
 
-
     test('[IMAGE_002] Get Image Successfully', async ({ request, token }) => {
 
         await test.step('Send GET request to get image detail', async () => {
@@ -83,7 +81,6 @@ test.describe.serial('API Image Tests', () => {
 
     });
 
-
     test('[IMAGE_003] Update Image Successfully', async ({ request, token }) => {
 
         await test.step('Send PUT request to update image', async () => {
@@ -114,7 +111,6 @@ test.describe.serial('API Image Tests', () => {
         });
 
     });
-
 
     test('[IMAGE_004] Get Image After Update Successfully', async ({ request, token }) => {
 
@@ -149,7 +145,6 @@ test.describe.serial('API Image Tests', () => {
 
     });
 
-
     test('[IMAGE_005] Delete Image Successfully', async ({ request, token }) => {
 
         await test.step('Send DELETE request to remove image', async () => {
@@ -182,7 +177,6 @@ test.describe.serial('API Image Tests', () => {
         });
 
     });
-
 
     test('[IMAGE_006] Get Image After Delete Successfully', async ({ request, token }) => {
 

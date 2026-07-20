@@ -37,6 +37,10 @@ export class ProjectsPage extends BasePage {
         return this.page.locator(`//button[@title='${name}']`)
     }
 
+    private get projectProgress() {
+        return this.page.locator("//p[contains(@class,'project-info')]")
+    }
+
     private projectNameCreated(name: string) {
         return this.page.locator(`//a[normalize-space()='${name}']`)
     }
@@ -53,7 +57,7 @@ export class ProjectsPage extends BasePage {
         return this.page.locator("//div[contains(@class,'ui-slider')]")
     }
 
-    async clickNewProject() {
+    async clickButtonNewProject() {
         await this.buttonNewProject.click();
     }
 
@@ -76,33 +80,36 @@ export class ProjectsPage extends BasePage {
         await this.page.mouse.up();
     }
 
-    async submitDataForNewProject(data: Project) {
+    async inputToCreateNewProject(data: Project) {
         await this.inputProjectName.fill(data.name);
         await this.selectDropdownWithSearch(Dropdown.CLIENT_ID, 6, data.customer);
         await this.checkBoxCalculate.click();
         await this.moveSliderToMiddle();
         await this.selectDropdownBySpanText(Dropdown.BILLING_TYPE, Option.PROJECTHOURS);
+    }
+
+    async clickButtonSave() {
         await this.saveProject.click();
     }
 
     async verifyProjectCreated(data: Project) {
         await expect(this.getAlert).toHaveText(Message.CREATEDPROJECT);
         await expect(this.projectNameCustomer(data.verifyProjectNameCustomer)).toHaveText(data.verifyProjectNameCustomer);
+        await expect(this.projectProgress).toHaveText(data.verifyProjectProgress);
         await expect(this.projectNameCreated(data.customer)).toHaveText(data.customer);
         await expect(this.statusProject).toHaveText(data.verifyStatusProject);
     }
 
-    async searchAndCheckProjectInTable(data: Project) {
+    async searchProject(data: Project) {
         await this.inputSearchProject.fill(data.name);
+    }
+
+    async verifyCreatedProject(data: Project) {
         await expect(this.itemCustomerFirst(data.name)).toHaveText(data.name);
     }
 
-    async moveToProjectName(data: Project) {
+    async hoverToProject(data: Project) {
         await this.projectNameOnProjectTab(data.name).hover();
     }
 
-    async searchAndverifyNoData(data: Project) {
-        await this.inputSearchProject.fill(data.name);
-        await expect(this.getNoData).toBeVisible();
-    }
 }

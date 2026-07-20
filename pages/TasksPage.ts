@@ -10,16 +10,8 @@ export class TasksPage extends BasePage {
         return this.page.locator("//a[normalize-space()='New Task']")
     }
 
-    private get titleTaskPage() {
-        return this.page.locator("//span[normalize-space()='Tasks Summary']")
-    }
-
     private get switchToKanBan() {
         return this.page.locator("//i[@class='fa-solid fa-grip-vertical']")
-    }
-
-    private get switchToList() {
-        return this.page.locator("//i[@class='fa-solid fa-table-list']")
     }
 
     private get completeTaskTotal() {
@@ -110,16 +102,8 @@ export class TasksPage extends BasePage {
         return this.page.locator(`//a[normalize-space()='${updatedName}']`)
     }
 
-    async verifyNavigateToTasksPage() {
-        await expect(this.titleTaskPage).toBeVisible();
-    }
-
     async clickButtonSwitchToKanBan() {
         await this.switchToKanBan.click();
-    }
-
-    async verifyNavigateToKanbanPage() {
-        await expect(this.switchToList).toBeVisible();
     }
 
     async clickButtonAddNewTask() {
@@ -133,8 +117,11 @@ export class TasksPage extends BasePage {
         expect(value).toContain(DateHelpers.getTodayDDMMYYYY());
     }
 
-    async submitDataForNewTask(data: Task) {
+    async inputToCreateNewTask(data: Task) {
         await this.inputSubject.fill(data.subject);
+    }
+
+    async clickButtonSave() {
         await this.saveTask.click();
     }
 
@@ -145,35 +132,44 @@ export class TasksPage extends BasePage {
         expect(this.normalizeText(rawText)).toBe(data.taskName);
         await expect(this.taskStatus).toHaveText(data.status);
     }
-
-    async hoverAndClickCreatedTask(data: Task) {
+    async hoverToCreatedTask(data: Task) {
         await this.binTask(data.subject).hover();
-        await this.binTask(data.subject).click();
     }
 
-    async markCompletedAndRefreshPage(data: Task) {
+    async hoverToUpdatedTask(data: Task) {
+        await this.binEditedTaskOnList(data.updatedSubject).hover();
+    }
+
+    async clickCreatedTask(subject: string) {
+        await this.binTask(subject).click();
+    }
+
+    async markCompletedTask() {
         await this.markComplete.click();
-        await this.closePopUp.click();
-        await this.reloadPage();
-        await expect(this.binTask(data.subject)).toBeVisible();
     }
 
     async verifyCompleteTasksAfterRefreshed(data: Task) {
         await expect(this.completeTaskTotal).toHaveText(data.completeTaskTotal);
     }
 
-    async editTask(data: Task) {
-        await this.binTask(data.subject).click();
+    async clickMenu() {
         await this.menu.click();
-        await this.editOption.click();
-        await this.inputSubject.fill(data.updatedSubject);
-        await this.saveTask.click();
-        await this.getbuttonCloseAlert.click();
-        await this.closePopUp.click();
     }
 
-    async searchTask(subject: string) {
+    async clickEditOption() {
+        await this.editOption.click();
+    }
+
+    async editTask(data: Task) {
+        await this.inputSubject.fill(data.updatedSubject);
+    }
+
+    async searchTaskOnKanBan(subject: string) {
         await this.searchOnKanBan.pressSequentially(subject, { delay: 100 });
+    }
+
+    async searchTaskOnList(subject: string) {
+        await this.searchOnList.pressSequentially(subject, { delay: 100 });
     }
 
     async verifyAfterSearch(data: Task) {
@@ -184,26 +180,12 @@ export class TasksPage extends BasePage {
     }
 
     async dragAndDropTask() {
-        await this.to.hover();
         await this.from.dragTo(this.to);
     }
 
     async verifyTotalTasksAfterDragDrop(data: Task) {
         await expect(this.completeTaskTotal).toHaveText(data.completeTaskAfterDragDrop);
         await expect(this.notStartedTaskTotal).toHaveText(data.notStartedTaskTotal);
-    }
-
-    async clickButtonSwitchToList() {
-        await this.switchToList.click();
-    }
-
-    async searchAndDeleteTask(data: Task) {
-        await this.acceptAlert();
-        await this.clickButtonSwitchToList;
-        await this.searchOnList.fill(data.updatedSubject);
-        await this.page.evaluate(() => window.scrollTo(0, 0));
-        await this.binEditedTaskOnList(data.updatedSubject).hover();
-        await this.buttonDelete.click();
     }
 
     async searchAfterDeleted(data: Task) {

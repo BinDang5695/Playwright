@@ -1,6 +1,8 @@
 import { test } from '@fixtures/ui.fixture';
 import { Menu } from '@constants/crm';
 import { articleData } from '@data/ui/knowledge.data';
+import { Message } from '@constants/crm';
+import type { Page } from '@playwright/test';
 
 test.describe.serial('Admin - Knowledge Base Test Suite', () => {
 
@@ -23,7 +25,11 @@ test.describe.serial('Admin - Knowledge Base Test Suite', () => {
         });
 
         await test.step('Create a new article', async () => {
-            await knowledgeBasePage.addNewArticle(articleData);
+            await knowledgeBasePage.inputToCreateNewArticle(articleData);
+        });
+
+        await test.step('Create a new article', async () => {
+            await knowledgeBasePage.clickButtonSave();
         });
 
         await test.step('Verify the article is created successfully', async () => {
@@ -32,24 +38,58 @@ test.describe.serial('Admin - Knowledge Base Test Suite', () => {
     });
 
 
-    test('[KNOWLEDGE_002] View article and submit feedback successfully', async ({ knowledgeBasePage }) => {
+    test('[KNOWLEDGE_002] View article and submit feedback successfully - Then delete article after switch to main tab', async ({ BasePage, knowledgeBasePage }) => {
 
-        await test.step('Open the article and switch between tabs', async () => {
-            await knowledgeBasePage.switchBetweenTabTest(articleData);
+        let articleTab: Page;
+
+        await test.step('Hover to article', async () => {
+            await knowledgeBasePage.hoverToArticle(articleData);
         });
-    });
 
+        await test.step('Open article in new tab', async () => {
+            articleTab = await knowledgeBasePage.openArticleInNewTab();
+        });
 
-    test('[KNOWLEDGE_003] Delete article successfully', async ({ BasePage, knowledgeBasePage }) => {
+        await test.step('Verify article detail', async () => {
+            await knowledgeBasePage.verifyArticleDetail(articleTab, articleData);
+        });
+
+        await test.step('Vote article first time', async () => {
+            await knowledgeBasePage.voteArticle(articleTab);
+        });
+
+        await test.step('Verify first feedback message', async () => {
+            await knowledgeBasePage.verifyFeedbackMessage(articleTab, Message.THANKSFORYOUFEEDBACK);
+        });
+
+        await test.step('Vote article second time', async () => {
+            await knowledgeBasePage.voteArticle(articleTab);
+        });
+
+        await test.step('Verify second feedback message', async () => {
+            await knowledgeBasePage.verifyFeedbackMessage(articleTab, Message.YOUCANVOTEONCEIN24HOURS);
+        });
+
+        await test.step('Switch back to main tab', async () => {
+            await knowledgeBasePage.switchBackToMainTab();
+        });
 
         await test.step('Search for the existing article', async () => {
             await knowledgeBasePage.searchKnowledgeBase(articleData);
         });
 
-        await test.step('Delete the article', async () => {
+        await test.step('Hover to article', async () => {
             await knowledgeBasePage.hoverToArticle(articleData);
-            await BasePage.deleteRecord();
         });
+
+        await test.step('Delete the article', async () => {
+            await BasePage.deleteRecordAfterHover();
+        });
+
+        await test.step('Verify the article is deleted successfully', async () => {
+            await BasePage.verifyNoItem(Message.NO_ENTRIES_FOUND);
+        });
+
     });
 
 });

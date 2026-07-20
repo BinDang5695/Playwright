@@ -18,16 +18,8 @@ test.describe.serial('Admin - Task Test Suite', () => {
 
     test('[TASK_001] Create Task Successfully', async ({ tasksPage }) => {
 
-        await test.step('Verify navigation to Tasks page', async () => {
-            await tasksPage.verifyNavigateToTasksPage();
-        });
-
         await test.step('Switch to Kanban view', async () => {
             await tasksPage.clickButtonSwitchToKanBan();
-        });
-
-        await test.step('Verify navigation to Kanban page', async () => {
-            await tasksPage.verifyNavigateToKanbanPage();
         });
 
         await test.step('Open the New Task form', async () => {
@@ -39,7 +31,11 @@ test.describe.serial('Admin - Task Test Suite', () => {
         });
 
         await test.step('Create a new task', async () => {
-            await tasksPage.submitDataForNewTask(taskData);
+            await tasksPage.inputToCreateNewTask(taskData);
+        });
+
+        await test.step('Create a new task', async () => {
+            await tasksPage.clickButtonSave();
         });
 
         await test.step('Verify the task is created successfully', async () => {
@@ -48,19 +44,34 @@ test.describe.serial('Admin - Task Test Suite', () => {
 
     });
 
+    test('[TASK_002] Complete Task Successfully', async ({ BasePage, tasksPage }) => {
 
-    test('[TASK_002] Complete Task Successfully', async ({ tasksPage }) => {
+        await test.step('Switch to Kanban view', async () => {
+            await tasksPage.clickButtonSwitchToKanBan();
+        });
 
         await test.step('Search for the existing task', async () => {
-            await tasksPage.searchTask(taskData.subject);
+            await tasksPage.searchTaskOnKanBan(taskData.subject);
+        });
+
+        await test.step('Hover to the created task', async () => {
+            await tasksPage.hoverToCreatedTask(taskData);
         });
 
         await test.step('Open the created task', async () => {
-            await tasksPage.hoverAndClickCreatedTask(taskData);
+            await tasksPage.clickCreatedTask(taskData.subject);
         });
 
         await test.step('Mark task as completed', async () => {
-            await tasksPage.markCompletedAndRefreshPage(taskData);
+            await tasksPage.markCompletedTask();
+        });
+
+        await test.step('Close pop up', async () => {
+            await BasePage.clickButtonClosePopUp();
+        });
+
+        await test.step('Reload page', async () => {
+            await BasePage.reloadPage();
         });
 
         await test.step('Verify the task is completed successfully', async () => {
@@ -69,15 +80,38 @@ test.describe.serial('Admin - Task Test Suite', () => {
 
     });
 
+    test('[TASK_003] Edit Task Successfully', async ({ BasePage, tasksPage }) => {
 
-    test('[TASK_003] Edit Task Successfully', async ({ tasksPage }) => {
+        await test.step('Switch to Kanban view', async () => {
+            await tasksPage.clickButtonSwitchToKanBan();
+        });
 
         await test.step('Search for the existing task', async () => {
-            await tasksPage.searchTask(taskData.subject);
+            await tasksPage.searchTaskOnKanBan(taskData.subject);
+        });
+
+        await test.step('Open the created task', async () => {
+            await tasksPage.clickCreatedTask(taskData.subject);
+        });
+
+        await test.step('Open the menu task', async () => {
+            await tasksPage.clickMenu();
+        });
+
+        await test.step('Select the edit option', async () => {
+            await tasksPage.clickEditOption();
         });
 
         await test.step('Edit the task information', async () => {
             await tasksPage.editTask(taskData);
+        });
+
+        await test.step('Click button save', async () => {
+            await tasksPage.clickButtonSave();
+        });
+
+        await test.step('Close popup', async () => {
+            await BasePage.clickButtonClosePopUp();
         });
 
         await test.step('Verify the task is updated successfully', async () => {
@@ -86,11 +120,18 @@ test.describe.serial('Admin - Task Test Suite', () => {
 
     });
 
-
     test('[TASK_004] Drag Drop Task Successfully', async ({ tasksPage }) => {
 
+        await test.step('Switch to Kanban view', async () => {
+            await tasksPage.clickButtonSwitchToKanBan();
+        });
+
         await test.step('Search for the task to drag and drop', async () => {
-            await tasksPage.searchTask(taskData.updatedSubject);
+            await tasksPage.searchTaskOnKanBan(taskData.updatedSubject);
+        });
+
+        await test.step('Hover to the updated task', async () => {
+            await tasksPage.hoverToUpdatedTask(taskData);
         });
 
         await test.step('Drag and drop the task', async () => {
@@ -103,19 +144,22 @@ test.describe.serial('Admin - Task Test Suite', () => {
 
     });
 
+    test('[TASK_005] Delete Task Successfully', async ({ BasePage, tasksPage }) => {
 
-    test('[TASK_005] Delete Task Successfully', async ({ tasksPage }) => {
-
-        await test.step('Switch to List view', async () => {
-            await tasksPage.clickButtonSwitchToList();
+        await test.step('Search updated task', async () => {
+            await tasksPage.searchTaskOnList(taskData.updatedSubject);
         });
 
-        await test.step('Search and delete the task', async () => {
-            await tasksPage.searchAndDeleteTask(updatedTaskData);
+        await test.step('Hover to the updated task', async () => {
+            await tasksPage.hoverToUpdatedTask(taskData);
         });
 
-        await test.step('Search for deleted task', async () => {
-            await tasksPage.searchAfterDeleted(updatedTaskData);
+        await test.step('Delete the task', async () => {
+            await BasePage.deleteRecordAfterHover();
+        });
+
+        await test.step('Search updated task after delete', async () => {
+            await tasksPage.searchTaskOnList(taskData.updatedSubject);
         });
 
         await test.step('Verify the task is deleted successfully', async () => {

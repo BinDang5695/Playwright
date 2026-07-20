@@ -1,6 +1,6 @@
-import { expect } from '@playwright/test';
+import { expect, Page } from '@playwright/test';
 import { Article } from '@models/types/ui/knowledge.model'
-import { Dropdown, Message } from '@constants/crm';
+import { Dropdown } from '@constants/crm';
 import { BasePage } from '@pages/BasePage';
 
 export class KnowledgeBasePage extends BasePage {
@@ -53,39 +53,48 @@ export class KnowledgeBasePage extends BasePage {
         await this.buttonNewArticle.click();
     }
 
-    async addNewArticle(data: Article) {
+    async inputToCreateNewArticle(data: Article) {
         await this.inputSubject.fill(data.subject);
         await this.selectDropdownBySpanText(Dropdown.ARTICLEGROUP, data.group);
         await this.checkboxInternalArticle.check();
         await this.checkboxDisabled.check();
         await this.editorBody.fill(data.description);
+    }
+
+    async clickButtonSave() {
         await this.buttonSave.click();
     }
 
     async verifyArticleAdded(data: Article) {
         await expect(this.inputSubject).toHaveValue(data.subject);
         await expect(this.getDropdownByDataId(Dropdown.ARTICLEGROUP)).toHaveText(data.group);
-        await expect(this.checkboxInternalArticle).toBeChecked;
+        await expect(this.checkboxInternalArticle).toBeChecked();
         await expect(this.checkboxDisabled).toBeChecked();
         await expect(this.editorBody).toHaveText(data.description);
     }
 
-    async switchBetweenTabTest(data: Article) {
-
-        await this.createdArticle(data.subject).hover();
-        await expect(this.buttonView).toBeVisible();
-
-        const [tab2] = await Promise.all([
+    async openArticleInNewTab() {
+        const [newTab] = await Promise.all([
             this.page.context().waitForEvent('page'),
             this.buttonView.click()
         ]);
+        return newTab;
+    }
 
-        await expect(tab2.locator(this.nameArticle(data.subject))).toHaveText(data.subject);
-        await expect(tab2.locator(this.descriptionArticle(data.description))).toHaveText(data.description);
-        await tab2.locator(this.buttonYes).click();
-        await expect(tab2.locator(this.messageNotification)).toHaveText(Message.THANKSFORYOUFEEDBACK);
-        await tab2.locator(this.buttonYes).click();
-        await expect(tab2.locator(this.messageNotification)).toHaveText(Message.YOUCANVOTEONCEIN24HOURS);
+    async verifyArticleDetail(tab: Page, data: Article) {
+        await expect(tab.locator(this.nameArticle(data.subject))).toHaveText(data.subject);
+        await expect(tab.locator(this.descriptionArticle(data.description))).toHaveText(data.description);
+    }
+
+    async voteArticle(tab: Page) {
+        await tab.locator(this.buttonYes).click();
+    }
+
+    async verifyFeedbackMessage(tab: Page, message: string) {
+        await expect(tab.locator(this.messageNotification)).toHaveText(message);
+    }
+
+    async switchBackToMainTab() {
         await this.page.bringToFront();
     }
 

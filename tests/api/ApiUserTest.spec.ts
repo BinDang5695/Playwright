@@ -6,9 +6,9 @@ import GetUserAfterPutSchema from '@data/api/GetUserAfterPutSchema.json';
 import DeleteUserSchema from '@data/api/DeleteUserSchema.json';
 import GetUserAfterDeleteSchema from '@data/api/GetUserAfterDeleteSchema.json';
 import { validateSchema } from '@models/helpers/ApiHelper';
-import { UserService } from '@api/user/UserService';
+import { UserService } from '@api/services/UserService';
 import { VerifyResponseHeaders } from '@api/common/VerifyResponseHeaders';
-import { VerifyUserResponseBody } from '@api/user/VerifyUserResponseBody';
+import { VerifyUserResponseBody } from '@api/verify/VerifyUserResponseBody';
 
 let createdUser: any;
 let createdUserId: number;
@@ -16,7 +16,6 @@ let createdUsername: string;
 let updatedUserData: any;
 
 test.describe.serial('API User Tests', () => {
-
 
     test('[USER_001] Create User Successfully', async ({ request, token }) => {
 
@@ -61,7 +60,6 @@ test.describe.serial('API User Tests', () => {
 
     });
 
-
     test('[USER_002] Get User Successfully', async ({ request, token }) => {
 
         await test.step('Send GET request to get user detail', async () => {
@@ -95,7 +93,6 @@ test.describe.serial('API User Tests', () => {
         });
 
     });
-
 
     test('[USER_003] Update User Successfully', async ({ request, token }) => {
 
@@ -136,7 +133,6 @@ test.describe.serial('API User Tests', () => {
 
     });
 
-
     test('[USER_004] Get User After Update Successfully', async ({ request, token }) => {
 
         await test.step('Send GET request after updating user', async () => {
@@ -171,7 +167,6 @@ test.describe.serial('API User Tests', () => {
 
     });
 
-
     test('[USER_005] Delete User Successfully', async ({ request, token }) => {
 
         await test.step('Send DELETE request to remove user', async () => {
@@ -205,7 +200,6 @@ test.describe.serial('API User Tests', () => {
         });
 
     });
-
 
     test('[USER_006] Get User After Delete Successfully', async ({ request, token }) => {
 

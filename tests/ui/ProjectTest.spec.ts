@@ -1,5 +1,5 @@
 import { test } from '@fixtures/ui.fixture';
-import { Menu } from '@constants/crm';
+import { Menu, Message } from '@constants/crm';
 import { projectData } from '@data/ui/project.data';
 import { customerData } from '@data/ui/customer.data';
 
@@ -13,7 +13,8 @@ test.describe.serial('Admin - Project Test Suite', () => {
         await test.step('Create Customer', async () => {
             await BasePage.clickByMenuName(Menu.CUSTOMERS);
             await customersPage.clickButtonAddNewCustomer();
-            await customersPage.addNewCustomer(customerData);
+            await customersPage.inputToAddNewCustomer(customerData);
+            await customersPage.clickButtonSave();
         });
     });
 
@@ -31,23 +32,33 @@ test.describe.serial('Admin - Project Test Suite', () => {
         });
 
         await test.step('Open the New Project form', async () => {
-            await projectsPage.clickNewProject();
+            await projectsPage.clickButtonNewProject();
         });
 
-        await test.step('Create a new project', async () => {
-            await projectsPage.submitDataForNewProject(projectData);
+        await test.step('Input to create a new project', async () => {
+            await projectsPage.inputToCreateNewProject(projectData);
+        });
+
+        await test.step('Click save button', async () => {
+            await projectsPage.clickButtonSave();
         });
 
         await test.step('Verify the project is created successfully', async () => {
             await projectsPage.verifyProjectCreated(projectData);
         });
 
-        await test.step('Search and verify the created project in table', async () => {
+        await test.step('Navigate to Projects page', async () => {
             await BasePage.clickByMenuName(Menu.PROJECTS);
-            await projectsPage.searchAndCheckProjectInTable(projectData);
+        });
+
+        await test.step('Search created project', async () => {
+            await projectsPage.searchProject(projectData);
+        });
+
+        await test.step('Verify the created project in table', async () => {
+            await projectsPage.verifyCreatedProject(projectData);
         });
     });
-
 
     test('[PROJECT_002] Delete Project Successfully', async ({ BasePage, projectsPage, customersPage }) => {
 
@@ -56,24 +67,30 @@ test.describe.serial('Admin - Project Test Suite', () => {
         });
 
         await test.step('Search for the existing project', async () => {
-            await projectsPage.searchAndCheckProjectInTable(projectData);
+            await projectsPage.searchProject(projectData);
+        });
+
+        await test.step('Hover to project', async () => {
+            await projectsPage.hoverToProject(projectData);
         });
 
         await test.step('Delete the project', async () => {
-            await projectsPage.moveToProjectName(projectData);
-            await BasePage.deleteRecord();
+            await BasePage.deleteRecordAfterHover();
+        });
+
+        await test.step('Navigate to Projects page', async () => {
+            await projectsPage.searchProject(projectData);
         });
 
         await test.step('Verify the project is deleted successfully', async () => {
-            await BasePage.clickByMenuName(Menu.PROJECTS);
-            await projectsPage.searchAndverifyNoData(projectData);
+            await BasePage.verifyNoItem(Message.NO_MATCHING_RECORDS_FOUND);
         });
 
         await test.step('Delete create Customer', async () => {
-            await BasePage.clickByMenuName(Menu.CUSTOMERS);
-            await customersPage.searchCustomer(customerData);
-            await customersPage.hoverToCustomer(customerData);
-            await BasePage.deleteRecord();
+                await BasePage.clickByMenuName(Menu.CUSTOMERS);
+                await customersPage.searchCustomer(customerData.company);
+                await customersPage.hoverToCustomer(customerData.company);
+                await BasePage.deleteRecordAfterHover();
         });
     });
 

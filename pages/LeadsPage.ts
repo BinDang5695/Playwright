@@ -9,10 +9,6 @@ export class LeadsPage extends BasePage {
     return this.page.locator("//a[normalize-space()='New Lead']")
   }
 
-  private get dropdownStatus() {
-    return this.page.locator("//button[@data-id='status']")
-  }
-
   private get inputName() {
     return this.page.locator("//div[@class='col-md-6']//input[@id='name']")
   }
@@ -42,9 +38,10 @@ export class LeadsPage extends BasePage {
     await this.selectDropdownByType(Button.STATUS, data.status);
     await this.selectDropdownBySpanText(Button.SOURCE, data.source);
     await this.inputName.fill(data.name);
+  }
+
+  async clickButtonSave() {
     await this.buttonSave.click();
-    await this.reloadPage();
-    await expect(this.buttonNewLead).toBeVisible();
   }
 
   async createMultipleLeads(totalLead: number, data: Lead) {
@@ -52,28 +49,19 @@ export class LeadsPage extends BasePage {
       data.name = `Bin Lead ${i}`;
       console.log(`Creating Lead: ${data.name}`);
 
-      let formOpened = false;
       for (let attempt = 1; attempt <= 3; attempt++) {
         try {
-          console.log(`🔄 Attempt ${attempt} to open New Lead form`);
-
           await this.buttonNewLead.click();
-          await expect(this.dropdownStatus).toBeVisible();
-          console.log(`✅ New Lead form opened successfully`);
-          formOpened = true;
           break;
 
         } catch (err) {
-          console.log(`⚠️ Form didn't open on attempt ${attempt}, refreshing page`);
           await this.reloadPage();
         }
       }
 
-      if (!formOpened) {
-        throw new Error(`❌ Failed to open New Lead form after 3 attempts`);
-      }
-
       await this.addNewLead(data);
+      await this.clickButtonSave();
+      await this.reloadPage();
     }
   }
 
@@ -82,33 +70,25 @@ export class LeadsPage extends BasePage {
     const texts = await this.leadNameCells.allTextContents();
     const normalizedValue = this.normalizeText(searchValue);
     const matched = texts.filter(text => this.normalizeText(text).includes(normalizedValue));
-
     console.log(`📋 Total rows: ${texts.length} | ✅ Matched: ${matched.length}`);
     expect(matched.length).toBeGreaterThan(0);
   }
 
-  async searchAndCheckDataInTable(data: Lead) {
+  async selectLeadsLength(length: number) {
+    await this.dropdownPagination.selectOption(`${length}`);
+  }
 
-    await this.dropdownPagination.selectOption('10');
+  async searchLeads(data: Lead) {
     await this.type(this.inputSearchLead, data.search);
+  }
+
+  async checkNumberOfLeads(data: Lead) {
     await expect(this.contentLeads_info1To2).toContainText(Message.SHOWING1TO2OFENTRIES);
     await this.checkLeadNameContains(data);
   }
 
-  async deleteDataAfterSearched() {
-    await this.acceptAlert();
-    await this.dropdownPagination.selectOption('25');
-    await this.selectAllAndEnsureChecked();
-    await this.buttonBulkActions.click();
-    await this.checkboxMassDelete.click();
-    await this.buttonConfirm.click();
-  }
-
-  async verifyDeletedLeads(data: Lead) {
+  async verifyAlertTotalDeletedLeads(data: Lead) {
     await expect(this.getAlert, Message.TOTALLEADSDELETE2).toBeVisible();
-    await this.getbuttonCloseAlert.click();
-    await this.inputSearchLead.fill(data.search);
-    await expect(this.getNoData).toBeVisible();
   }
   
 }

@@ -1,6 +1,6 @@
 import { test } from '@fixtures/ui.fixture';
 import customerCases from '@data/ui/CustomerData.json';
-import { Menu } from '@constants/crm';
+import { Menu, Message } from '@constants/crm';
 import { CustomerDataDriven } from '@models/types/ui/customerdriven.model';
 import { ROLES } from '@constants/crm';
 
@@ -23,7 +23,7 @@ for (const role of ROLES) {
 
     test.beforeEach(async ({ BasePage }) => {
 
-      await test.step('Navigate to Customers', async () => {
+      await test.step('Navigate to Customers page', async () => {
         await BasePage.clickByMenuName(Menu.CUSTOMERS);
       });
 
@@ -37,8 +37,16 @@ for (const role of ROLES) {
           await customersPage.clickButtonAddNewCustomer();
         });
 
-        await test.step('Add new customer from JSON data file', async () => {
-          await customersPage.addNewCustomerDataDriven(item.data);
+        await test.step('Input to create a new customer from JSON data file', async () => {
+          await customersPage.inputToCreateCustomer(item.data);
+        });
+
+        await test.step('Scroll to button save', async () => {
+          await customersPage.scrollToButtonSave();
+        });
+
+        await test.step('Click button save', async () => {
+          await customersPage.clickButtonSave();
         });
 
         if (item.expectedType === 'success') {
@@ -47,9 +55,28 @@ for (const role of ROLES) {
             await customersPage.verifyCustomerAddedDataDriven(item.data);
           });
 
-          await test.step('Delete the created customer', async () => {
+          await test.step('Navigate to Customers page', async () => {
             await BasePage.clickByMenuName(Menu.CUSTOMERS);
-            await customersPage.deleteCustomerIfExist(item.data);
+          });
+
+          await test.step('Search for the existing customer', async () => {
+                await customersPage.searchCustomer(item.data.company!);
+          });
+
+          await test.step('Hover to customer', async () => {
+                await customersPage.hoverToCustomer(item.data.company!);
+          });
+
+          await test.step('Delete the customer', async () => {
+                await BasePage.deleteRecordAfterHover();
+            });
+
+          await test.step('Search for the deleted customer', async () => {
+                await customersPage.searchCustomer(item.data.company!);
+          });
+
+          await test.step('Verify the customer is deleted successfully', async () => {
+                await BasePage.verifyNoItem(Message.NO_MATCHING_RECORDS_FOUND);
           });
 
         } else {

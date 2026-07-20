@@ -101,7 +101,7 @@ export class ExpensesPage extends BasePage {
         await this.buttonRecordExpense.click();
     }
 
-    async addNewExpense(data: Expense) {
+    async inputToCreateNewExpense(data: Expense) {
         await this.attachFile(data.receipt);
         await this.type(this.inputName, data.name);
         await this.type(this.inputNote, data.note);
@@ -113,6 +113,9 @@ export class ExpensesPage extends BasePage {
         await this.selectDropdownBySpanText(Dropdown.REPEAT_EVERY, data.repeatEvery);
         await this.checkboxInfinity.click();
         await this.type(this.inputTotalCycles, data.totalCycles);
+    }
+
+    async clickButtonSave() {
         await this.buttonSave.click();
     }
 
@@ -138,23 +141,24 @@ export class ExpensesPage extends BasePage {
         await this.createdExpense(data.name).hover();
     }
 
-    async updateExpense(data: Expense) {
+    async inputToUpdateExpense(data: Expense) {
         await this.inputName.fill(data.name);
         await this.inputNote.fill(data.note);
         await this.inputAmount.fill(data.amount);
-        await this.buttonSave.click();
     }
 
     async verifyUpdatedExpense(data: Expense) {
         await expect(this.getAlert).toHaveText(Message.UPDATEDEXPENSE);
-        await this.getbuttonCloseAlert.click();
         await expect(this.expenseName).toHaveText(data.name);
         await expect(this.expenseNote(data.note)).toHaveText(data.note);
         await expect(this.expenseAmount(data.verifyAmount)).toHaveText(data.verifyAmount);
     }
 
-    async verifyTooltipContent() {
+    async hoverToTooltip() {
         await this.hoverToogle.hover();
+    }
+
+    async verifyTooltipContent() {
         await expect(this.tooltipContent).toHaveText(Toogle.FULLVIEW);
     }
     

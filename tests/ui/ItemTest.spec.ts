@@ -49,13 +49,19 @@ test.describe.serial('Admin - Item Test Suite', () => {
             await itemsPage.searchItems(itemData);
         });
 
-        await test.step('Delete the imported item', async () => {
+        await test.step('Hover to expense', async () => {
             await itemsPage.hoverToItem(itemData);
-            await itemsPage.deleteRecord();
+        });
+
+        await test.step('Delete the imported item', async () => {
+            await itemsPage.deleteRecordAfterHover();
+        });
+
+        await test.step('Search for the delete imported item', async () => {
+            await itemsPage.searchItems(itemData);
         });
 
         await test.step('Verify the imported item is deleted successfully', async () => {
-            await itemsPage.searchItems(itemData);
             await BasePage.verifyNoItem(Message.NO_MATCHING_RECORDS_FOUND);
         });
     });

@@ -3,10 +3,6 @@ import { BasePage } from '@pages/BasePage';
 
 export class LoginPage extends BasePage {
 
-    private get headerLogin() {
-        return this.page.getByRole('heading', { name: 'Login' })
-    }
-
     private get inputEmail() {
         return this.page.getByLabel('Email')
     }
@@ -28,7 +24,6 @@ export class LoginPage extends BasePage {
 
     async loginCRM(email: string, password: string) {
         await this.page.goto('/admin/authentication');
-        await expect(this.headerLogin).toBeVisible();
         await this.inputEmail.fill(email);
         await this.inputPassword.fill(password);
         await this.checkboxRememberMe.check();
@@ -41,7 +36,6 @@ export class LoginPage extends BasePage {
 
     async verifyLoginFail(expectedMessage: string | string[]) {
         await expect(this.page).toHaveURL(/authentication/);
-        await expect(this.alertErrorMessage).toBeVisible();
         await expect(this.alertErrorMessage).toHaveText(expectedMessage);
     }
 }
