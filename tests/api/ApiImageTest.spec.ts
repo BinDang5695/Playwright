@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/api.fixture';
+import { test, expect } from '@fixtures/api.fixture';
 import CreateImageSchema from '@data/api/CreateImageSchema.json';
 import GetImageSchema from '@data/api/GetImageSchema.json';
 import UpdateImageSchema from '@data/api/UpdateImageSchema.json';

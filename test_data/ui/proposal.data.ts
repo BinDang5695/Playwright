@@ -8,5 +8,5 @@ export const proposalData: Proposal = {
   total: '€1.000,00',
   openTill: '27-12-2040',
   binDescription: 'Bin Description',
-  description: '(1,000.00) Bin description...'
+  description: '(1,000.00) Bin Description...'
 }

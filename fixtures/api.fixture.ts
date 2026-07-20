@@ -1,5 +1,5 @@
 import { test as base, expect } from '@playwright/test';
-import { AuthService } from '../api/services/AuthService';
+import { AuthService } from '@api/services/AuthService';
 
 type ApiFixtures = {
   token: string;

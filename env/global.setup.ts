@@ -2,8 +2,8 @@ import { chromium, type Browser } from '@playwright/test';
 import fs from 'node:fs';
 import path from 'node:path';
 import { LoginPage } from '@pages/LoginPage';
-import { Users } from './users';
-import { ENV_NAME } from './environment';
+import { Users } from '@env/users';
+import { ENV_NAME } from '@env/environment';
 
 export default async function globalSetup() {
 

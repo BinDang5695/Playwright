@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
 import { ExportData } from '@models/types/ui/export-data.model';
 import { BasePage } from '@pages/BasePage';
-import { Message, Dropdown, Toogle, Attribute } from '@constants/crm';
+import { Dropdown, Toogle, Attribute } from '@constants/crm';
 import { Proposal } from '@models/types/ui/proposal.model'
 
 export class ProposalsPage extends BasePage {
@@ -124,7 +124,7 @@ export class ProposalsPage extends BasePage {
         await this.buttonNewProposal.click();
     }
 
-    async addNewProposal(data: Proposal) {
+    async inputToAddNewProposal(data: Proposal) {
         await this.inputSubject.fill(data.subject);
         await this.dropdownRelated.click();
         await this.optionCustomer.click();
@@ -159,7 +159,7 @@ export class ProposalsPage extends BasePage {
     }
 
     async searchCreatedProposal(data: Proposal) {
-        await this.inputSearchProposal.pressSequentially(data.subject, { delay: 100 });
+        await this.inputSearchProposal.pressSequentially(data.subject, {delay: 100});
     }
 
     async selectCreatedProposal(data: Proposal) {

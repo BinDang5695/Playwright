@@ -43,7 +43,7 @@ test.describe.serial('Admin - Proposal Test Suite', () => {
             });
 
             await test.step('Create a new proposal', async () => {
-                await proposalsPage.addNewProposal(proposalData);
+                await proposalsPage.inputToAddNewProposal(proposalData);
             });
 
             await test.step('Scroll to button save', async () => {

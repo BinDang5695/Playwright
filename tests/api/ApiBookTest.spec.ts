@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/api.fixture';
+import { test, expect } from '@fixtures/api.fixture';
 import CreateBookSchema from '@data/api/CreateBookSchema.json';
 import GetBookSchema from '@data/api/GetBookSchema.json';
 import UpdateBookSchema from '@data/api/UpdateBookSchema.json';

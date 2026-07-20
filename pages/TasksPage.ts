@@ -169,7 +169,7 @@ export class TasksPage extends BasePage {
     }
 
     async searchTaskOnList(subject: string) {
-        await this.searchOnList.pressSequentially(subject, { delay: 100 });
+        await this.searchOnList.fill(subject);
     }
 
     async verifyAfterSearch(data: Task) {
@@ -186,10 +186,6 @@ export class TasksPage extends BasePage {
     async verifyTotalTasksAfterDragDrop(data: Task) {
         await expect(this.completeTaskTotal).toHaveText(data.completeTaskAfterDragDrop);
         await expect(this.notStartedTaskTotal).toHaveText(data.notStartedTaskTotal);
-    }
-
-    async searchAfterDeleted(data: Task) {
-        await this.searchOnList.fill(data.updatedSubject);
     }
 
 }

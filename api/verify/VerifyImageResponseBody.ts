@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { VerifyResponseBody } from '../common/VerifyResponseBody';
+import { VerifyResponseBody } from '@api/common/VerifyResponseBody';
 
 export class VerifyImageResponseBody {
 

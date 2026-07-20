@@ -1,8 +1,8 @@
 // api/common/BaseApiService
 import type { APIRequestContext } from '@playwright/test';
 import { expect } from '@playwright/test';
-import { measureRequest } from '../../models/helpers/ApiHelper';
-import { ApiLogger } from './ApiLogger';
+import { measureRequest } from '@models/helpers/ApiHelper';
+import { ApiLogger } from '@api/common/ApiLogger';
 
 export class ApiClient {
 

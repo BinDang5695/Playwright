@@ -16,7 +16,6 @@ export default defineConfig({
     globalSetup: './env/global.setup.ts',
     fullyParallel: true,
     workers: 1,
-    testDir: './tests',
     timeout: 90 * 1000,
     expect: {
         timeout: 15 * 1000,
@@ -38,18 +37,22 @@ export default defineConfig({
     projects: [
         {
             name: 'chrome',
+            testDir: './tests/ui',
             use: {
                 channel: 'chrome',
             },
         },
         {
             name: 'edge',
+            testDir: './tests/ui',
             use: {
                 channel: 'msedge',
             },
         },
         {
             name: 'api',
+            testDir: './tests/api',
+            use: {},
         },
     ],
 

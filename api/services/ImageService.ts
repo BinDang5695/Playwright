@@ -1,8 +1,8 @@
 // api/image/ImageService.ts
 import type { APIRequestContext } from '@playwright/test';
-import { ConfigGlobal } from '../common/Config';
-import { EndPointGlobal } from '../common/EndpointGlobal';
-import { ApiClient } from '../common/ApiClient';
+import { ConfigGlobal } from '@api/common/Config';
+import { EndPointGlobal } from '@api/common/EndpointGlobal';
+import { ApiClient } from '@api/common/ApiClient';
 import { imageData } from '@data/api/image.data';
 import fs from 'fs';
 

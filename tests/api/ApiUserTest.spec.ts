@@ -1,4 +1,4 @@
-import { test, expect } from '../../fixtures/api.fixture';
+import { test, expect } from '@fixtures/api.fixture';
 import CreateUserSchema from '@data/api/CreateUserSchema.json';
 import GetUserSchema from '@data/api/GetUserSchema.json';
 import UpdateUserSchema from '@data/api/UpdateUserSchema.json';

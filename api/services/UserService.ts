@@ -1,9 +1,9 @@
 // api/user/UserService.ts
 import type { APIRequestContext } from '@playwright/test';
-import { ConfigGlobal } from '../common/Config';
-import { EndPointGlobal } from '../common/EndpointGlobal';
+import { ConfigGlobal } from '@api/common/Config';
+import { EndPointGlobal } from '@api/common/EndpointGlobal';
 import { userData } from '@data/api/user.data';
-import { ApiClient } from '../common/ApiClient';
+import { ApiClient } from '@api/common/ApiClient';
 
 export class UserService {
 
