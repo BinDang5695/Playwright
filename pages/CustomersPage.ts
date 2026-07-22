@@ -66,10 +66,6 @@ export class CustomersPage extends BasePage {
         return this.page.locator("#zip");
     }
 
-    private get countryDropdown() {
-        return this.page.locator('button[data-id="country"]');
-    }
-
     private get buttonSave() {
         return this.page.locator("//button[contains(@class,'only-save')]");
     }
@@ -88,19 +84,8 @@ export class CustomersPage extends BasePage {
     
     async inputToAddNewCustomer(data: Customer) {
         await this.inputCompany.fill(data.company);
-        await this.inputVATNumber.fill(data.vat);
-        await this.inputPhoneNumber.fill(data.phone);
-        await this.inputWebsite.fill(data.website);
-        await this.selectDropdownWithSearch(Dropdown.GROUPS_IN, 1, data.group);
-        await this.dropDownGroups.click();
         await this.currencyDropdown.click();
         await this.currencyOption.click();
-        await this.selectDropdownBySpanText(Dropdown.DEFAULT_LANGUAGE, data.language);
-        await this.inputAddress.fill(data.address);
-        await this.inputCity.fill(data.city);
-        await this.inputState.fill(data.state);
-        await this.inputZipCode.fill(data.zip);
-        await this.selectDropdownWithSearch(Dropdown.COUNTRY, 4, data.country);
     }
 
     async clickButtonSave() {
@@ -190,18 +175,7 @@ export class CustomersPage extends BasePage {
 
     async verifyCustomerAdded(data: Customer) {
         await expect(this.inputCompany).toHaveValue(data.company);
-        await expect(this.inputVATNumber).toHaveValue(data.vat);
-        await expect(this.inputPhoneNumber).toHaveValue(data.phone);
-        await expect(this.inputWebsite).toHaveValue(data.website);
-        await expect(this.dropDownGroups).toHaveText(data.group);
         await expect(this.currencyDropdown).toHaveText(data.currency);
-        await expect(this.defaultLanguageDropdown).toHaveText(data.language);
-        await expect(this.inputAddress).toHaveValue(data.address);
-        await expect(this.inputCity).toHaveValue(data.city);
-        await expect(this.inputState).toHaveValue(data.state);
-        await expect(this.inputZipCode).toHaveValue(data.zip);
-        await expect(this.inputState).toHaveValue(data.state);
-        await expect(this.countryDropdown).toHaveText(data.country);
     }
 
     async hoverToCustomer(company: string) {

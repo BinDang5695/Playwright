@@ -85,12 +85,14 @@ test.describe.serial('Admin - Project Test Suite', () => {
         await test.step('Verify the project is deleted successfully', async () => {
             await BasePage.verifyNoItem(Message.NO_MATCHING_RECORDS_FOUND);
         });
-
-        await test.step('Delete create Customer', async () => {
-                await BasePage.clickByMenuName(Menu.CUSTOMERS);
-                await customersPage.searchCustomer(customerData.company);
-                await customersPage.hoverToCustomer(customerData.company);
-                await BasePage.deleteRecordAfterHover();
+    });
+    
+    test.afterAll(async ({ BasePage, customersPage }) => {
+        await test.step('Delete created Customer', async () => {
+            await BasePage.clickByMenuName(Menu.CUSTOMERS);
+            await customersPage.searchCustomer(customerData.company);
+            await customersPage.hoverToCustomer(customerData.company);
+            await BasePage.deleteRecordAfterHover();
         });
     });
 

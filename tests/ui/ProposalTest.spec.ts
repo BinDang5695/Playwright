@@ -24,17 +24,16 @@ test.describe.serial('Admin - Proposal Test Suite', () => {
             await customersPage.inputToAddNewCustomer(customerData);
             await customersPage.clickButtonSave();
         });
-
-        await test.step('Navigate to Sales > Proposals', async () => {
-            await BasePage.clickByMenuText(Menu.SALES);
-            await BasePage.clickByMenuName(Menu.PROPOSALS);
-        });
-
     });
 
     fileTypes.forEach(({ type, tag }) => {
 
         test(`[PROPOSAL] Manage Proposal Export ${type.toUpperCase()} File ${tag}`, async ({ BasePage, customersPage, proposalsPage }) => {
+
+            await test.step('Navigate to Sales > Proposals', async () => {
+                await BasePage.clickByMenuText(Menu.SALES);
+                await BasePage.clickByMenuName(Menu.PROPOSALS);
+            });
 
             let uiData!: ExportData;
 
